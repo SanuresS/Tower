@@ -8,49 +8,121 @@ import {
   cities,
   cityZoneLabels,
   cityZoneColors,
-  cityTypeLabels,
+  citySizeLabels,
+  citySpecializationLabels,
+  cityFactionGroupLabels,
   CityZone,
-  CityType,
+  CitySize,
+  CitySpecialization,
+  CityFactionGroup,
 } from "@/data/cities";
 
 const cityZones: CityZone[] = ["lower", "middle", "special"];
-
-const cityTypes: CityType[] = [
+const citySizes: CitySize[] = ["hive", "large", "city", "small", "outpost"];
+const citySpecs: CitySpecialization[] = [
   "capital",
-  "city",
-  "small_city",
   "fortress",
   "bastion",
   "trade",
-  "industrial",
   "resource",
-  "settlement",
+  "industrial",
+  "none",
 ];
+const cityFactionGroups: CityFactionGroup[] = [
+  "clans",
+  "coalition",
+  "witnesses",
+  "military",
+  "other",
+];
+
+function FilterGroup({
+  label,
+  items,
+  labels,
+  selected,
+  onSelect,
+  colorFn,
+}: {
+  label: string;
+  items: readonly string[];
+  labels: Record<string, string>;
+  selected: string;
+  onSelect: (v: string) => void;
+  colorFn?: (v: string) => string;
+}) {
+  return (
+    <div>
+      <p className="text-[10px] font-mono text-tower-muted/60 uppercase tracking-widest mb-2 m-0">
+        {label}
+      </p>
+      <div className="flex flex-wrap gap-1.5">
+        <button
+          onClick={() => onSelect("all")}
+          className="px-2.5 py-1 rounded font-mono text-[11px] transition-all duration-200 border cursor-pointer"
+          style={
+            selected === "all"
+              ? { backgroundColor: "rgba(148,163,184,0.15)", color: "#cbd5e1", borderColor: "rgba(148,163,184,0.4)" }
+              : { backgroundColor: "transparent", color: "rgba(255,255,255,0.4)", borderColor: "rgba(255,255,255,0.08)" }
+          }
+        >
+          Все
+        </button>
+        {items.map((v) => {
+          const isActive = selected === v;
+          const color = colorFn ? colorFn(v) : "#cbd5e1";
+          return (
+            <button
+              key={v}
+              onClick={() => onSelect(v)}
+              className="px-2.5 py-1 rounded font-mono text-[11px] transition-all duration-200 border cursor-pointer"
+              style={
+                isActive
+                  ? { backgroundColor: `${color}20`, color, borderColor: `${color}50` }
+                  : { backgroundColor: "transparent", color: "rgba(255,255,255,0.4)", borderColor: "rgba(255,255,255,0.08)" }
+              }
+            >
+              {labels[v]}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
 
 export default function CitiesPage() {
   const searchParams = useSearchParams();
   const highlightId = searchParams.get("highlight");
 
   const [selectedZone, setSelectedZone] = useState<CityZone | "all">("all");
-  const [selectedType, setSelectedType] = useState<CityType | "all">("all");
+  const [selectedSize, setSelectedSize] = useState<CitySize | "all">("all");
+  const [selectedSpec, setSelectedSpec] = useState<CitySpecialization | "all">("all");
+  const [selectedFaction, setSelectedFaction] = useState<CityFactionGroup | "all">("all");
   const [highlightedId, setHighlightedId] = useState<string | null>(null);
 
   const filtered = useMemo(() => {
     return cities.filter((c) => {
       if (selectedZone !== "all" && c.zone !== selectedZone) return false;
-      if (selectedType !== "all" && c.type !== selectedType) return false;
+      if (selectedSize !== "all" && c.size !== selectedSize) return false;
+      if (selectedSpec !== "all" && c.specialization !== selectedSpec) return false;
+      if (selectedFaction !== "all" && c.factionGroup !== selectedFaction) return false;
       return true;
     });
-  }, [selectedZone, selectedType]);
+  }, [selectedZone, selectedSize, selectedSpec, selectedFaction]);
 
-  const hasFilters = selectedZone !== "all" || selectedType !== "all";
+  const hasFilters =
+    selectedZone !== "all" ||
+    selectedSize !== "all" ||
+    selectedSpec !== "all" ||
+    selectedFaction !== "all";
 
   const scrollToCity = useCallback((cityId: string) => {
     const el = document.getElementById(`city-${cityId}`);
     if (el) {
       el.scrollIntoView({ behavior: "smooth", block: "center" });
       setHighlightedId(cityId);
-      setTimeout(() => setHighlightedId(null), 3000);
+      setTimeout(() => setHighlightedId(null), 5000);
     }
   }, []);
 
@@ -63,16 +135,10 @@ export default function CitiesPage() {
 
   function resetFilters() {
     setSelectedZone("all");
-    setSelectedType("all");
+    setSelectedSize("all");
+    setSelectedSpec("all");
+    setSelectedFaction("all");
   }
-
-  function countByType(t: CityType) {
-    return cities.filter((c) => c.type === t).length;
-  }
-
-  const usedTypes = useMemo(() => {
-    return cityTypes.filter((t) => cities.some((c) => c.type === t));
-  }, []);
 
   return (
     <PageContainer
@@ -81,80 +147,38 @@ export default function CitiesPage() {
     >
       {/* Filters */}
       <div className="space-y-4 mb-8">
-        {/* Zone */}
-        <div>
-          <p className="text-[10px] font-mono text-tower-muted/60 uppercase tracking-widest mb-2 m-0">
-            Зона
-          </p>
-          <div className="flex flex-wrap gap-1.5">
-            <button
-              onClick={() => setSelectedZone("all")}
-              className="px-2.5 py-1 rounded font-mono text-[11px] transition-all duration-200 border cursor-pointer"
-              style={
-                selectedZone === "all"
-                  ? { backgroundColor: "rgba(148,163,184,0.15)", color: "#cbd5e1", borderColor: "rgba(148,163,184,0.4)" }
-                  : { backgroundColor: "transparent", color: "rgba(255,255,255,0.4)", borderColor: "rgba(255,255,255,0.08)" }
-              }
-            >
-              Все
-            </button>
-            {cityZones.map((z) => {
-              const isActive = selectedZone === z;
-              const color = cityZoneColors[z];
-              return (
-                <button
-                  key={z}
-                  onClick={() => setSelectedZone(z)}
-                  className="px-2.5 py-1 rounded font-mono text-[11px] transition-all duration-200 border cursor-pointer"
-                  style={
-                    isActive
-                      ? { backgroundColor: `${color}20`, color, borderColor: `${color}50` }
-                      : { backgroundColor: "transparent", color: "rgba(255,255,255,0.4)", borderColor: "rgba(255,255,255,0.08)" }
-                  }
-                >
-                  {cityZoneLabels[z]}
-                </button>
-              );
-            })}
-          </div>
-        </div>
+        <FilterGroup
+          label="Зона"
+          items={cityZones}
+          labels={cityZoneLabels}
+          selected={selectedZone}
+          onSelect={(v) => setSelectedZone(v as CityZone | "all")}
+          colorFn={(v) => cityZoneColors[v as CityZone] ?? "#cbd5e1"}
+        />
 
-        {/* Type */}
-        <div>
-          <p className="text-[10px] font-mono text-tower-muted/60 uppercase tracking-widest mb-2 m-0">
-            Тип
-          </p>
-          <div className="flex flex-wrap gap-1.5">
-            <button
-              onClick={() => setSelectedType("all")}
-              className="px-2.5 py-1 rounded font-mono text-[11px] transition-all duration-200 border cursor-pointer"
-              style={
-                selectedType === "all"
-                  ? { backgroundColor: "rgba(148,163,184,0.15)", color: "#cbd5e1", borderColor: "rgba(148,163,184,0.4)" }
-                  : { backgroundColor: "transparent", color: "rgba(255,255,255,0.4)", borderColor: "rgba(255,255,255,0.08)" }
-              }
-            >
-              Все
-            </button>
-            {usedTypes.map((t) => {
-              const isActive = selectedType === t;
-              return (
-                <button
-                  key={t}
-                  onClick={() => setSelectedType(t)}
-                  className="px-2.5 py-1 rounded font-mono text-[11px] transition-all duration-200 border cursor-pointer"
-                  style={
-                    isActive
-                      ? { backgroundColor: "rgba(148,163,184,0.15)", color: "#cbd5e1", borderColor: "rgba(148,163,184,0.4)" }
-                      : { backgroundColor: "transparent", color: "rgba(255,255,255,0.4)", borderColor: "rgba(255,255,255,0.08)" }
-                  }
-                >
-                  {cityTypeLabels[t]} ({countByType(t)})
-                </button>
-              );
-            })}
-          </div>
-        </div>
+        <FilterGroup
+          label="Размер"
+          items={citySizes}
+          labels={citySizeLabels}
+          selected={selectedSize}
+          onSelect={(v) => setSelectedSize(v as CitySize | "all")}
+        />
+
+        <FilterGroup
+          label="Специализация"
+          items={citySpecs}
+          labels={citySpecializationLabels}
+          selected={selectedSpec}
+          onSelect={(v) => setSelectedSpec(v as CitySpecialization | "all")}
+        />
+
+        <FilterGroup
+          label="Фракция"
+          items={cityFactionGroups}
+          labels={cityFactionGroupLabels}
+          selected={selectedFaction}
+          onSelect={(v) => setSelectedFaction(v as CityFactionGroup | "all")}
+        />
 
         {hasFilters && (
           <button

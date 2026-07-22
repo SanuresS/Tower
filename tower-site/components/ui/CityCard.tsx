@@ -3,10 +3,10 @@
 import React from "react";
 import {
   City,
-  cityTypeLabels,
+  citySizeLabels,
+  citySpecializationLabels,
   cityZoneLabels,
   cityZoneColors,
-  cityTypeIcons,
 } from "@/data/cities";
 
 interface CityCardProps {
@@ -14,9 +14,9 @@ interface CityCardProps {
   highlighted?: boolean;
 }
 
-function CityTypeIcon({ type, color }: { type: City["type"]; color: string }) {
+function SpecIcon({ spec, color }: { spec: City["specialization"]; color: string }) {
   const size = 14;
-  switch (type) {
+  switch (spec) {
     case "capital":
       return (
         <svg width={size} height={size} viewBox="0 0 16 16" fill="none">
@@ -33,7 +33,9 @@ function CityTypeIcon({ type, color }: { type: City["type"]; color: string }) {
     case "bastion":
       return (
         <svg width={size} height={size} viewBox="0 0 16 16" fill="none">
-          <path d="M8 2L14 14H2L8 2Z" stroke={color} strokeWidth="1.2" fill={`${color}20`} />
+          <circle cx="8" cy="8" r="5" stroke={color} strokeWidth="1.2" fill="none" />
+          <circle cx="8" cy="8" r="2" stroke={color} strokeWidth="1" fill={`${color}20`} />
+          <path d="M8 3V1M8 15v-2M3 8H1M15 8h-2" stroke={color} strokeWidth="1.2" />
         </svg>
       );
     case "trade":
@@ -44,6 +46,12 @@ function CityTypeIcon({ type, color }: { type: City["type"]; color: string }) {
         </svg>
       );
     case "resource":
+      return (
+        <svg width={size} height={size} viewBox="0 0 16 16" fill="none">
+          <path d="M8 2L14 14H2L8 2Z" stroke={color} strokeWidth="1.2" fill={`${color}20`} />
+        </svg>
+      );
+    case "industrial":
       return (
         <svg width={size} height={size} viewBox="0 0 16 16" fill="none">
           <polygon points="8,2 14,8 8,14 2,8" stroke={color} strokeWidth="1.2" fill={`${color}20`} />
@@ -88,32 +96,33 @@ export default function CityCard({ city, highlighted }: CityCardProps) {
       />
 
       <div className="p-5 pt-4">
-        {/* Header: icon + name + type badge */}
+        {/* Header: icon + name */}
         <div className="flex items-start gap-2.5 mb-2">
           <div className="shrink-0 mt-0.5">
-            <CityTypeIcon type={city.type} color={zColor} />
+            <SpecIcon spec={city.specialization} color={zColor} />
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-2">
               <h3 className="text-tower-text font-mono text-[15px] font-semibold m-0 leading-snug">
                 {city.name}
               </h3>
-              <span
-                className="inline-flex items-center gap-1 px-2 py-0.5 rounded font-mono text-[10px] shrink-0 mt-0.5"
-                style={{
-                  backgroundColor: `${zColor}18`,
-                  color: zColor,
-                  border: `1px solid ${zColor}30`,
-                }}
-              >
-                <span className="text-[9px] opacity-50">{cityTypeIcons[city.type]}</span>
-                {cityTypeLabels[city.type]}
-              </span>
+              {city.specialization !== "none" && (
+                <span
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded font-mono text-[10px] shrink-0 mt-0.5"
+                  style={{
+                    backgroundColor: `${zColor}18`,
+                    color: zColor,
+                    border: `1px solid ${zColor}30`,
+                  }}
+                >
+                  {citySpecializationLabels[city.specialization]}
+                </span>
+              )}
             </div>
           </div>
         </div>
 
-        {/* Badges row: zone + faction */}
+        {/* Badges row: zone + size + faction */}
         <div className="flex flex-wrap gap-1.5 mb-3 mt-2">
           <span
             className="inline-flex items-center gap-1 px-2 py-0.5 rounded font-mono text-[10px]"
@@ -127,7 +136,19 @@ export default function CityCard({ city, highlighted }: CityCardProps) {
             {cityZoneLabels[city.zone]}
           </span>
 
-          {city.faction && (
+          <span
+            className="inline-flex items-center gap-1 px-2 py-0.5 rounded font-mono text-[10px]"
+            style={{
+              backgroundColor: "rgba(255,255,255,0.04)",
+              color: "#a3a3a3",
+              border: "1px solid rgba(255,255,255,0.08)",
+            }}
+          >
+            <span className="text-[9px] opacity-50">Размер:</span>
+            {citySizeLabels[city.size]}
+          </span>
+
+          {city.factionName && (
             <span
               className="inline-flex items-center gap-1 px-2 py-0.5 rounded font-mono text-[10px]"
               style={{
@@ -137,21 +158,7 @@ export default function CityCard({ city, highlighted }: CityCardProps) {
               }}
             >
               <span className="text-[9px] opacity-50">Фракция:</span>
-              {city.faction}
-            </span>
-          )}
-
-          {city.population && (
-            <span
-              className="inline-flex items-center gap-1 px-2 py-0.5 rounded font-mono text-[10px]"
-              style={{
-                backgroundColor: "rgba(255,255,255,0.04)",
-                color: "#a3a3a3",
-                border: "1px solid rgba(255,255,255,0.08)",
-              }}
-            >
-              <span className="text-[9px] opacity-50">Масштаб:</span>
-              {city.population}
+              {city.factionName}
             </span>
           )}
         </div>

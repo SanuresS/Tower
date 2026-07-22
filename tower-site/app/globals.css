@@ -115,8 +115,8 @@ body {
 /* City highlight glow animation */
 @keyframes cityGlow {
   0% {
-    box-shadow: 0 0 20px rgba(184, 134, 11, 0.5), 0 0 40px rgba(184, 134, 11, 0.2);
-    border-left-color: rgba(184, 134, 11, 0.8) !important;
+    box-shadow: 0 0 30px rgba(220, 38, 38, 0.6), 0 0 60px rgba(220, 38, 38, 0.3), 0 0 90px rgba(220, 38, 38, 0.15);
+    border-left-color: rgba(220, 38, 38, 0.9) !important;
   }
   100% {
     box-shadow: none;
@@ -125,5 +125,5 @@ body {
 }
 
 .city-highlight {
-  animation: cityGlow 3s ease-out forwards;
+  animation: cityGlow 5s ease-out forwards;
 }
