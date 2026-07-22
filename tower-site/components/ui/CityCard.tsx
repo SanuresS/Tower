@@ -7,6 +7,8 @@ import {
   citySpecializationLabels,
   cityZoneLabels,
   cityZoneColors,
+  religionLabels,
+  religionColors,
 } from "@/data/cities";
 
 interface CityCardProps {
@@ -66,8 +68,50 @@ function SpecIcon({ spec, color }: { spec: City["specialization"]; color: string
   }
 }
 
+function MetricBar({ label, value, color }: { label: string; value: number; color: string }) {
+  return (
+    <div className="flex items-center gap-2">
+      <span className="text-[11px] font-mono text-tower-muted/60 w-28 shrink-0">{label}</span>
+      <div className="flex-1 h-1 rounded-full bg-white/[0.06] overflow-hidden">
+        <div
+          className="h-full rounded-full transition-all duration-500"
+          style={{
+            width: `${value}%`,
+            backgroundColor: color,
+          }}
+        />
+      </div>
+      <span
+        className="text-[11px] font-mono w-10 text-right shrink-0"
+        style={{ color }}
+      >
+        {value}%
+      </span>
+    </div>
+  );
+}
+
+function getReligiosityColor(value: number): string {
+  if (value < 30) return "#737373";
+  if (value < 60) return "#a78bfa";
+  return "#a855f7";
+}
+
+function getStabilityColor(value: number): string {
+  if (value < 40) return "#dc2626";
+  if (value < 70) return "#eab308";
+  return "#22c55e";
+}
+
+function getCrimeColor(value: number): string {
+  if (value < 30) return "#22c55e";
+  if (value < 60) return "#eab308";
+  return "#dc2626";
+}
+
 export default function CityCard({ city, highlighted }: CityCardProps) {
   const zColor = cityZoneColors[city.zone];
+  const rColor = religionColors[city.religion];
 
   return (
     <div
@@ -161,6 +205,49 @@ export default function CityCard({ city, highlighted }: CityCardProps) {
               {city.factionName}
             </span>
           )}
+        </div>
+
+        {/* Religion badge */}
+        <div className="mb-4">
+          <span
+            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded font-mono text-[10px]"
+            style={{
+              backgroundColor: `${rColor}15`,
+              color: rColor,
+              border: `1px solid ${rColor}30`,
+            }}
+          >
+            <span className="text-[9px] opacity-60">✦</span>
+            {religionLabels[city.religion]}
+          </span>
+        </div>
+
+        {/* Metrics block */}
+        <div className="mb-4 p-3 rounded-md border border-tower-border/50 bg-white/[0.02]">
+          <div className="flex items-center gap-2 mb-2.5">
+            <div className="h-px flex-1 bg-white/[0.06]" />
+            <p className="text-[9px] font-mono uppercase tracking-widest m-0 text-tower-muted/50">
+              Показатели
+            </p>
+            <div className="h-px flex-1 bg-white/[0.06]" />
+          </div>
+          <div className="space-y-2">
+            <MetricBar
+              label="Религиозность"
+              value={city.religiosity}
+              color={getReligiosityColor(city.religiosity)}
+            />
+            <MetricBar
+              label="Контроль власти"
+              value={city.powerStability}
+              color={getStabilityColor(city.powerStability)}
+            />
+            <MetricBar
+              label="Преступность"
+              value={city.crimeLevel}
+              color={getCrimeColor(city.crimeLevel)}
+            />
+          </div>
         </div>
 
         {/* Description */}

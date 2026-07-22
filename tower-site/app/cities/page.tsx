@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, useEffect, useCallback } from "react";
+import React, { useState, useMemo, useEffect, useCallback, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import PageContainer from "@/components/layout/PageContainer";
 import CityCard from "@/components/ui/CityCard";
@@ -11,10 +11,13 @@ import {
   citySizeLabels,
   citySpecializationLabels,
   cityFactionGroupLabels,
+  religionLabels,
+  religionColors,
   CityZone,
   CitySize,
   CitySpecialization,
   CityFactionGroup,
+  Religion,
 } from "@/data/cities";
 
 const cityZones: CityZone[] = ["lower", "middle", "special"];
@@ -34,6 +37,15 @@ const cityFactionGroups: CityFactionGroup[] = [
   "witnesses",
   "military",
   "other",
+];
+const cityReligions: Religion[] = [
+  "ezibtu",
+  "rishtu",
+  "atheism",
+  "free",
+  "echo_worship",
+  "silence_cult",
+  "forest_collective",
 ];
 
 function FilterGroup({
@@ -91,7 +103,7 @@ function FilterGroup({
   );
 }
 
-export default function CitiesPage() {
+function CitiesContent() {
   const searchParams = useSearchParams();
   const highlightId = searchParams.get("highlight");
 
@@ -99,6 +111,7 @@ export default function CitiesPage() {
   const [selectedSize, setSelectedSize] = useState<CitySize | "all">("all");
   const [selectedSpec, setSelectedSpec] = useState<CitySpecialization | "all">("all");
   const [selectedFaction, setSelectedFaction] = useState<CityFactionGroup | "all">("all");
+  const [selectedReligion, setSelectedReligion] = useState<Religion | "all">("all");
   const [highlightedId, setHighlightedId] = useState<string | null>(null);
 
   const filtered = useMemo(() => {
@@ -107,15 +120,17 @@ export default function CitiesPage() {
       if (selectedSize !== "all" && c.size !== selectedSize) return false;
       if (selectedSpec !== "all" && c.specialization !== selectedSpec) return false;
       if (selectedFaction !== "all" && c.factionGroup !== selectedFaction) return false;
+      if (selectedReligion !== "all" && c.religion !== selectedReligion) return false;
       return true;
     });
-  }, [selectedZone, selectedSize, selectedSpec, selectedFaction]);
+  }, [selectedZone, selectedSize, selectedSpec, selectedFaction, selectedReligion]);
 
   const hasFilters =
     selectedZone !== "all" ||
     selectedSize !== "all" ||
     selectedSpec !== "all" ||
-    selectedFaction !== "all";
+    selectedFaction !== "all" ||
+    selectedReligion !== "all";
 
   const scrollToCity = useCallback((cityId: string) => {
     const el = document.getElementById(`city-${cityId}`);
@@ -138,6 +153,7 @@ export default function CitiesPage() {
     setSelectedSize("all");
     setSelectedSpec("all");
     setSelectedFaction("all");
+    setSelectedReligion("all");
   }
 
   return (
@@ -178,6 +194,15 @@ export default function CitiesPage() {
           labels={cityFactionGroupLabels}
           selected={selectedFaction}
           onSelect={(v) => setSelectedFaction(v as CityFactionGroup | "all")}
+        />
+
+        <FilterGroup
+          label="Религия"
+          items={cityReligions}
+          labels={religionLabels}
+          selected={selectedReligion}
+          onSelect={(v) => setSelectedReligion(v as Religion | "all")}
+          colorFn={(v) => religionColors[v as Religion] ?? "#cbd5e1"}
         />
 
         {hasFilters && (
@@ -221,5 +246,13 @@ export default function CitiesPage() {
         </div>
       )}
     </PageContainer>
+  );
+}
+
+export default function CitiesPage() {
+  return (
+    <Suspense>
+      <CitiesContent />
+    </Suspense>
   );
 }
