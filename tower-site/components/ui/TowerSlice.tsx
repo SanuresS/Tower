@@ -42,7 +42,7 @@ export default function TowerSlice({
   const centerX = svgWidth / 2;
 
   return (
-    <div className="flex gap-4 items-stretch" style={{ height: svgHeight + 32 }}>
+    <div className="flex gap-4 items-start" style={{ height: svgHeight }}>
       {/* SVG Tower */}
       <div className="relative shrink-0">
         <svg
@@ -127,40 +127,26 @@ export default function TowerSlice({
             rx={2}
           />
         </svg>
-
-        {/* Floor markers */}
-        <div
-          className="absolute top-0 left-0 flex flex-col justify-between pointer-events-none"
-          style={{ height: svgHeight }}
-        >
-          {[12000, 10000, 8000, 5000, 2200, 1].map((floor) => {
-            const y = floorToY(floor, svgHeight);
-            return (
-              <span
-                key={floor}
-                className="absolute font-mono text-[8px] text-tower-muted/40 -translate-y-1/2"
-                style={{ top: y, left: svgWidth + 4 }}
-              >
-                {floor.toLocaleString()}
-              </span>
-            );
-          })}
-        </div>
       </div>
 
-      {/* Labels */}
+      {/* Labels — absolute positioning at zone centers, reversed order */}
       {showLabels && (
-        <div className="flex flex-col justify-between py-0 min-w-[120px]">
-          {towerZones.map((zone) => {
+        <div className="relative shrink-0" style={{ width: 140, height: svgHeight }}>
+          {[...towerZones].reverse().map((zone) => {
             const yTop = floorToY(zone.floorEnd, svgHeight);
             const yBottom = floorToY(zone.floorStart, svgHeight);
-            const zoneHeight = yBottom - yTop;
+            const centerY = (yTop + yBottom) / 2;
 
             return (
               <div
                 key={zone.id}
-                className="flex items-center gap-2"
-                style={{ height: zoneHeight }}
+                className="absolute flex items-center gap-2"
+                style={{
+                  top: centerY,
+                  transform: "translateY(-50%)",
+                  left: 0,
+                  right: 0,
+                }}
               >
                 <div
                   className="w-2 h-2 rounded-full shrink-0"

@@ -47,38 +47,7 @@ export default function HeroSection() {
           </Link>
         </div>
 
-        {/* Floor scale teaser */}
-        <div className="mt-16 flex flex-col items-center gap-1 opacity-40">
-          {[12000, 10000, 8000, 5000, 2200, 1700, 1].map((floor, i) => (
-            <div key={floor} className="flex items-center gap-2">
-              <span className="font-mono text-[9px] text-tower-muted w-10 text-right">
-                {floor.toLocaleString()}
-              </span>
-              <div
-                className="w-8 h-0.5"
-                style={{
-                  backgroundColor:
-                    i === 0
-                      ? "#94a3b8"
-                      : i === 1
-                        ? "#94a3b8"
-                        : i === 2
-                          ? "#b8860b"
-                          : i === 3
-                            ? "#dc2626"
-                            : i === 4
-                              ? "#737373"
-                              : i === 5
-                                ? "#22c55e"
-                                : "#1a1a1a",
-                }}
-              />
-            </div>
-          ))}
-          <span className="font-mono text-[8px] text-tower-muted/50 mt-1">
-            ↑ 120 км
-          </span>
-        </div>
+
       </div>
     </section>
   );

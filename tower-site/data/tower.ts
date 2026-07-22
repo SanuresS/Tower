@@ -82,7 +82,7 @@ export interface BabylonPart {
 export const babylonParts: BabylonPart[] = [
   {
     id: "v3-unfinished",
-    name: "Вавилон-3 (недостроенный)",
+    name: "Недостроенные этажи Вавилона-3",
     floorStart: 10000,
     floorEnd: 12000,
     shape: "truncated-cone",
