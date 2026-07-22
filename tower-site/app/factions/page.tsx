@@ -38,36 +38,8 @@ export default function FactionsPage() {
       subtitle={`${factions.length} объединений, населяющих Башню`}
     >
       {/* Filters */}
-      <div className="space-y-4 mb-8">
-        {/* Location zone filter */}
-        <div>
-          <p className="text-[10px] font-mono text-tower-muted/60 uppercase tracking-widest mb-2 m-0">
-            Местоположение
-          </p>
-          <div className="flex flex-wrap gap-1.5">
-            {locationZones.map((z) => {
-              const isActive = selectedZone === z;
-              const color = locationColors[z];
-              const count = countByZone(z);
-              return (
-                <button
-                  key={z}
-                  onClick={() => setSelectedZone(z)}
-                  className="px-2.5 py-1 rounded font-mono text-[11px] transition-all duration-200 border cursor-pointer"
-                  style={
-                    isActive
-                      ? { backgroundColor: `${color}20`, color, borderColor: `${color}50` }
-                      : { backgroundColor: "transparent", color: "rgba(255,255,255,0.4)", borderColor: "rgba(255,255,255,0.08)" }
-                  }
-                >
-                  {locationLabels[z]} ({count})
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* All button — prominent, centered, directly above Sects */}
+      <div className="space-y-3 mb-8">
+        {/* All button — prominent, centered */}
         <div className="flex justify-center">
           <button
             onClick={() => setSelectedZone("all")}
@@ -116,6 +88,39 @@ export default function FactionsPage() {
             ✦ Секты ({countByZone("sects")}) ✦
           </button>
           <div className="h-px flex-1 bg-gradient-to-r from-transparent via-tower-border/40 to-transparent" />
+        </div>
+
+        {/* Zone buttons — same style as All, below Sects */}
+        <div className="flex justify-center gap-3">
+          {locationZones.map((z) => {
+            const isActive = selectedZone === z;
+            const color = locationColors[z];
+            const count = countByZone(z);
+            return (
+              <button
+                key={z}
+                onClick={() => setSelectedZone(z)}
+                className="px-5 py-2 rounded-xl font-mono text-[12px] tracking-wide transition-all duration-300 border cursor-pointer"
+                style={
+                  isActive
+                    ? {
+                        background: `linear-gradient(135deg, ${color}20, ${color}08)`,
+                        color,
+                        borderColor: `${color}50`,
+                        boxShadow: `0 0 20px ${color}12, inset 0 1px 0 ${color}10`,
+                      }
+                    : {
+                        background: `linear-gradient(135deg, ${color}08, ${color}03)`,
+                        color: `${color}aa`,
+                        borderColor: `${color}18`,
+                        boxShadow: "none",
+                      }
+                }
+              >
+                {locationLabels[z]} ({count})
+              </button>
+            );
+          })}
         </div>
       </div>
 
