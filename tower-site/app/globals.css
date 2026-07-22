@@ -1,0 +1,113 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-tower-bg: #0a0a0a;
+  --color-tower-surface: #141414;
+  --color-tower-surface-hover: #1a1a1a;
+  --color-tower-border: #2a2a2a;
+  --color-tower-text: #d4d4d4;
+  --color-tower-muted: #737373;
+  --color-tower-rust: #8b4513;
+  --color-tower-amber: #b8860b;
+  --color-tower-biolum: #22c55e;
+  --color-tower-glow: #0ea5e9;
+  --color-tower-danger: #dc2626;
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--color-tower-bg);
+  color: var(--color-tower-text);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-tower-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-tower-border);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-tower-muted);
+}
+
+/* Glitch text effect - CSS only, extensible for future JS animations */
+@keyframes glitch-clip {
+  0% { clip-path: inset(40% 0 61% 0); }
+  20% { clip-path: inset(92% 0 1% 0); }
+  40% { clip-path: inset(43% 0 1% 0); }
+  60% { clip-path: inset(25% 0 58% 0); }
+  80% { clip-path: inset(54% 0 7% 0); }
+  100% { clip-path: inset(58% 0 43% 0); }
+}
+
+@keyframes glitch-shift {
+  0% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, 2px); }
+  80% { transform: translate(2px, -2px); }
+  100% { transform: translate(0); }
+}
+
+.glitch-text {
+  position: relative;
+}
+
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.glitch-text:hover::before {
+  animation: glitch-clip 0.3s infinite linear alternate-reverse;
+  color: var(--color-tower-danger);
+  opacity: 0.8;
+}
+
+.glitch-text:hover::after {
+  animation: glitch-shift 0.3s infinite linear alternate-reverse;
+  color: var(--color-tower-glow);
+  opacity: 0.8;
+}
+
+/* Subtle scanline overlay - for future expansion */
+.scanlines::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.03) 2px,
+    rgba(0, 0, 0, 0.03) 4px
+  );
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.scanlines:hover::after {
+  opacity: 1;
+}
+
+/* Floor zone colors for tower visualization */
+.zone-upper { --zone-color: #94a3b8; }
+.zone-middle { --zone-color: #b8860b; }
+.zone-buffer { --zone-color: #dc2626; }
+.zone-lower { --zone-color: #737373; }
+.zone-life { --zone-color: #22c55e; }
+.zone-deep { --zone-color: #1a1a1a; }
