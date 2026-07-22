@@ -27,7 +27,12 @@ export default function LorePage() {
                     key={section.id}
                     className="relative pl-6 border-l border-tower-border"
                   >
-                    <div className="absolute left-0 top-0 w-2 h-2 rounded-full bg-tower-rust -translate-x-[5px] mt-1.5" />
+                    {/* Diamond marker */}
+                    <div className="absolute left-0 top-0 w-2 h-2 -translate-x-[5px] mt-1.5">
+                      <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+                        <path d="M4 0L8 4L4 8L0 4L4 0Z" fill="#8b4513" opacity="0.7" />
+                      </svg>
+                    </div>
                     <p className="font-mono text-tower-rust text-[10px] tracking-widest uppercase mb-1 m-0">
                       Часть {i + 1}
                     </p>
@@ -54,7 +59,11 @@ export default function LorePage() {
                 {terminology.map((item) => (
                   <div
                     key={item.term}
-                    className="p-4 rounded bg-tower-surface border border-tower-border"
+                    className="p-4 rounded-md border border-tower-border bg-tower-surface transition-shadow duration-300 hover:shadow-md"
+                    style={{
+                      borderLeftWidth: "2px",
+                      borderLeftColor: "rgba(139, 69, 19, 0.4)",
+                    }}
                   >
                     <h3 className="font-mono text-tower-rust text-sm font-semibold mb-1 m-0">
                       {item.term}

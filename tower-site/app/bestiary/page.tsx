@@ -62,6 +62,23 @@ export default function BestiaryPage() {
     return creatures.filter((c) => c.dangerLevel === d).length;
   }
 
+  function getFilterStyle(isActive: boolean, color: string) {
+    if (isActive) {
+      return {
+        backgroundColor: `${color}15`,
+        color,
+        border: `1px solid ${color}50`,
+        borderLeftWidth: "3px" as const,
+        borderLeftColor: color,
+      };
+    }
+    return {
+      backgroundColor: "transparent",
+      color: "rgba(255,255,255,0.4)",
+      border: "1px solid rgba(255,255,255,0.08)",
+    };
+  }
+
   return (
     <PageContainer
       title="Существа"
@@ -76,18 +93,13 @@ export default function BestiaryPage() {
           </p>
           <div className="flex flex-wrap gap-1.5">
             {categories.map((cat) => {
-              const isActive = selectedCategory === cat;
               const color = cat === "all" ? "#94a3b8" : categoryColors[cat];
               return (
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
-                  className="px-2.5 py-1 rounded font-mono text-[11px] transition-all duration-200 border cursor-pointer"
-                  style={
-                    isActive
-                      ? { backgroundColor: `${color}20`, color, borderColor: `${color}50` }
-                      : { backgroundColor: "transparent", color: "rgba(255,255,255,0.4)", borderColor: "rgba(255,255,255,0.08)" }
-                  }
+                  className="px-2.5 py-1 rounded-full font-mono text-[11px] transition-all duration-200 border cursor-pointer"
+                  style={getFilterStyle(selectedCategory === cat, color)}
                 >
                   {cat === "all" ? `Все (${creatures.length})` : `${categoryLabels[cat]} (${countByCategory(cat)})`}
                 </button>
@@ -103,7 +115,6 @@ export default function BestiaryPage() {
           </p>
           <div className="flex flex-wrap gap-1.5">
             {habitatOrder.map((h) => {
-              const isActive = selectedHabitat === h;
               const color = h === "all" ? "#94a3b8" : habitatColors[h];
               const count = countByHabitat(h);
               if (count === 0 && h !== "all") return null;
@@ -111,16 +122,8 @@ export default function BestiaryPage() {
                 <button
                   key={h}
                   onClick={() => setSelectedHabitat(h)}
-                  className="px-2.5 py-1 rounded font-mono text-[11px] transition-all duration-200 border cursor-pointer"
-                  style={
-                    isActive
-                      ? {
-                          backgroundColor: `${color}20`,
-                          color: h === "black" ? "#a3a3a3" : color,
-                          borderColor: `${color}50`,
-                        }
-                      : { backgroundColor: "transparent", color: "rgba(255,255,255,0.4)", borderColor: "rgba(255,255,255,0.08)" }
-                  }
+                  className="px-2.5 py-1 rounded-full font-mono text-[11px] transition-all duration-200 border cursor-pointer"
+                  style={getFilterStyle(selectedHabitat === h, color)}
                 >
                   {h === "all" ? `Все (${creatures.length})` : `${habitatLabels[h]} (${count})`}
                 </button>
@@ -136,7 +139,6 @@ export default function BestiaryPage() {
           </p>
           <div className="flex flex-wrap gap-1.5">
             {dangerLevels.map((d) => {
-              const isActive = selectedDanger === d;
               const color = d === "all" ? "#94a3b8" : dangerColors[d];
               const label = d === "all" ? "Все" : dangerLabels[d];
               const count = d === "all" ? creatures.length : countByDanger(d);
@@ -144,12 +146,8 @@ export default function BestiaryPage() {
                 <button
                   key={d}
                   onClick={() => setSelectedDanger(d)}
-                  className="px-2.5 py-1 rounded font-mono text-[11px] transition-all duration-200 border cursor-pointer"
-                  style={
-                    isActive
-                      ? { backgroundColor: `${color}20`, color, borderColor: `${color}50` }
-                      : { backgroundColor: "transparent", color: "rgba(255,255,255,0.4)", borderColor: "rgba(255,255,255,0.08)" }
-                  }
+                  className="px-2.5 py-1 rounded-full font-mono text-[11px] transition-all duration-200 border cursor-pointer"
+                  style={getFilterStyle(selectedDanger === d, color)}
                 >
                   {label} ({count})
                 </button>

@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { Card } from "antd";
 import PageContainer from "@/components/layout/PageContainer";
 import FloorIndicator from "@/components/ui/FloorIndicator";
 import TowerSlice from "@/components/ui/TowerSlice";
@@ -29,7 +28,11 @@ export default function TowerPage() {
               {babylonParts.map((part) => (
                 <div
                   key={part.id}
-                  className="flex items-center gap-3 p-3 rounded bg-tower-bg border border-tower-border"
+                  className="flex items-center gap-3 p-3 rounded-md border border-tower-border/50 bg-white/[0.02] transition-shadow duration-300 hover:shadow-md"
+                  style={{
+                    borderLeftWidth: "2px",
+                    borderLeftColor: `${part.color}60`,
+                  }}
                 >
                   <svg width={24} height={24} viewBox="0 0 24 24" className="shrink-0">
                     <path
@@ -71,7 +74,11 @@ export default function TowerPage() {
                 return (
                   <div
                     key={zone.id}
-                    className="flex items-center gap-3 p-2 rounded bg-tower-bg border border-tower-border"
+                    className="flex items-center gap-3 p-2.5 rounded-md border border-tower-border/50 bg-white/[0.02] transition-shadow duration-300 hover:shadow-md"
+                    style={{
+                      borderLeftWidth: "2px",
+                      borderLeftColor: `${zone.color}60`,
+                    }}
                   >
                     <div
                       className="w-2 h-8 rounded-full shrink-0"
@@ -84,6 +91,7 @@ export default function TowerPage() {
                         </p>
                         <FloorIndicator
                           floors={`${zone.floorStart.toLocaleString()}–${zone.floorEnd.toLocaleString()}`}
+                          color={zone.color}
                         />
                       </div>
                       <p className="text-tower-muted text-[10px] m-0">
@@ -105,9 +113,13 @@ export default function TowerPage() {
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {towerSections.map((section) => (
-            <Card
+            <div
               key={section.id}
-              className="!bg-tower-surface !border-tower-border"
+              className="p-4 rounded-md border border-tower-border bg-tower-surface transition-shadow duration-300 hover:shadow-md"
+              style={{
+                borderLeftWidth: "2px",
+                borderLeftColor: "rgba(139, 69, 19, 0.4)",
+              }}
             >
               <div className="flex items-center gap-2 mb-2 flex-wrap">
                 <h3 className="font-mono text-tower-text text-sm font-semibold m-0">
@@ -118,7 +130,7 @@ export default function TowerPage() {
               <p className="text-tower-muted text-xs leading-relaxed m-0">
                 {section.description}
               </p>
-            </Card>
+            </div>
           ))}
         </div>
       </section>

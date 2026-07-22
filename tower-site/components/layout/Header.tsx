@@ -24,9 +24,17 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 bg-tower-bg/95 backdrop-blur border-b border-tower-border">
-      <div className="max-w-6xl mx-auto px-4 flex items-center h-12">
+      <div className="max-w-6xl mx-auto px-4 flex items-center h-14">
         {/* Logo / Title */}
-        <Link href="/" className="mr-6 shrink-0">
+        <Link href="/" className="mr-6 shrink-0 flex items-center gap-2">
+          {/* Tower icon */}
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-tower-rust">
+            <rect x="5" y="2" width="6" height="12" rx="1" stroke="currentColor" strokeWidth="1.2" fill="none" />
+            <line x1="5" y1="5" x2="11" y2="5" stroke="currentColor" strokeWidth="0.8" />
+            <line x1="5" y1="8" x2="11" y2="8" stroke="currentColor" strokeWidth="0.8" />
+            <line x1="5" y1="11" x2="11" y2="11" stroke="currentColor" strokeWidth="0.8" />
+            <rect x="7" y="0" width="2" height="3" rx="0.5" fill="currentColor" opacity="0.6" />
+          </svg>
           <span className="font-mono text-tower-rust text-sm font-bold tracking-wider">
             БАШНЯ
           </span>
@@ -39,7 +47,7 @@ export default function Header() {
             selectedKeys={[activeKey]}
             items={menuItems}
             className="!bg-transparent !border-none !text-tower-text"
-            style={{ lineHeight: "48px" }}
+            style={{ lineHeight: "56px" }}
           />
         </nav>
 

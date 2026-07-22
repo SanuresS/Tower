@@ -24,23 +24,37 @@ const encounterBarColors = [
   "#dc2626",
 ];
 
+function lerpColor(a: string, b: string, t: number): string {
+  const ar = parseInt(a.slice(1, 3), 16);
+  const ag = parseInt(a.slice(3, 5), 16);
+  const ab = parseInt(a.slice(5, 7), 16);
+  const br = parseInt(b.slice(1, 3), 16);
+  const bg = parseInt(b.slice(3, 5), 16);
+  const bb = parseInt(b.slice(5, 7), 16);
+  const r = Math.round(ar + (br - ar) * t);
+  const g = Math.round(ag + (bg - ag) * t);
+  const bl = Math.round(ab + (bb - ab) * t);
+  return `#${r.toString(16).padStart(2, "0")}${g.toString(16).padStart(2, "0")}${bl.toString(16).padStart(2, "0")}`;
+}
+
 function EncounterBar({ label, icon, value }: { label: string; icon: React.ReactNode; value: number }) {
+  const t = value / 5;
+  const color = lerpColor("#22c55e", "#dc2626", t);
   return (
     <div className="flex items-center gap-1.5 min-w-0">
       <span className="text-[9px] text-tower-muted/50 shrink-0">{icon}</span>
-      <div className="flex items-center gap-0.5 min-w-0">
-        {[1, 2, 3, 4, 5].map((lvl) => (
-          <div
-            key={lvl}
-            className="h-1 rounded-full"
-            style={{
-              width: 6,
-              backgroundColor: lvl <= value ? encounterBarColors[value] : "rgba(255,255,255,0.05)",
-            }}
-          />
-        ))}
+      <div className="flex-1 h-1 rounded-full bg-white/[0.06] overflow-hidden">
+        <div
+          className="h-full rounded-full transition-all duration-500"
+          style={{
+            width: `${(value / 5) * 100}%`,
+            backgroundColor: color,
+          }}
+        />
       </div>
-      <span className="text-[9px] font-mono text-tower-muted/60 shrink-0 w-3 text-right">{value}</span>
+      <span className="text-[9px] font-mono shrink-0 w-3 text-right" style={{ color }}>
+        {value}
+      </span>
     </div>
   );
 }
@@ -52,12 +66,18 @@ export default function CreatureCard({ creature }: CreatureCardProps) {
 
   return (
     <div
-      className="relative group rounded-lg border border-tower-border bg-tower-surface overflow-hidden transition-all duration-300 hover:border-tower-rust/40 hover:shadow-lg hover:shadow-tower-rust/5"
+      className="relative rounded-lg border border-tower-border bg-tower-surface overflow-hidden transition-shadow duration-300 hover:shadow-lg"
+      style={{
+        borderLeftWidth: "2px",
+        borderLeftColor: `${catColor}60`,
+      }}
     >
       {/* Top accent stripe */}
       <div
-        className="h-1 w-full"
-        style={{ backgroundColor: catColor, opacity: 0.7 }}
+        className="h-[3px] w-full"
+        style={{
+          background: `linear-gradient(90deg, ${catColor}cc 0%, ${catColor}40 60%, transparent 100%)`,
+        }}
       />
 
       <div className="p-4">
@@ -70,7 +90,7 @@ export default function CreatureCard({ creature }: CreatureCardProps) {
             {[1, 2, 3, 4, 5].map((lvl) => (
               <div
                 key={lvl}
-                className="w-1.5 h-1.5 rounded-full transition-colors"
+                className="w-1.5 h-1.5 rounded-sm transition-colors"
                 style={{
                   backgroundColor: lvl <= creature.dangerLevel ? dColor : "rgba(255,255,255,0.08)",
                 }}
@@ -83,41 +103,46 @@ export default function CreatureCard({ creature }: CreatureCardProps) {
         <div className="flex flex-wrap gap-1.5 mb-3">
           {/* Category */}
           <span
-            className="inline-flex items-center gap-1 px-2 py-0.5 rounded font-mono text-[10px]"
+            className="inline-flex items-center gap-1 px-2.5 py-1 rounded text-[10px] font-mono"
             style={{
-              backgroundColor: `${catColor}18`,
+              backgroundColor: `${catColor}10`,
               color: catColor,
-              border: `1px solid ${catColor}30`,
+              border: `1px solid ${catColor}25`,
+              borderLeftWidth: "3px",
+              borderLeftColor: catColor,
             }}
           >
-            <span className="text-[9px] opacity-50">Класс:</span>
-            <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: catColor }} />
-            {categoryLabels[creature.category]}
+            <svg width="10" height="10" viewBox="0 0 16 16" fill="none" className="shrink-0">
+              <path d="M8 1L15 8L8 15L1 8L8 1Z" stroke={catColor} strokeWidth="1.5" fill={`${catColor}20`} />
+            </svg>
+            <span className="ml-1">{categoryLabels[creature.category]}</span>
           </span>
 
           {/* Habitat zone */}
           <span
-            className="inline-flex items-center gap-1 px-2 py-0.5 rounded font-mono text-[10px]"
+            className="inline-flex items-center gap-1 px-2.5 py-1 rounded text-[10px] font-mono"
             style={{
-              backgroundColor: `${hColor}18`,
+              backgroundColor: `${hColor}10`,
               color: creature.habitat === "black" ? "#a3a3a3" : hColor,
-              border: `1px solid ${hColor}30`,
+              border: `1px solid ${hColor}25`,
+              borderLeftWidth: "3px",
+              borderLeftColor: hColor,
             }}
           >
-            <span className="text-[9px] opacity-50">Зона:</span>
             {habitatLabels[creature.habitat]}
           </span>
 
           {/* Danger label */}
           <span
-            className="inline-flex items-center gap-1 px-2 py-0.5 rounded font-mono text-[10px]"
+            className="inline-flex items-center gap-1 px-2.5 py-1 rounded text-[10px] font-mono"
             style={{
-              backgroundColor: `${dColor}18`,
+              backgroundColor: `${dColor}10`,
               color: dColor,
-              border: `1px solid ${dColor}30`,
+              border: `1px solid ${dColor}25`,
+              borderLeftWidth: "3px",
+              borderLeftColor: dColor,
             }}
           >
-            <span className="text-[9px] opacity-50">Опасность:</span>
             {dangerLabels[creature.dangerLevel]}
           </span>
         </div>
@@ -128,7 +153,7 @@ export default function CreatureCard({ creature }: CreatureCardProps) {
         </p>
 
         {/* Encounter probability */}
-        <div className="flex flex-col gap-1 mb-3 p-2 rounded bg-tower-bg/50 border border-tower-border/50">
+        <div className="flex flex-col gap-1.5 mb-3 p-2.5 rounded-md border border-tower-border/50 bg-white/[0.02]">
           <p className="text-[9px] font-mono text-tower-muted/40 uppercase tracking-widest m-0 mb-0.5">
             Вероятность встречи
           </p>
@@ -167,7 +192,7 @@ export default function CreatureCard({ creature }: CreatureCardProps) {
             {creature.tags.map((tag) => (
               <span
                 key={tag}
-                className="px-1.5 py-0.5 rounded text-[9px] font-mono text-tower-muted/70 bg-tower-bg/50 border border-tower-border/50"
+                className="px-2 py-0.5 rounded-full text-[9px] font-mono text-tower-muted/60 border border-tower-border/50"
               >
                 {tag}
               </span>

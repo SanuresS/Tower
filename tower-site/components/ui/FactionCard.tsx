@@ -83,19 +83,11 @@ export default function FactionCard({ faction, highlighted }: FactionCardProps) 
   return (
     <div
       id={`faction-${faction.id}`}
-      className={`relative group rounded-lg border border-tower-border bg-tower-surface overflow-hidden transition-all duration-300 hover:shadow-xl ${highlighted ? "faction-highlight" : ""}`}
+      className={`relative rounded-lg border border-tower-border bg-tower-surface overflow-hidden transition-shadow duration-300 hover:shadow-lg ${highlighted ? "faction-highlight" : ""}`}
       style={{
         borderLeftWidth: "2px",
-        borderLeftColor: "transparent",
+        borderLeftColor: `${zColor}60`,
         ["--zone-glow" as string]: zColor,
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.borderLeftColor = `${zColor}80`;
-        e.currentTarget.style.boxShadow = `0 8px 32px -8px ${zColor}15, 0 0 0 1px ${zColor}10`;
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.borderLeftColor = "transparent";
-        e.currentTarget.style.boxShadow = "";
       }}
     >
       {/* Top accent stripe */}
@@ -114,18 +106,19 @@ export default function FactionCard({ faction, highlighted }: FactionCardProps) 
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-2">
-              <h3 className="text-tower-text font-mono text-[15px] font-semibold m-0 leading-snug">
+              <h3 className="text-tower-text font-mono text-[15px] font-semibold m-0 leading-tight">
                 {faction.name}
               </h3>
               <span
-                className="inline-flex items-center gap-1 px-2 py-0.5 rounded font-mono text-[10px] shrink-0 mt-0.5"
+                className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono shrink-0 mt-0.5"
                 style={{
-                  backgroundColor: "rgba(255,255,255,0.05)",
-                  color: "#a3a3a3",
-                  border: "1px solid rgba(255,255,255,0.1)",
+                  backgroundColor: `${zColor}10`,
+                  color: `${zColor}cc`,
+                  border: `1px solid ${zColor}25`,
+                  borderLeftWidth: "3px",
+                  borderLeftColor: zColor,
                 }}
               >
-                <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "#737373" }} />
                 {factionTypeLabels[faction.type]}
               </span>
             </div>
@@ -140,38 +133,43 @@ export default function FactionCard({ faction, highlighted }: FactionCardProps) 
         {/* Badges row: zone + religion + population */}
         <div className="flex flex-wrap gap-1.5 mb-4 mt-3">
           <span
-            className="inline-flex items-center gap-1 px-2 py-0.5 rounded font-mono text-[10px]"
+            className="inline-flex items-center gap-1 px-2.5 py-1 rounded text-[10px] font-mono"
             style={{
-              backgroundColor: `${zColor}18`,
+              backgroundColor: `${zColor}10`,
               color: zColor,
-              border: `1px solid ${zColor}30`,
+              border: `1px solid ${zColor}25`,
+              borderLeftWidth: "3px",
+              borderLeftColor: zColor,
             }}
           >
-            <span className="text-[9px] opacity-50">Зона:</span>
-            {locationLabels[faction.zone]}
+            <svg width="10" height="10" viewBox="0 0 16 16" fill="none" className="shrink-0">
+              <path d="M8 1L15 8L8 15L1 8L8 1Z" stroke={zColor} strokeWidth="1.5" fill={`${zColor}20`} />
+            </svg>
+            <span className="ml-1">{locationLabels[faction.zone]}</span>
           </span>
 
           <span
-            className="inline-flex items-center gap-1 px-2 py-0.5 rounded font-mono text-[10px]"
+            className="inline-flex items-center gap-1 px-2.5 py-1 rounded text-[10px] font-mono"
             style={{
-              backgroundColor: `${rColor}18`,
+              backgroundColor: `${rColor}10`,
               color: rColor,
-              border: `1px solid ${rColor}30`,
+              border: `1px solid ${rColor}25`,
+              borderLeftWidth: "3px",
+              borderLeftColor: rColor,
             }}
           >
-            <span className="text-[9px] opacity-50">Религия:</span>
             {religionLabels[faction.religion]}
           </span>
 
           <span
-            className="inline-flex items-center gap-1 px-2 py-0.5 rounded font-mono text-[10px]"
+            className="inline-flex items-center gap-1 px-2.5 py-1 rounded text-[10px] font-mono"
             style={{
-              backgroundColor: "rgba(255,255,255,0.04)",
+              backgroundColor: "rgba(255,255,255,0.03)",
               color: "#a3a3a3",
               border: "1px solid rgba(255,255,255,0.08)",
             }}
           >
-            <span className="text-[9px] opacity-50">Население:</span>
+            <span className="text-[9px] opacity-50">Нас.</span>
             {faction.population}
           </span>
         </div>

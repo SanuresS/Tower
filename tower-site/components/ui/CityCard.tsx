@@ -37,6 +37,14 @@ const sizeDots: Record<string, number> = {
   hive: 5,
 };
 
+const sizeLabels: Record<string, string> = {
+  outpost: "Пост",
+  small: "Малый",
+  city: "Город",
+  large: "Большой",
+  hive: "Улей",
+};
+
 function SpecIcon({ spec, color }: { spec: CitySpecialization; color: string }) {
   const size = 14;
   switch (spec) {
@@ -197,28 +205,20 @@ function ReligionPie({ religions }: { religions: { religion: Religion; percent: 
 
 export default function CityCard({ city, highlighted }: CityCardProps) {
   const zColor = cityZoneColors[city.zone];
-  const rColor = religionColors[city.religion];
   const primarySpec = city.specialization[0] ?? "none";
   const activeSpecs = city.specialization.filter((s) => s !== "none");
   const factionId = city.factionName ? findFactionIdByName(city.factionName) : null;
   const dots = sizeDots[city.size] ?? 3;
+  const sizeLabel = sizeLabels[city.size] ?? city.size;
 
   return (
     <div
       id={`city-${city.id}`}
-      className={`relative group rounded-lg border border-tower-border bg-tower-surface overflow-hidden transition-all duration-300 hover:shadow-xl ${highlighted ? "city-highlight" : ""}`}
+      className={`relative rounded-lg border border-tower-border bg-tower-surface overflow-hidden transition-shadow duration-300 hover:shadow-lg ${highlighted ? "city-highlight" : ""}`}
       style={{
         borderLeftWidth: "2px",
-        borderLeftColor: "transparent",
+        borderLeftColor: `${zColor}60`,
         ["--zone-glow" as string]: zColor,
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.borderLeftColor = `${zColor}80`;
-        e.currentTarget.style.boxShadow = `0 8px 32px -8px ${zColor}15, 0 0 0 1px ${zColor}10`;
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.borderLeftColor = "transparent";
-        e.currentTarget.style.boxShadow = "";
       }}
     >
       {/* Top accent stripe */}
@@ -230,93 +230,127 @@ export default function CityCard({ city, highlighted }: CityCardProps) {
       />
 
       <div className="p-5 pt-4">
-        {/* Header: icon + name */}
-        <div className="flex items-start gap-2.5 mb-3">
-          <div className="shrink-0 mt-0.5">
-            <SpecIcon spec={primarySpec} color={zColor} />
+        {/* Row 1: SpecIcon + Name + Size indicator */}
+        <div className="flex items-start justify-between gap-3 mb-3">
+          {/* Left: icon + name */}
+          <div className="flex items-start gap-2.5 min-w-0">
+            <div className="shrink-0 mt-0.5">
+              <SpecIcon spec={primarySpec} color={zColor} />
+            </div>
+            <div className="min-w-0">
+              <h3 className="text-tower-text font-mono text-[15px] font-semibold m-0 leading-tight">
+                {city.name}
+              </h3>
+              {city.population && (
+                <span className="text-[10px] font-mono text-tower-muted/40 mt-0.5 block">
+                  {city.population}
+                </span>
+              )}
+            </div>
           </div>
-          <div className="flex-1 min-w-0">
-            <h3 className="text-tower-text font-mono text-[15px] font-semibold m-0 leading-snug">
-              {city.name}
-            </h3>
+
+          {/* Right: size indicator */}
+          <div className="shrink-0 flex flex-col items-end gap-1">
+            <span className="text-[8px] font-mono uppercase tracking-[0.15em] text-tower-muted/40">
+              Размер города
+            </span>
+            <div className="flex items-center gap-[3px]">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <span
+                  key={i}
+                  className="w-[5px] h-[5px] rounded-sm transition-colors"
+                  style={{
+                    backgroundColor: i < dots ? zColor : "rgba(255,255,255,0.08)",
+                  }}
+                />
+              ))}
+            </div>
+            <span className="text-[9px] font-mono text-tower-muted/50">{sizeLabel}</span>
           </div>
         </div>
 
-        {/* Info row: zone + size dots + specializations */}
+        {/* Row 2: Zone + Specializations + Faction */}
         <div className="flex flex-wrap items-center gap-2 mb-3">
-          {/* Zone badge */}
+          {/* Zone pill — left accent bar */}
           <span
-            className="inline-flex items-center gap-1 px-2 py-0.5 rounded font-mono text-[10px]"
+            className="inline-flex items-center px-2.5 py-1 rounded text-[10px] font-mono"
             style={{
-              backgroundColor: `${zColor}18`,
-              color: zColor,
-              border: `1px solid ${zColor}30`,
+              backgroundColor: `${zColor}10`,
+              border: `1px solid ${zColor}25`,
+              borderLeftWidth: "3px",
+              borderLeftColor: zColor,
             }}
           >
-            {cityZoneLabels[city.zone]}
+            <svg width="10" height="10" viewBox="0 0 16 16" fill="none" className="shrink-0">
+              <path d="M8 1L15 8L8 15L1 8L8 1Z" stroke={zColor} strokeWidth="1.5" fill={`${zColor}20`} />
+            </svg>
+            <span className="ml-1.5" style={{ color: zColor }}>
+              {cityZoneLabels[city.zone]}
+            </span>
           </span>
 
-          {/* Size dots */}
-          <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <span
-                key={i}
-                className="w-1.5 h-1.5 rounded-full"
-                style={{
-                  backgroundColor: i < dots ? zColor : "rgba(255,255,255,0.1)",
-                }}
-              />
-            ))}
-          </span>
-
-          {/* Specialization badges */}
+          {/* Specialization pills — outlined */}
           {activeSpecs.map((spec) => (
             <span
               key={spec}
-              className="inline-flex items-center gap-1 px-2 py-0.5 rounded font-mono text-[10px]"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-mono transition-colors"
               style={{
-                backgroundColor: `${zColor}12`,
-                color: `${zColor}cc`,
-                border: `1px solid ${zColor}25`,
+                backgroundColor: "transparent",
+                color: `${zColor}bb`,
+                border: `1px solid ${zColor}35`,
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = `${zColor}12`;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = "transparent";
               }}
             >
               <SpecIcon spec={spec} color={zColor} />
               {citySpecializationLabels[spec]}
             </span>
           ))}
-        </div>
 
-        {/* Faction link */}
-        {city.factionName && (
-          <div className="mb-3">
-            {factionId ? (
+          {/* Faction pill — golden accent */}
+          {city.factionName && (
+            factionId ? (
               <Link
                 href={`/factions?highlight=${factionId}`}
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded font-mono text-[10px] transition-all duration-200 hover:opacity-80"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-mono transition-colors"
                 style={{
-                  backgroundColor: "rgba(255,255,255,0.04)",
+                  backgroundColor: "rgba(184,134,11,0.08)",
                   color: "#d4a853",
                   border: "1px solid rgba(184,134,11,0.25)",
                 }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = "rgba(184,134,11,0.15)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = "rgba(184,134,11,0.08)";
+                }}
               >
-                <span className="text-[9px] opacity-50">Фракция:</span>
+                <svg width="10" height="10" viewBox="0 0 16 16" fill="none" className="shrink-0">
+                  <path d="M8 1L10 6H15L11 9.5L12.5 15L8 11.5L3.5 15L5 9.5L1 6H6L8 1Z" stroke="#d4a853" strokeWidth="1" fill="rgba(212,168,83,0.15)" />
+                </svg>
                 {city.factionName}
               </Link>
             ) : (
               <span
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded font-mono text-[10px]"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-mono"
                 style={{
-                  backgroundColor: "rgba(255,255,255,0.04)",
-                  color: "#a3a3a3",
+                  backgroundColor: "rgba(255,255,255,0.03)",
+                  color: "#737373",
                   border: "1px solid rgba(255,255,255,0.08)",
                 }}
               >
-                <span className="text-[9px] opacity-50">Фракция:</span>
+                <svg width="10" height="10" viewBox="0 0 16 16" fill="none" className="shrink-0">
+                  <path d="M8 1L10 6H15L11 9.5L12.5 15L8 11.5L3.5 15L5 9.5L1 6H6L8 1Z" stroke="#737373" strokeWidth="1" fill="rgba(115,115,115,0.15)" />
+                </svg>
                 {city.factionName}
               </span>
-            )}
-          </div>
-        )}
+            )
+          )}
+        </div>
 
         {/* Combined: Metrics + Religions */}
         <div className="mb-4 p-3 rounded-md border border-tower-border/50 bg-white/[0.02]">

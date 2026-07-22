@@ -2,7 +2,6 @@
 
 import React from "react";
 import Link from "next/link";
-import { Button } from "antd";
 import TowerSlice from "@/components/ui/TowerSlice";
 import { babylonParts } from "@/data/tower";
 
@@ -24,13 +23,11 @@ export default function TowerPreview() {
                   120 км мегаструктура, 3 вложенные части, 6 зон
                 </p>
               </div>
-              <Link href="/tower">
-                <Button
-                  type="link"
-                  className="!text-tower-rust !font-mono !text-xs"
-                >
-                  Подробнее →
-                </Button>
+              <Link
+                href="/tower"
+                className="text-tower-rust text-xs font-mono hover:underline transition-colors"
+              >
+                Подробнее →
               </Link>
             </div>
 
@@ -38,7 +35,11 @@ export default function TowerPreview() {
               {babylonParts.map((part) => (
                 <div
                   key={part.id}
-                  className="flex items-start gap-3 p-3 rounded bg-tower-bg border border-tower-border"
+                  className="flex items-start gap-3 p-3 rounded-md border border-tower-border/50 bg-white/[0.02] transition-shadow duration-300 hover:shadow-md"
+                  style={{
+                    borderLeftWidth: "2px",
+                    borderLeftColor: `${part.color}60`,
+                  }}
                 >
                   <div
                     className="w-1 h-full rounded-full shrink-0 self-stretch"

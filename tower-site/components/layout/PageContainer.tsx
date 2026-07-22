@@ -22,7 +22,12 @@ export default function PageContainer({
             {subtitle && (
               <p className="text-tower-muted text-sm mt-2 m-0">{subtitle}</p>
             )}
-            <div className="mt-4 h-px bg-gradient-to-r from-tower-rust/60 via-tower-rust/20 to-transparent" />
+            {/* Ornamental divider with diamond */}
+            <div className="mt-4 flex items-center gap-2">
+              <div className="h-px flex-1 bg-gradient-to-r from-tower-rust/50 to-transparent" />
+              <span className="text-tower-rust/40 text-[10px]">◆</span>
+              <div className="h-px w-8 bg-tower-border" />
+            </div>
           </div>
         )}
         {children}

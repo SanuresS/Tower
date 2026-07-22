@@ -48,6 +48,23 @@ function FactionsContent() {
     setSelectedZone("all");
   }
 
+  function getFilterStyle(isActive: boolean, color: string) {
+    if (isActive) {
+      return {
+        backgroundColor: `${color}15`,
+        color,
+        border: `1px solid ${color}50`,
+        borderLeftWidth: "3px",
+        borderLeftColor: color,
+      };
+    }
+    return {
+      backgroundColor: "transparent",
+      color: "rgba(255,255,255,0.4)",
+      border: "1px solid rgba(255,255,255,0.08)",
+    };
+  }
+
   return (
     <PageContainer
       title="Фракции"
@@ -59,22 +76,8 @@ function FactionsContent() {
         <div className="flex justify-center">
           <button
             onClick={() => setSelectedZone("all")}
-            className="px-6 py-2.5 rounded-xl font-mono text-[12px] tracking-wide transition-all duration-300 border cursor-pointer"
-            style={
-              selectedZone === "all"
-                ? {
-                    background: "linear-gradient(135deg, rgba(148,163,184,0.15), rgba(148,163,184,0.05))",
-                    color: "#cbd5e1",
-                    borderColor: "rgba(148,163,184,0.4)",
-                    boxShadow: "0 0 20px rgba(148,163,184,0.1), inset 0 1px 0 rgba(148,163,184,0.1)",
-                  }
-                : {
-                    background: "linear-gradient(135deg, rgba(148,163,184,0.06), rgba(148,163,184,0.02))",
-                    color: "rgba(148,163,184,0.65)",
-                    borderColor: "rgba(148,163,184,0.2)",
-                    boxShadow: "none",
-                  }
-            }
+            className="px-6 py-2 rounded-full font-mono text-[12px] tracking-wide transition-all duration-200 border cursor-pointer"
+            style={getFilterStyle(selectedZone === "all", "#94a3b8")}
           >
             Все
           </button>
@@ -82,55 +85,41 @@ function FactionsContent() {
 
         {/* Divider + Sects button */}
         <div className="flex items-center gap-4">
-          <div className="h-px flex-1 bg-gradient-to-r from-transparent via-tower-border/40 to-transparent" />
+          <div className="h-px flex-1 bg-white/[0.06]" />
           <button
             onClick={() => setSelectedZone(selectedZone === "sects" ? "all" : "sects")}
-            className="px-5 py-2 rounded-lg font-mono text-[12px] transition-all duration-300 cursor-pointer"
+            className="px-5 py-1.5 rounded-full font-mono text-[11px] transition-all duration-200 cursor-pointer"
             style={
               selectedZone === "sects"
                 ? {
-                    background: `linear-gradient(135deg, ${sectsColor}25, ${sectsColor}10)`,
+                    backgroundColor: `${sectsColor}15`,
                     border: `1px solid ${sectsColor}50`,
+                    borderLeftWidth: "3px",
+                    borderLeftColor: sectsColor,
                     color: sectsColor,
-                    boxShadow: `0 0 24px ${sectsColor}15, inset 0 1px 0 ${sectsColor}10`,
                   }
                 : {
                     backgroundColor: "transparent",
                     border: `1px solid ${sectsColor}20`,
-                    color: "rgba(255,255,255,0.45)",
+                    color: "rgba(255,255,255,0.4)",
                   }
             }
           >
             ✦ Секты ✦
           </button>
-          <div className="h-px flex-1 bg-gradient-to-r from-transparent via-tower-border/40 to-transparent" />
+          <div className="h-px flex-1 bg-white/[0.06]" />
         </div>
 
-        {/* Zone buttons — same style as All, below Sects */}
+        {/* Zone buttons — same pill style */}
         <div className="flex justify-center gap-3">
           {locationZones.map((z) => {
-            const isActive = selectedZone === z;
             const color = locationColors[z];
             return (
               <button
                 key={z}
                 onClick={() => setSelectedZone(z)}
-                className="px-5 py-2 rounded-xl font-mono text-[12px] tracking-wide transition-all duration-300 border cursor-pointer"
-                style={
-                  isActive
-                    ? {
-                        background: `linear-gradient(135deg, ${color}20, ${color}08)`,
-                        color,
-                        borderColor: `${color}50`,
-                        boxShadow: `0 0 20px ${color}12, inset 0 1px 0 ${color}10`,
-                      }
-                    : {
-                        background: `linear-gradient(135deg, ${color}08, ${color}03)`,
-                        color: `${color}aa`,
-                        borderColor: `${color}18`,
-                        boxShadow: "none",
-                      }
-                }
+                className="px-5 py-1.5 rounded-full font-mono text-[12px] tracking-wide transition-all duration-200 border cursor-pointer"
+                style={getFilterStyle(selectedZone === z, color)}
               >
                 {locationLabels[z]}
               </button>

@@ -64,6 +64,23 @@ function FilterGroup({
   onSelect: (v: string) => void;
   colorFn?: (v: string) => string;
 }) {
+  function getStyle(isActive: boolean, color: string) {
+    if (isActive) {
+      return {
+        backgroundColor: `${color}15`,
+        color,
+        border: `1px solid ${color}50`,
+        borderLeftWidth: "3px" as const,
+        borderLeftColor: color,
+      };
+    }
+    return {
+      backgroundColor: "transparent",
+      color: "rgba(255,255,255,0.4)",
+      border: "1px solid rgba(255,255,255,0.08)",
+    };
+  }
+
   return (
     <div>
       <p className="text-[10px] font-mono text-tower-muted/60 uppercase tracking-widest mb-2 m-0">
@@ -72,28 +89,20 @@ function FilterGroup({
       <div className="flex flex-wrap gap-1.5">
         <button
           onClick={() => onSelect("all")}
-          className="px-2.5 py-1 rounded font-mono text-[11px] transition-all duration-200 border cursor-pointer"
-          style={
-            selected === "all"
-              ? { backgroundColor: "rgba(148,163,184,0.15)", color: "#cbd5e1", borderColor: "rgba(148,163,184,0.4)" }
-              : { backgroundColor: "transparent", color: "rgba(255,255,255,0.4)", borderColor: "rgba(255,255,255,0.08)" }
-          }
+          className="px-2.5 py-1 rounded-full font-mono text-[11px] transition-all duration-200 border cursor-pointer"
+          style={getStyle(selected === "all", "#94a3b8")}
         >
           Все
         </button>
         {items.map((v) => {
           const isActive = selected === v;
-          const color = colorFn ? colorFn(v) : "#cbd5e1";
+          const color = colorFn ? colorFn(v) : "#94a3b8";
           return (
             <button
               key={v}
               onClick={() => onSelect(v)}
-              className="px-2.5 py-1 rounded font-mono text-[11px] transition-all duration-200 border cursor-pointer"
-              style={
-                isActive
-                  ? { backgroundColor: `${color}20`, color, borderColor: `${color}50` }
-                  : { backgroundColor: "transparent", color: "rgba(255,255,255,0.4)", borderColor: "rgba(255,255,255,0.08)" }
-              }
+              className="px-2.5 py-1 rounded-full font-mono text-[11px] transition-all duration-200 border cursor-pointer"
+              style={getStyle(isActive, color)}
             >
               {labels[v]}
             </button>
@@ -170,7 +179,7 @@ function CitiesContent() {
           labels={cityZoneLabels}
           selected={selectedZone}
           onSelect={(v) => setSelectedZone(v as CityZone | "all")}
-          colorFn={(v) => cityZoneColors[v as CityZone] ?? "#cbd5e1"}
+          colorFn={(v) => cityZoneColors[v as CityZone] ?? "#94a3b8"}
         />
 
         <FilterGroup
@@ -203,7 +212,7 @@ function CitiesContent() {
           labels={religionLabels}
           selected={selectedReligion}
           onSelect={(v) => setSelectedReligion(v as Religion | "all")}
-          colorFn={(v) => religionColors[v as Religion] ?? "#cbd5e1"}
+          colorFn={(v) => religionColors[v as Religion] ?? "#94a3b8"}
         />
 
         {hasFilters && (

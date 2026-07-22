@@ -36,72 +36,18 @@ body {
   background: var(--color-tower-muted);
 }
 
-/* Glitch text effect - CSS only, extensible for future JS animations */
-@keyframes glitch-clip {
-  0% { clip-path: inset(40% 0 61% 0); }
-  20% { clip-path: inset(92% 0 1% 0); }
-  40% { clip-path: inset(43% 0 1% 0); }
-  60% { clip-path: inset(25% 0 58% 0); }
-  80% { clip-path: inset(54% 0 7% 0); }
-  100% { clip-path: inset(58% 0 43% 0); }
-}
-
-@keyframes glitch-shift {
-  0% { transform: translate(0); }
-  20% { transform: translate(-2px, 2px); }
-  40% { transform: translate(-2px, -2px); }
-  60% { transform: translate(2px, 2px); }
-  80% { transform: translate(2px, -2px); }
-  100% { transform: translate(0); }
-}
-
+/* Glitch text effect — disabled (kept for future) */
 .glitch-text {
   position: relative;
 }
 
-.glitch-text::before,
-.glitch-text::after {
-  content: attr(data-text);
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  pointer-events: none;
-}
-
-.glitch-text:hover::before {
-  animation: glitch-clip 0.3s infinite linear alternate-reverse;
-  color: var(--color-tower-danger);
-  opacity: 0.8;
-}
-
-.glitch-text:hover::after {
-  animation: glitch-shift 0.3s infinite linear alternate-reverse;
-  color: var(--color-tower-glow);
-  opacity: 0.8;
-}
-
-/* Subtle scanline overlay - for future expansion */
+/* Scanlines — disabled (kept for future) */
 .scanlines::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(0, 0, 0, 0.03) 2px,
-    rgba(0, 0, 0, 0.03) 4px
-  );
   pointer-events: none;
   opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.scanlines:hover::after {
-  opacity: 1;
 }
 
 /* Floor zone colors for tower visualization */
@@ -112,11 +58,11 @@ body {
 .zone-life { --zone-color: #22c55e; }
 .zone-deep { --zone-color: #1a1a1a; }
 
-/* City highlight glow animation */
+/* City highlight glow animation — amber */
 @keyframes cityGlow {
   0% {
-    box-shadow: 0 0 30px rgba(220, 38, 38, 0.6), 0 0 60px rgba(220, 38, 38, 0.3), 0 0 90px rgba(220, 38, 38, 0.15);
-    border-left-color: rgba(220, 38, 38, 0.9) !important;
+    box-shadow: 0 0 24px rgba(184, 134, 11, 0.5), 0 0 48px rgba(184, 134, 11, 0.2);
+    border-left-color: rgba(184, 134, 11, 0.9) !important;
   }
   100% {
     box-shadow: none;
@@ -128,11 +74,11 @@ body {
   animation: cityGlow 5s ease-out forwards;
 }
 
-/* Faction highlight glow animation */
+/* Faction highlight glow animation — amber */
 @keyframes factionGlow {
   0% {
-    box-shadow: 0 0 30px rgba(220, 38, 38, 0.6), 0 0 60px rgba(220, 38, 38, 0.3), 0 0 90px rgba(220, 38, 38, 0.15);
-    border-left-color: rgba(220, 38, 38, 0.9) !important;
+    box-shadow: 0 0 24px rgba(184, 134, 11, 0.5), 0 0 48px rgba(184, 134, 11, 0.2);
+    border-left-color: rgba(184, 134, 11, 0.9) !important;
   }
   100% {
     box-shadow: none;

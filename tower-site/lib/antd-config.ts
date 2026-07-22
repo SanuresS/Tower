@@ -11,7 +11,7 @@ export const darkTheme: ThemeConfig = {
     colorText: "#d4d4d4",
     colorTextSecondary: "#737373",
     colorTextTertiary: "#525252",
-    borderRadius: 6,
+    borderRadius: 8,
     fontFamily: "var(--font-geist-sans), Arial, sans-serif",
   },
   components: {
@@ -26,12 +26,14 @@ export const darkTheme: ThemeConfig = {
     Card: {
       colorBgContainer: "#141414",
       colorBorderSecondary: "#2a2a2a",
+      borderRadiusLG: 8,
     },
     Button: {
       defaultBg: "#1a1a1a",
       defaultBorderColor: "#2a2a2a",
       defaultColor: "#d4d4d4",
       primaryColor: "#fff",
+      borderRadius: 8,
     },
     Typography: {
       colorText: "#d4d4d4",
@@ -40,6 +42,12 @@ export const darkTheme: ThemeConfig = {
     Tag: {
       defaultBg: "#1a1a1a",
       defaultColor: "#d4d4d4",
+    },
+    Tabs: {
+      inkBarColor: "#8b4513",
+      itemActiveColor: "#b8860b",
+      itemHoverColor: "#d4a853",
+      itemSelectedColor: "#d4d4d4",
     },
   },
 };
