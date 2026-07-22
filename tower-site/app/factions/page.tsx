@@ -45,17 +45,6 @@ export default function FactionsPage() {
             Местоположение
           </p>
           <div className="flex flex-wrap gap-1.5">
-            <button
-              onClick={() => setSelectedZone("all")}
-              className="px-2.5 py-1 rounded font-mono text-[11px] transition-all duration-200 border cursor-pointer"
-              style={
-                selectedZone === "all"
-                  ? { backgroundColor: "rgba(148,163,184,0.12)", color: "#94a3b8", borderColor: "rgba(148,163,184,0.3)" }
-                  : { backgroundColor: "transparent", color: "rgba(255,255,255,0.4)", borderColor: "rgba(255,255,255,0.08)" }
-              }
-            >
-              Все ({factions.length})
-            </button>
             {locationZones.map((z) => {
               const isActive = selectedZone === z;
               const color = locationColors[z];
@@ -76,6 +65,31 @@ export default function FactionsPage() {
               );
             })}
           </div>
+        </div>
+
+        {/* All button — prominent, centered, directly above Sects */}
+        <div className="flex justify-center">
+          <button
+            onClick={() => setSelectedZone("all")}
+            className="px-6 py-2.5 rounded-xl font-mono text-[12px] tracking-wide transition-all duration-300 border cursor-pointer"
+            style={
+              selectedZone === "all"
+                ? {
+                    background: "linear-gradient(135deg, rgba(148,163,184,0.15), rgba(148,163,184,0.05))",
+                    color: "#cbd5e1",
+                    borderColor: "rgba(148,163,184,0.4)",
+                    boxShadow: "0 0 20px rgba(148,163,184,0.1), inset 0 1px 0 rgba(148,163,184,0.1)",
+                  }
+                : {
+                    background: "linear-gradient(135deg, rgba(148,163,184,0.06), rgba(148,163,184,0.02))",
+                    color: "rgba(148,163,184,0.65)",
+                    borderColor: "rgba(148,163,184,0.2)",
+                    boxShadow: "none",
+                  }
+            }
+          >
+            Все ({factions.length})
+          </button>
         </div>
 
         {/* Divider + Sects button */}
@@ -103,15 +117,6 @@ export default function FactionsPage() {
           </button>
           <div className="h-px flex-1 bg-gradient-to-r from-transparent via-tower-border/40 to-transparent" />
         </div>
-
-        {hasFilters && (
-          <button
-            onClick={resetFilters}
-            className="text-[11px] font-mono text-tower-rust/70 hover:text-tower-rust transition-colors cursor-pointer bg-transparent border-none p-0"
-          >
-            Сбросить фильтры
-          </button>
-        )}
       </div>
 
       {hasFilters && (
