@@ -130,12 +130,12 @@ export const relationToneColors: Record<RelationTone, string> = {
 };
 
 export const relationToneOrder: RelationTone[] = [
-  "allied",
-  "cooperative",
-  "neutral_positive",
-  "neutral_negative",
-  "tense",
   "hostile",
+  "tense",
+  "neutral_negative",
+  "neutral_positive",
+  "cooperative",
+  "allied",
 ];
 
 /* ─── Data ─── */
