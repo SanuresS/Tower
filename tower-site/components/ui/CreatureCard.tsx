@@ -83,38 +83,41 @@ export default function CreatureCard({ creature }: CreatureCardProps) {
         <div className="flex flex-wrap gap-1.5 mb-3">
           {/* Category */}
           <span
-            className="inline-flex items-center gap-1 px-2 py-0.5 rounded font-mono text-[10px] font-medium"
+            className="inline-flex items-center gap-1 px-2 py-0.5 rounded font-mono text-[10px]"
             style={{
               backgroundColor: `${catColor}18`,
               color: catColor,
               border: `1px solid ${catColor}30`,
             }}
           >
+            <span className="text-[9px] opacity-50">Класс:</span>
             <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: catColor }} />
             {categoryLabels[creature.category]}
           </span>
 
           {/* Habitat zone */}
           <span
-            className="inline-flex items-center gap-1 px-2 py-0.5 rounded font-mono text-[10px] font-medium"
+            className="inline-flex items-center gap-1 px-2 py-0.5 rounded font-mono text-[10px]"
             style={{
               backgroundColor: `${hColor}18`,
               color: creature.habitat === "black" ? "#a3a3a3" : hColor,
               border: `1px solid ${hColor}30`,
             }}
           >
+            <span className="text-[9px] opacity-50">Зона:</span>
             {habitatLabels[creature.habitat]}
           </span>
 
           {/* Danger label */}
           <span
-            className="inline-flex items-center gap-1 px-2 py-0.5 rounded font-mono text-[10px] font-medium"
+            className="inline-flex items-center gap-1 px-2 py-0.5 rounded font-mono text-[10px]"
             style={{
               backgroundColor: `${dColor}18`,
               color: dColor,
               border: `1px solid ${dColor}30`,
             }}
           >
+            <span className="text-[9px] opacity-50">Опасность:</span>
             {dangerLabels[creature.dangerLevel]}
           </span>
         </div>

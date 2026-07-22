@@ -4,25 +4,24 @@ import React, { useState, useMemo } from "react";
 import { Button } from "antd";
 import PageContainer from "@/components/layout/PageContainer";
 import FactionCard from "@/components/ui/FactionCard";
-import { factions, factionTypeLabels, FactionType } from "@/data/factions";
+import {
+  factions,
+  locationLabels,
+  locationColors,
+  LocationZone,
+} from "@/data/factions";
 
-const types: (FactionType | "all")[] = [
-  "all",
-  "clan",
-  "coalition",
-  "religion",
-  "group",
-];
+const zones: (LocationZone | "all")[] = ["all", "lower", "middle", "special"];
 
 export default function FactionsPage() {
-  const [selectedType, setSelectedType] = useState<FactionType | "all">("all");
+  const [selectedZone, setSelectedZone] = useState<LocationZone | "all">("all");
 
   const filtered = useMemo(
     () =>
-      selectedType === "all"
+      selectedZone === "all"
         ? factions
-        : factions.filter((f) => f.type === selectedType),
-    [selectedType]
+        : factions.filter((f) => f.zone === selectedZone),
+    [selectedZone]
   );
 
   return (
@@ -30,25 +29,39 @@ export default function FactionsPage() {
       title="Фракции"
       subtitle={`${factions.length} объединений, населяющих Башню`}
     >
-      {/* Type filter */}
+      {/* Zone filter */}
       <div className="flex flex-wrap gap-2 mb-8">
-        {types.map((type) => (
-          <Button
-            key={type}
-            size="small"
-            type={selectedType === type ? "primary" : "default"}
-            onClick={() => setSelectedType(type)}
-            className="!font-mono !text-xs"
-          >
-            {type === "all"
-              ? `Все (${factions.length})`
-              : `${factionTypeLabels[type]} (${factions.filter((f) => f.type === type).length})`}
-          </Button>
-        ))}
+        {zones.map((zone) => {
+          const isActive = selectedZone === zone;
+          const count =
+            zone === "all"
+              ? factions.length
+              : factions.filter((f) => f.zone === zone).length;
+          const color = zone === "all" ? undefined : locationColors[zone];
+
+          return (
+            <Button
+              key={zone}
+              size="small"
+              type={isActive ? "primary" : "default"}
+              onClick={() => setSelectedZone(zone)}
+              className="!font-mono !text-xs"
+              style={
+                isActive && color
+                  ? { backgroundColor: color, borderColor: color }
+                  : undefined
+              }
+            >
+              {zone === "all"
+                ? `Все (${count})`
+                : `${locationLabels[zone]} (${count})`}
+            </Button>
+          );
+        })}
       </div>
 
       {/* Factions grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
         {filtered.map((faction) => (
           <FactionCard key={faction.id} faction={faction} />
         ))}
