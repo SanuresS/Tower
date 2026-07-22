@@ -20,7 +20,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Вавилонская Башня",
   description:
-    "Постапокалиптическая мегаструктура. 10 000 этажей. Процедурный мир. Живая история.",
+    "Постапокалиптическая мегаструктура. 12 000 этажей. Процедурный мир. Живая история.",
 };
 
 export default function RootLayout({

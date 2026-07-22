@@ -1,83 +1,177 @@
 "use client";
 
 import React from "react";
-import { towerZones } from "@/data/tower";
+import { TOTAL_FLOORS, towerZones, babylonParts } from "@/data/tower";
 
 interface TowerSliceProps {
   height?: number;
+  svgWidth?: number;
   showLabels?: boolean;
+  showBabylons?: boolean;
+}
+
+function floorToY(floor: number, svgHeight: number): number {
+  return ((TOTAL_FLOORS - floor) / TOTAL_FLOORS) * svgHeight;
+}
+
+function getBabylonPath(
+  widthBottom: number,
+  widthTop: number,
+  floorStart: number,
+  floorEnd: number,
+  svgHeight: number,
+  centerX: number
+): string {
+  const yBottom = floorToY(floorStart, svgHeight);
+  const yTop = floorToY(floorEnd, svgHeight);
+  const xLeftBottom = centerX - widthBottom / 2;
+  const xRightBottom = centerX + widthBottom / 2;
+  const xLeftTop = centerX - widthTop / 2;
+  const xRightTop = centerX + widthTop / 2;
+
+  return `M ${xLeftBottom} ${yBottom} L ${xLeftTop} ${yTop} L ${xRightTop} ${yTop} L ${xRightBottom} ${yBottom} Z`;
 }
 
 export default function TowerSlice({
-  height = 480,
+  height = 400,
+  svgWidth = 200,
   showLabels = true,
+  showBabylons = true,
 }: TowerSliceProps) {
-  const totalFloors = 10000;
+  const svgHeight = height;
+  const centerX = svgWidth / 2;
 
   return (
-    <div className="flex gap-4 items-stretch" style={{ height }}>
-      {/* Tower visual */}
-      <div className="relative flex flex-col overflow-hidden rounded border border-tower-border bg-tower-surface"
-           style={{ width: 60 }}>
-        {towerZones.map((zone) => {
-          const floorStart = parseInt(zone.floors?.split("–")[0]?.replace("+", "") || "0");
-          const floorEnd = parseInt(zone.floors?.split("–")[1]?.replace("+", "") || zone.floors?.replace("+", "") || "10000");
-          const start = Math.max(0, floorStart);
-          const end = Math.min(totalFloors, floorEnd);
-          const percentage = ((end - start) / totalFloors) * 100;
+    <div className="flex gap-4 items-stretch" style={{ height: svgHeight + 32 }}>
+      {/* SVG Tower */}
+      <div className="relative shrink-0">
+        <svg
+          width={svgWidth}
+          height={svgHeight}
+          viewBox={`0 0 ${svgWidth} ${svgHeight}`}
+          className="block"
+        >
+          {/* Zone backgrounds */}
+          {towerZones.map((zone) => {
+            const yTop = floorToY(zone.floorEnd, svgHeight);
+            const yBottom = floorToY(zone.floorStart, svgHeight);
+            const zoneHeight = yBottom - yTop;
 
-          return (
-            <div
-              key={zone.id}
-              className="relative flex items-center justify-center transition-opacity hover:opacity-80"
-              style={{
-                height: `${percentage}%`,
-                backgroundColor: zone.color,
-                opacity: 0.7,
-              }}
-              title={`${zone.name} (${zone.floors})`}
-            >
-              <div
-                className="absolute inset-0 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center"
-                style={{ backgroundColor: zone.color }}
+            return (
+              <rect
+                key={zone.id}
+                x={0}
+                y={yTop}
+                width={svgWidth}
+                height={zoneHeight}
+                fill={zone.color}
+                opacity={0.35}
               >
-                <span className="text-[8px] font-mono text-white/90 px-0.5 text-center leading-tight">
-                  {zone.floors}
-                </span>
-              </div>
-            </div>
-          );
-        })}
-        {/* Tower outline overlay */}
-        <div className="absolute inset-0 border border-tower-border/30 pointer-events-none" />
+                <title>{`${zone.name} (${zone.floorStart}–${zone.floorEnd})`}</title>
+              </rect>
+            );
+          })}
+
+          {/* Zone divider lines */}
+          {towerZones.map((zone) => {
+            const y = floorToY(zone.floorEnd, svgHeight);
+            return (
+              <line
+                key={`divider-${zone.id}`}
+                x1={0}
+                y1={y}
+                x2={svgWidth}
+                y2={y}
+                stroke="rgba(255,255,255,0.08)"
+                strokeWidth={0.5}
+              />
+            );
+          })}
+
+          {/* Babylon outlines */}
+          {showBabylons &&
+            babylonParts.map((part) => {
+              const path = getBabylonPath(
+                part.widthBottom,
+                part.widthTop,
+                part.floorStart,
+                part.floorEnd,
+                svgHeight,
+                centerX
+              );
+
+              return (
+                <path
+                  key={part.id}
+                  d={path}
+                  fill="none"
+                  stroke={part.color}
+                  strokeWidth={1.5}
+                  strokeOpacity={0.6}
+                  strokeDasharray={part.dashed ? "6 4" : "none"}
+                >
+                  <title>{`${part.name} (${part.floorStart}–${part.floorEnd} этажей)`}</title>
+                </path>
+              );
+            })}
+
+          {/* Border */}
+          <rect
+            x={0.5}
+            y={0.5}
+            width={svgWidth - 1}
+            height={svgHeight - 1}
+            fill="none"
+            stroke="rgba(255,255,255,0.1)"
+            strokeWidth={1}
+            rx={2}
+          />
+        </svg>
+
+        {/* Floor markers */}
+        <div
+          className="absolute top-0 left-0 flex flex-col justify-between pointer-events-none"
+          style={{ height: svgHeight }}
+        >
+          {[12000, 10000, 8000, 5000, 2200, 1].map((floor) => {
+            const y = floorToY(floor, svgHeight);
+            return (
+              <span
+                key={floor}
+                className="absolute font-mono text-[8px] text-tower-muted/40 -translate-y-1/2"
+                style={{ top: y, left: svgWidth + 4 }}
+              >
+                {floor.toLocaleString()}
+              </span>
+            );
+          })}
+        </div>
       </div>
 
       {/* Labels */}
       {showLabels && (
-        <div className="flex flex-col justify-between py-1">
+        <div className="flex flex-col justify-between py-0 min-w-[120px]">
           {towerZones.map((zone) => {
-            const floorStart = parseInt(zone.floors?.split("–")[0]?.replace("+", "") || "0");
-            const floorEnd = parseInt(zone.floors?.split("–")[1]?.replace("+", "") || zone.floors?.replace("+", "") || "10000");
-            const start = Math.max(0, floorStart);
-            const end = Math.min(totalFloors, floorEnd);
-            const percentage = ((end - start) / totalFloors) * 100;
+            const yTop = floorToY(zone.floorEnd, svgHeight);
+            const yBottom = floorToY(zone.floorStart, svgHeight);
+            const zoneHeight = yBottom - yTop;
 
             return (
               <div
                 key={zone.id}
                 className="flex items-center gap-2"
-                style={{ height: `${percentage}%` }}
+                style={{ height: zoneHeight }}
               >
                 <div
                   className="w-2 h-2 rounded-full shrink-0"
                   style={{ backgroundColor: zone.color }}
                 />
                 <div className="min-w-0">
-                  <p className="text-xs font-mono text-tower-text truncate">
+                  <p className="text-[11px] font-mono text-tower-text leading-tight m-0">
                     {zone.name}
                   </p>
-                  <p className="text-[10px] font-mono text-tower-muted">
-                    {zone.floors}
+                  <p className="text-[9px] font-mono text-tower-muted leading-tight m-0">
+                    {zone.floorStart}–{zone.floorEnd}
                   </p>
                 </div>
               </div>

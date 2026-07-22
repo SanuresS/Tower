@@ -30,7 +30,7 @@ export default function HeroSection() {
           Она строилась 6500 лет. Бог умер в ней. Выжившие забыли, зачем.
           <br />
           <span className="text-tower-rust">
-            10 000 этажей. Процедурный мир. Живая история.
+            12 000 этажей. Процедурный мир. Живая история.
           </span>
         </p>
 
@@ -49,7 +49,7 @@ export default function HeroSection() {
 
         {/* Floor scale teaser */}
         <div className="mt-16 flex flex-col items-center gap-1 opacity-40">
-          {[10000, 8000, 5000, 2200, 1700, 1].map((floor, i) => (
+          {[12000, 10000, 8000, 5000, 2200, 1700, 1].map((floor, i) => (
             <div key={floor} className="flex items-center gap-2">
               <span className="font-mono text-[9px] text-tower-muted w-10 text-right">
                 {floor.toLocaleString()}
@@ -61,20 +61,22 @@ export default function HeroSection() {
                     i === 0
                       ? "#94a3b8"
                       : i === 1
-                        ? "#b8860b"
+                        ? "#94a3b8"
                         : i === 2
-                          ? "#dc2626"
+                          ? "#b8860b"
                           : i === 3
-                            ? "#737373"
+                            ? "#dc2626"
                             : i === 4
-                              ? "#22c55e"
-                              : "#1a1a1a",
+                              ? "#737373"
+                              : i === 5
+                                ? "#22c55e"
+                                : "#1a1a1a",
                 }}
               />
             </div>
           ))}
           <span className="font-mono text-[8px] text-tower-muted/50 mt-1">
-            ↑ 100 км
+            ↑ 120 км
           </span>
         </div>
       </div>
