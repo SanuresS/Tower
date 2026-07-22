@@ -1,6 +1,6 @@
 export type FactionType = "clan" | "religion" | "group";
 
-export type LocationZone = "lower" | "middle" | "special";
+export type LocationZone = "lower" | "middle" | "special" | "sects";
 
 export type Religion =
   | "atheism"
@@ -37,19 +37,21 @@ export const locationLabels: Record<LocationZone, string> = {
   lower: "Нижние этажи",
   middle: "Средние этажи",
   special: "Особые этажи",
+  sects: "Секты",
 };
 
 export const locationColors: Record<LocationZone, string> = {
   lower: "#b8860b",
-  middle: "#22c55e",
-  special: "#a855f7",
+  middle: "#94a3b8",
+  special: "#991b1b",
+  sects: "#c084fc",
 };
 
 export const religionLabels: Record<Religion, string> = {
   atheism: "Атеизм",
   free: "Свободное вероисповедание",
-  ezibtu: "Преим. Эзибту Ша-ЦСУ",
-  rishtu: "Преим. Ришту Ша-ЦСУ",
+  ezibtu: "Преимущественно Эзибту Ша-ЦСУ",
+  rishtu: "Преимущественно Ришту Ша-ЦСУ",
   lamashtu_cult: "Культ Ламашту",
   silence_cult: "Культ тишины",
   forest_collective: "Коллектив леса",
@@ -282,7 +284,7 @@ export const factions: Faction[] = [
     id: "ezibtu",
     name: "Э́зибту Ша-ЦСУ",
     type: "religion",
-    zone: "special",
+    zone: "sects",
     religion: "free",
     population: "Основная религия",
     cities: ["Консилиум в Эшмане (вне данных — Коалиция)", "Храмы по всей Башне"],
@@ -294,7 +296,7 @@ export const factions: Faction[] = [
     id: "rishtu",
     name: "Ри́шту Ша-ЦСУ",
     type: "religion",
-    zone: "special",
+    zone: "sects",
     religion: "rishtu",
     population: "Ограниченная (Клан Зубаккар)",
     cities: ["Ректар (религиозный центр)", "Храмы на территории Зубаккара"],

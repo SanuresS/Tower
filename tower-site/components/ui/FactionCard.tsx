@@ -8,48 +8,117 @@ import {
   locationColors,
   religionLabels,
   religionColors,
+  LocationZone,
 } from "@/data/factions";
 
 interface FactionCardProps {
   faction: Faction;
 }
 
+function ZoneIcon({ zone, color }: { zone: LocationZone; color: string }) {
+  const size = 14;
+  switch (zone) {
+    case "lower":
+      return (
+        <svg width={size} height={size} viewBox="0 0 16 16" fill="none">
+          <path d="M8 2L14 14H2L8 2Z" stroke={color} strokeWidth="1.5" fill={`${color}20`} />
+        </svg>
+      );
+    case "middle":
+      return (
+        <svg width={size} height={size} viewBox="0 0 16 16" fill="none">
+          <rect x="2" y="2" width="12" height="12" rx="2" stroke={color} strokeWidth="1.5" fill={`${color}20`} />
+        </svg>
+      );
+    case "special":
+      return (
+        <svg width={size} height={size} viewBox="0 0 16 16" fill="none">
+          <path d="M8 1L10 6L15 8L10 10L8 15L6 10L1 8L6 6L8 1Z" stroke={color} strokeWidth="1.2" fill={`${color}20`} />
+        </svg>
+      );
+    case "sects":
+      return (
+        <svg width={size} height={size} viewBox="0 0 16 16" fill="none">
+          <circle cx="8" cy="8" r="6" stroke={color} strokeWidth="1.5" fill={`${color}20`} />
+          <circle cx="8" cy="8" r="2" fill={color} opacity="0.6" />
+        </svg>
+      );
+  }
+}
+
+function getTagline(description: string): string {
+  const sentences = description.split(/[.!?]\s/);
+  if (sentences.length > 0 && sentences[0].length > 5) {
+    return sentences[0].includes("«") || sentences[0].length < 80
+      ? sentences[0]
+      : sentences[0].slice(0, 70) + "...";
+  }
+  return "";
+}
+
 export default function FactionCard({ faction }: FactionCardProps) {
   const zColor = locationColors[faction.zone];
   const rColor = religionColors[faction.religion];
+  const tagline = getTagline(faction.description);
 
   return (
     <div
-      className="relative group rounded-lg border border-tower-border bg-tower-surface overflow-hidden transition-all duration-300 hover:border-tower-rust/40 hover:shadow-lg hover:shadow-tower-rust/5"
+      className="relative group rounded-lg border border-tower-border bg-tower-surface overflow-hidden transition-all duration-300 hover:shadow-xl"
+      style={{
+        borderLeftWidth: "2px",
+        borderLeftColor: "transparent",
+        ["--zone-glow" as string]: zColor,
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.borderLeftColor = `${zColor}80`;
+        e.currentTarget.style.boxShadow = `0 8px 32px -8px ${zColor}15, 0 0 0 1px ${zColor}10`;
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.borderLeftColor = "transparent";
+        e.currentTarget.style.boxShadow = "";
+      }}
     >
       {/* Top accent stripe */}
       <div
-        className="h-1 w-full"
-        style={{ backgroundColor: zColor, opacity: 0.7 }}
+        className="h-[3px] w-full"
+        style={{
+          background: `linear-gradient(90deg, ${zColor}cc 0%, ${zColor}40 60%, transparent 100%)`,
+        }}
       />
 
-      <div className="p-5">
-        {/* Header: name + type badge */}
-        <div className="flex items-start justify-between gap-2 mb-3">
-          <h3 className="text-tower-text font-mono text-base font-semibold m-0 leading-tight">
-            {faction.name}
-          </h3>
-          <span
-            className="inline-flex items-center gap-1 px-2 py-0.5 rounded font-mono text-[10px] shrink-0"
-            style={{
-              backgroundColor: `${faction.color}18`,
-              color: faction.color,
-              border: `1px solid ${faction.color}30`,
-            }}
-          >
-            <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: faction.color }} />
-            {factionTypeLabels[faction.type]}
-          </span>
+      <div className="p-5 pt-4">
+        {/* Header: icon + name + type badge */}
+        <div className="flex items-start gap-2.5 mb-2">
+          <div className="shrink-0 mt-0.5">
+            <ZoneIcon zone={faction.zone} color={zColor} />
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-start justify-between gap-2">
+              <h3 className="text-tower-text font-mono text-[15px] font-semibold m-0 leading-snug">
+                {faction.name}
+              </h3>
+              <span
+                className="inline-flex items-center gap-1 px-2 py-0.5 rounded font-mono text-[10px] shrink-0 mt-0.5"
+                style={{
+                  backgroundColor: `${faction.color}18`,
+                  color: faction.color,
+                  border: `1px solid ${faction.color}30`,
+                }}
+              >
+                <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: faction.color }} />
+                {factionTypeLabels[faction.type]}
+              </span>
+            </div>
+            {tagline && (
+              <p className="text-tower-muted/50 text-[11px] italic mt-0.5 m-0 leading-snug">
+                {tagline}
+              </p>
+            )}
+          </div>
         </div>
 
         {/* Badges row: zone + religion + population */}
-        <div className="flex flex-wrap gap-1.5 mb-4">
-          {/* Zone */}
+        <div className="flex flex-wrap gap-1.5 mb-4 mt-3">
           <span
             className="inline-flex items-center gap-1 px-2 py-0.5 rounded font-mono text-[10px]"
             style={{
@@ -62,7 +131,6 @@ export default function FactionCard({ faction }: FactionCardProps) {
             {locationLabels[faction.zone]}
           </span>
 
-          {/* Religion */}
           <span
             className="inline-flex items-center gap-1 px-2 py-0.5 rounded font-mono text-[10px]"
             style={{
@@ -75,7 +143,6 @@ export default function FactionCard({ faction }: FactionCardProps) {
             {religionLabels[faction.religion]}
           </span>
 
-          {/* Population */}
           <span
             className="inline-flex items-center gap-1 px-2 py-0.5 rounded font-mono text-[10px]"
             style={{
@@ -91,23 +158,24 @@ export default function FactionCard({ faction }: FactionCardProps) {
 
         {/* Cities block */}
         {faction.cities.length > 0 && (
-          <div className="mb-4 p-3 rounded bg-tower-bg/50 border border-tower-border/50">
-            <p className="text-[9px] font-mono text-tower-muted/40 uppercase tracking-widest m-0 mb-1.5">
-              Города и поселения
-            </p>
-            <div className="flex flex-wrap gap-x-2 gap-y-0.5">
+          <div className="mb-4 p-3 rounded-md border border-tower-border/50" style={{ backgroundColor: `${zColor}06` }}>
+            <div className="flex items-center gap-2 mb-2">
+              <div className="h-px flex-1" style={{ backgroundColor: `${zColor}20` }} />
+              <p className="text-[9px] font-mono uppercase tracking-widest m-0" style={{ color: `${zColor}80` }}>
+                Города и поселения
+              </p>
+              <div className="h-px flex-1" style={{ backgroundColor: `${zColor}20` }} />
+            </div>
+            <div className="flex flex-wrap gap-x-3 gap-y-1">
               {faction.cities.map((city, i) => (
                 <span key={i} className="flex items-center gap-1.5">
                   <span
-                    className="w-1 h-1 rounded-full shrink-0"
-                    style={{ backgroundColor: zColor, opacity: 0.6 }}
+                    className="w-1.5 h-1.5 rounded-full shrink-0"
+                    style={{ backgroundColor: zColor, opacity: 0.5 }}
                   />
-                  <span className="text-xs font-mono text-tower-text/80">
+                  <span className="text-[12px] font-mono text-tower-text/80">
                     {city}
                   </span>
-                  {i < faction.cities.length - 1 && (
-                    <span className="text-tower-muted/20 ml-1 hidden last:inline">·</span>
-                  )}
                 </span>
               ))}
             </div>
@@ -115,7 +183,7 @@ export default function FactionCard({ faction }: FactionCardProps) {
         )}
 
         {/* Description */}
-        <p className="text-tower-muted text-sm leading-relaxed m-0">
+        <p className="text-tower-muted text-[13px] leading-[1.7] m-0">
           {faction.description}
         </p>
       </div>

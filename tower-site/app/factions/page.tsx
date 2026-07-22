@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { Button } from "antd";
 import PageContainer from "@/components/layout/PageContainer";
 import FactionCard from "@/components/ui/FactionCard";
 import {
@@ -11,54 +10,117 @@ import {
   LocationZone,
 } from "@/data/factions";
 
-const zones: (LocationZone | "all")[] = ["all", "lower", "middle", "special"];
+const locationZones: LocationZone[] = ["lower", "middle", "special"];
+const sectZones: LocationZone[] = ["sects"];
 
 export default function FactionsPage() {
   const [selectedZone, setSelectedZone] = useState<LocationZone | "all">("all");
 
-  const filtered = useMemo(
-    () =>
-      selectedZone === "all"
-        ? factions
-        : factions.filter((f) => f.zone === selectedZone),
-    [selectedZone]
-  );
+  const filtered = useMemo(() => {
+    if (selectedZone === "all") return factions;
+    return factions.filter((f) => f.zone === selectedZone);
+  }, [selectedZone]);
+
+  const hasFilters = selectedZone !== "all";
+
+  function resetFilters() {
+    setSelectedZone("all");
+  }
+
+  function countByZone(z: LocationZone | "all") {
+    if (z === "all") return factions.length;
+    return factions.filter((f) => f.zone === z).length;
+  }
 
   return (
     <PageContainer
       title="Фракции"
       subtitle={`${factions.length} объединений, населяющих Башню`}
     >
-      {/* Zone filter */}
-      <div className="flex flex-wrap gap-2 mb-8">
-        {zones.map((zone) => {
-          const isActive = selectedZone === zone;
-          const count =
-            zone === "all"
-              ? factions.length
-              : factions.filter((f) => f.zone === zone).length;
-          const color = zone === "all" ? undefined : locationColors[zone];
-
-          return (
-            <Button
-              key={zone}
-              size="small"
-              type={isActive ? "primary" : "default"}
-              onClick={() => setSelectedZone(zone)}
-              className="!font-mono !text-xs"
+      {/* Filters */}
+      <div className="space-y-4 mb-8">
+        {/* Location zone filter */}
+        <div>
+          <p className="text-[10px] font-mono text-tower-muted/60 uppercase tracking-widest mb-2 m-0">
+            Местоположение
+          </p>
+          <div className="flex flex-wrap gap-1.5">
+            <button
+              onClick={() => setSelectedZone("all")}
+              className="px-2.5 py-1 rounded font-mono text-[11px] transition-all duration-200 border cursor-pointer"
               style={
-                isActive && color
-                  ? { backgroundColor: color, borderColor: color }
-                  : undefined
+                selectedZone === "all"
+                  ? { backgroundColor: "rgba(148,163,184,0.12)", color: "#94a3b8", borderColor: "rgba(148,163,184,0.3)" }
+                  : { backgroundColor: "transparent", color: "rgba(255,255,255,0.4)", borderColor: "rgba(255,255,255,0.08)" }
               }
             >
-              {zone === "all"
-                ? `Все (${count})`
-                : `${locationLabels[zone]} (${count})`}
-            </Button>
-          );
-        })}
+              Все ({factions.length})
+            </button>
+            {locationZones.map((z) => {
+              const isActive = selectedZone === z;
+              const color = locationColors[z];
+              const count = countByZone(z);
+              return (
+                <button
+                  key={z}
+                  onClick={() => setSelectedZone(z)}
+                  className="px-2.5 py-1 rounded font-mono text-[11px] transition-all duration-200 border cursor-pointer"
+                  style={
+                    isActive
+                      ? { backgroundColor: `${color}20`, color, borderColor: `${color}50` }
+                      : { backgroundColor: "transparent", color: "rgba(255,255,255,0.4)", borderColor: "rgba(255,255,255,0.08)" }
+                  }
+                >
+                  {locationLabels[z]} ({count})
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Sects filter */}
+        <div>
+          <p className="text-[10px] font-mono text-tower-muted/60 uppercase tracking-widest mb-2 m-0">
+            Секты
+          </p>
+          <div className="flex flex-wrap gap-1.5">
+            {sectZones.map((z) => {
+              const isActive = selectedZone === z;
+              const color = locationColors[z];
+              const count = countByZone(z);
+              return (
+                <button
+                  key={z}
+                  onClick={() => setSelectedZone(z)}
+                  className="px-2.5 py-1 rounded font-mono text-[11px] transition-all duration-200 border cursor-pointer"
+                  style={
+                    isActive
+                      ? { backgroundColor: `${color}20`, color, borderColor: `${color}50` }
+                      : { backgroundColor: "transparent", color: "rgba(255,255,255,0.4)", borderColor: "rgba(255,255,255,0.08)" }
+                  }
+                >
+                  {locationLabels[z]} ({count})
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {hasFilters && (
+          <button
+            onClick={resetFilters}
+            className="text-[11px] font-mono text-tower-rust/70 hover:text-tower-rust transition-colors cursor-pointer bg-transparent border-none p-0"
+          >
+            Сбросить фильтры
+          </button>
+        )}
       </div>
+
+      {hasFilters && (
+        <p className="text-tower-muted text-xs font-mono mb-4 m-0">
+          Найдено: {filtered.length} из {factions.length}
+        </p>
+      )}
 
       {/* Factions grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
@@ -68,9 +130,17 @@ export default function FactionsPage() {
       </div>
 
       {filtered.length === 0 && (
-        <p className="text-tower-muted text-sm text-center py-12">
-          В этой категории пока нет фракций.
-        </p>
+        <div className="text-center py-16">
+          <p className="text-tower-muted text-sm font-mono m-0">
+            Нет фракций, соответствующих фильтрам.
+          </p>
+          <button
+            onClick={resetFilters}
+            className="text-tower-rust text-xs font-mono mt-2 hover:underline cursor-pointer bg-transparent border-none p-0"
+          >
+            Сбросить фильтры
+          </button>
+        </div>
       )}
     </PageContainer>
   );
