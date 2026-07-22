@@ -100,12 +100,12 @@ export default function FactionCard({ faction }: FactionCardProps) {
               <span
                 className="inline-flex items-center gap-1 px-2 py-0.5 rounded font-mono text-[10px] shrink-0 mt-0.5"
                 style={{
-                  backgroundColor: `${faction.color}18`,
-                  color: faction.color,
-                  border: `1px solid ${faction.color}30`,
+                  backgroundColor: "rgba(255,255,255,0.05)",
+                  color: "#a3a3a3",
+                  border: "1px solid rgba(255,255,255,0.1)",
                 }}
               >
-                <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: faction.color }} />
+                <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "#737373" }} />
                 {factionTypeLabels[faction.type]}
               </span>
             </div>
@@ -197,6 +197,29 @@ export default function FactionCard({ faction }: FactionCardProps) {
                 ))}
               </div>
             )}
+          </div>
+        )}
+
+        {/* Protected communities block */}
+        {faction.protectedCommunities && faction.protectedCommunities.length > 0 && (
+          <div className="mb-4 p-3 rounded-md border border-dashed border-tower-border/40 bg-white/[0.02]">
+            <div className="flex items-center gap-2 mb-2.5">
+              <div className="h-px flex-1 bg-white/[0.06]" />
+              <p className="text-[9px] font-mono uppercase tracking-widest m-0 text-tower-muted/50">
+                Под крышей клана
+              </p>
+              <div className="h-px flex-1 bg-white/[0.06]" />
+            </div>
+            <div className="flex flex-wrap gap-x-3 gap-y-1 pl-0.5">
+              {faction.protectedCommunities.map((community, i) => (
+                <span key={i} className="flex items-center gap-1.5">
+                  <span className="text-tower-muted/40 text-[10px] shrink-0">◇</span>
+                  <span className="text-[12px] font-mono text-tower-text/60">
+                    {community.name}
+                  </span>
+                </span>
+              ))}
+            </div>
           </div>
         )}
 
