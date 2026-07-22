@@ -11,7 +11,7 @@ import {
 } from "@/data/factions";
 
 const locationZones: LocationZone[] = ["lower", "middle", "special"];
-const sectZones: LocationZone[] = ["sects"];
+const sectsColor = locationColors.sects;
 
 export default function FactionsPage() {
   const [selectedZone, setSelectedZone] = useState<LocationZone | "all">("all");
@@ -78,32 +78,30 @@ export default function FactionsPage() {
           </div>
         </div>
 
-        {/* Sects filter */}
-        <div>
-          <p className="text-[10px] font-mono text-tower-muted/60 uppercase tracking-widest mb-2 m-0">
-            Секты
-          </p>
-          <div className="flex flex-wrap gap-1.5">
-            {sectZones.map((z) => {
-              const isActive = selectedZone === z;
-              const color = locationColors[z];
-              const count = countByZone(z);
-              return (
-                <button
-                  key={z}
-                  onClick={() => setSelectedZone(z)}
-                  className="px-2.5 py-1 rounded font-mono text-[11px] transition-all duration-200 border cursor-pointer"
-                  style={
-                    isActive
-                      ? { backgroundColor: `${color}20`, color, borderColor: `${color}50` }
-                      : { backgroundColor: "transparent", color: "rgba(255,255,255,0.4)", borderColor: "rgba(255,255,255,0.08)" }
+        {/* Divider + Sects button */}
+        <div className="flex items-center gap-4">
+          <div className="h-px flex-1 bg-gradient-to-r from-transparent via-tower-border/40 to-transparent" />
+          <button
+            onClick={() => setSelectedZone(selectedZone === "sects" ? "all" : "sects")}
+            className="px-5 py-2 rounded-lg font-mono text-[12px] transition-all duration-300 cursor-pointer"
+            style={
+              selectedZone === "sects"
+                ? {
+                    background: `linear-gradient(135deg, ${sectsColor}25, ${sectsColor}10)`,
+                    border: `1px solid ${sectsColor}50`,
+                    color: sectsColor,
+                    boxShadow: `0 0 24px ${sectsColor}15, inset 0 1px 0 ${sectsColor}10`,
                   }
-                >
-                  {locationLabels[z]} ({count})
-                </button>
-              );
-            })}
-          </div>
+                : {
+                    backgroundColor: "transparent",
+                    border: `1px solid ${sectsColor}20`,
+                    color: "rgba(255,255,255,0.45)",
+                  }
+            }
+          >
+            ✦ Секты ({countByZone("sects")}) ✦
+          </button>
+          <div className="h-px flex-1 bg-gradient-to-r from-transparent via-tower-border/40 to-transparent" />
         </div>
 
         {hasFilters && (

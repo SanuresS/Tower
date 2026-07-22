@@ -159,26 +159,44 @@ export default function FactionCard({ faction }: FactionCardProps) {
         {/* Cities block */}
         {faction.cities.length > 0 && (
           <div className="mb-4 p-3 rounded-md border border-tower-border/50" style={{ backgroundColor: `${zColor}06` }}>
-            <div className="flex items-center gap-2 mb-2">
+            <div className="flex items-center gap-2 mb-2.5">
               <div className="h-px flex-1" style={{ backgroundColor: `${zColor}20` }} />
               <p className="text-[9px] font-mono uppercase tracking-widest m-0" style={{ color: `${zColor}80` }}>
                 Города и поселения
               </p>
               <div className="h-px flex-1" style={{ backgroundColor: `${zColor}20` }} />
             </div>
-            <div className="flex flex-wrap gap-x-3 gap-y-1">
-              {faction.cities.map((city, i) => (
-                <span key={i} className="flex items-center gap-1.5">
-                  <span
-                    className="w-1.5 h-1.5 rounded-full shrink-0"
-                    style={{ backgroundColor: zColor, opacity: 0.5 }}
-                  />
-                  <span className="text-[12px] font-mono text-tower-text/80">
-                    {city}
-                  </span>
-                </span>
-              ))}
+
+            {/* Capital */}
+            <div className="flex items-center gap-2 mb-1.5">
+              <span
+                className="w-2 h-2 rounded-full shrink-0"
+                style={{ backgroundColor: "#b8860b" }}
+              />
+              <span className="text-[12px] font-mono font-semibold text-tower-text/90">
+                {faction.cities[0]}
+              </span>
+              <span className="text-[8px] font-mono text-tower-amber/50 uppercase tracking-wider">
+                столица
+              </span>
             </div>
+
+            {/* Other cities */}
+            {faction.cities.length > 1 && (
+              <div className="flex flex-wrap gap-x-3 gap-y-1 pl-0.5">
+                {faction.cities.slice(1).map((city, i) => (
+                  <span key={i} className="flex items-center gap-1.5">
+                    <span
+                      className="w-1.5 h-1.5 rounded-full shrink-0"
+                      style={{ backgroundColor: zColor, opacity: 0.5 }}
+                    />
+                    <span className="text-[12px] font-mono text-tower-text/80">
+                      {city}
+                    </span>
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
         )}
 
