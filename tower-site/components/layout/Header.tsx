@@ -10,6 +10,7 @@ const menuItems = [
   { key: "/lore", label: <Link href="/lore">Лор</Link> },
   { key: "/tower", label: <Link href="/tower">Башня</Link> },
   { key: "/bestiary", label: <Link href="/bestiary">Существа</Link> },
+  { key: "/cities", label: <Link href="/cities">Города</Link> },
   { key: "/factions", label: <Link href="/factions">Фракции</Link> },
 ];
 

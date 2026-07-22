@@ -111,3 +111,19 @@ body {
 .zone-lower { --zone-color: #737373; }
 .zone-life { --zone-color: #22c55e; }
 .zone-deep { --zone-color: #1a1a1a; }
+
+/* City highlight glow animation */
+@keyframes cityGlow {
+  0% {
+    box-shadow: 0 0 20px rgba(184, 134, 11, 0.5), 0 0 40px rgba(184, 134, 11, 0.2);
+    border-left-color: rgba(184, 134, 11, 0.8) !important;
+  }
+  100% {
+    box-shadow: none;
+    border-left-color: transparent !important;
+  }
+}
+
+.city-highlight {
+  animation: cityGlow 3s ease-out forwards;
+}

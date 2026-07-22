@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import {
   Faction,
   factionTypeLabels,
@@ -15,6 +16,7 @@ import {
   relationToneOrder,
   LocationZone,
 } from "@/data/factions";
+import { cities } from "@/data/cities";
 
 interface FactionCardProps {
   faction: Faction;
@@ -59,6 +61,17 @@ function getTagline(description: string): string {
       : sentences[0].slice(0, 70) + "...";
   }
   return "";
+}
+
+function findCityIdByName(name: string): string | null {
+  const normalizedName = name.toLowerCase().replace(/[«»]/g, "").trim();
+  const found = cities.find(
+    (c) =>
+      c.name.toLowerCase().replace(/[«»]/g, "").trim() === normalizedName ||
+      c.name.toLowerCase().includes(normalizedName) ||
+      normalizedName.includes(c.name.toLowerCase().replace(/[«»]/g, "").trim())
+  );
+  return found?.id ?? null;
 }
 
 export default function FactionCard({ faction }: FactionCardProps) {
@@ -178,9 +191,21 @@ export default function FactionCard({ faction }: FactionCardProps) {
                 className="w-2 h-2 rounded-full shrink-0"
                 style={{ backgroundColor: "#b8860b" }}
               />
-              <span className="text-[12px] font-mono font-semibold text-tower-text/90">
-                {faction.cities[0]}
-              </span>
+              {(() => {
+                const cityId = findCityIdByName(faction.cities[0]);
+                return cityId ? (
+                  <Link
+                    href={`/cities?highlight=${cityId}`}
+                    className="text-[12px] font-mono font-semibold text-tower-amber/90 hover:text-tower-amber hover:underline transition-colors"
+                  >
+                    {faction.cities[0]}
+                  </Link>
+                ) : (
+                  <span className="text-[12px] font-mono font-semibold text-tower-text/90">
+                    {faction.cities[0]}
+                  </span>
+                );
+              })()}
               <span className="text-[8px] font-mono text-tower-amber/50 uppercase tracking-wider">
                 столица
               </span>
@@ -189,17 +214,29 @@ export default function FactionCard({ faction }: FactionCardProps) {
             {/* Other cities */}
             {faction.cities.length > 1 && (
               <div className="flex flex-wrap gap-x-3 gap-y-1 pl-0.5">
-                {faction.cities.slice(1).map((city, i) => (
-                  <span key={i} className="flex items-center gap-1.5">
-                    <span
-                      className="w-1.5 h-1.5 rounded-full shrink-0"
-                      style={{ backgroundColor: zColor, opacity: 0.5 }}
-                    />
-                    <span className="text-[12px] font-mono text-tower-text/80">
-                      {city}
+                {faction.cities.slice(1).map((city, i) => {
+                  const cityId = findCityIdByName(city);
+                  return (
+                    <span key={i} className="flex items-center gap-1.5">
+                      <span
+                        className="w-1.5 h-1.5 rounded-full shrink-0"
+                        style={{ backgroundColor: zColor, opacity: 0.5 }}
+                      />
+                      {cityId ? (
+                        <Link
+                          href={`/cities?highlight=${cityId}`}
+                          className="text-[12px] font-mono text-tower-amber/70 hover:text-tower-amber hover:underline transition-colors"
+                        >
+                          {city}
+                        </Link>
+                      ) : (
+                        <span className="text-[12px] font-mono text-tower-text/80">
+                          {city}
+                        </span>
+                      )}
                     </span>
-                  </span>
-                ))}
+                  );
+                })}
               </div>
             )}
           </div>
