@@ -27,11 +27,6 @@ export default function FactionsPage() {
     setSelectedZone("all");
   }
 
-  function countByZone(z: LocationZone | "all") {
-    if (z === "all") return factions.length;
-    return factions.filter((f) => f.zone === z).length;
-  }
-
   return (
     <PageContainer
       title="Фракции"
@@ -60,7 +55,7 @@ export default function FactionsPage() {
                   }
             }
           >
-            Все ({factions.length})
+            Все
           </button>
         </div>
 
@@ -85,7 +80,7 @@ export default function FactionsPage() {
                   }
             }
           >
-            ✦ Секты ({countByZone("sects")}) ✦
+            ✦ Секты ✦
           </button>
           <div className="h-px flex-1 bg-gradient-to-r from-transparent via-tower-border/40 to-transparent" />
         </div>
@@ -95,7 +90,6 @@ export default function FactionsPage() {
           {locationZones.map((z) => {
             const isActive = selectedZone === z;
             const color = locationColors[z];
-            const count = countByZone(z);
             return (
               <button
                 key={z}
@@ -117,7 +111,7 @@ export default function FactionsPage() {
                       }
                 }
               >
-                {locationLabels[z]} ({count})
+                {locationLabels[z]}
               </button>
             );
           })}

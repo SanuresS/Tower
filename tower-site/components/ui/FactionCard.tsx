@@ -38,14 +38,14 @@ function ZoneIcon({ zone, color }: { zone: LocationZone; color: string }) {
     case "special":
       return (
         <svg width={size} height={size} viewBox="0 0 16 16" fill="none">
-          <path d="M8 1L10 6L15 8L10 10L8 15L6 10L1 8L6 6L8 1Z" stroke={color} strokeWidth="1.2" fill={`${color}20`} />
+          <circle cx="8" cy="8" r="6" stroke={color} strokeWidth="1.5" fill={`${color}20`} />
+          <circle cx="8" cy="8" r="2" fill={color} opacity="0.6" />
         </svg>
       );
     case "sects":
       return (
         <svg width={size} height={size} viewBox="0 0 16 16" fill="none">
-          <circle cx="8" cy="8" r="6" stroke={color} strokeWidth="1.5" fill={`${color}20`} />
-          <circle cx="8" cy="8" r="2" fill={color} opacity="0.6" />
+          <path d="M8 1L10 6L15 8L10 10L8 15L6 10L1 8L6 6L8 1Z" stroke={color} strokeWidth="1.2" fill={`${color}20`} />
         </svg>
       );
   }
