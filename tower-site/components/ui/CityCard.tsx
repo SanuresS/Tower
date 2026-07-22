@@ -68,7 +68,41 @@ function SpecIcon({ spec, color }: { spec: City["specialization"]; color: string
   }
 }
 
-function MetricBar({ label, value, color }: { label: string; value: number; color: string }) {
+function lerpColor(a: string, b: string, t: number): string {
+  const ar = parseInt(a.slice(1, 3), 16);
+  const ag = parseInt(a.slice(3, 5), 16);
+  const ab = parseInt(a.slice(5, 7), 16);
+  const br = parseInt(b.slice(1, 3), 16);
+  const bg = parseInt(b.slice(3, 5), 16);
+  const bb = parseInt(b.slice(5, 7), 16);
+  const r = Math.round(ar + (br - ar) * t);
+  const g = Math.round(ag + (bg - ag) * t);
+  const bl = Math.round(ab + (bb - ab) * t);
+  return `#${r.toString(16).padStart(2, "0")}${g.toString(16).padStart(2, "0")}${bl.toString(16).padStart(2, "0")}`;
+}
+
+function lerpColor3(a: string, b: string, c: string, t: number): string {
+  if (t <= 0.5) return lerpColor(a, b, t * 2);
+  return lerpColor(b, c, (t - 0.5) * 2);
+}
+
+function MetricBar({
+  label,
+  value,
+  gradientFrom,
+  gradientMid,
+  gradientTo,
+}: {
+  label: string;
+  value: number;
+  gradientFrom: string;
+  gradientMid?: string;
+  gradientTo: string;
+}) {
+  const t = value / 100;
+  const color = gradientMid
+    ? lerpColor3(gradientFrom, gradientMid, gradientTo, t)
+    : lerpColor(gradientFrom, gradientTo, t);
   return (
     <div className="flex items-center gap-2">
       <span className="text-[11px] font-mono text-tower-muted/60 w-28 shrink-0">{label}</span>
@@ -89,24 +123,6 @@ function MetricBar({ label, value, color }: { label: string; value: number; colo
       </span>
     </div>
   );
-}
-
-function getReligiosityColor(value: number): string {
-  if (value < 30) return "#737373";
-  if (value < 60) return "#a78bfa";
-  return "#a855f7";
-}
-
-function getStabilityColor(value: number): string {
-  if (value < 40) return "#dc2626";
-  if (value < 70) return "#eab308";
-  return "#22c55e";
-}
-
-function getCrimeColor(value: number): string {
-  if (value < 30) return "#22c55e";
-  if (value < 60) return "#eab308";
-  return "#dc2626";
 }
 
 export default function CityCard({ city, highlighted }: CityCardProps) {
@@ -235,17 +251,22 @@ export default function CityCard({ city, highlighted }: CityCardProps) {
             <MetricBar
               label="Религиозность"
               value={city.religiosity}
-              color={getReligiosityColor(city.religiosity)}
+              gradientFrom="#737373"
+              gradientTo="#a855f7"
             />
             <MetricBar
-              label="Контроль власти"
+              label="Стабильность"
               value={city.powerStability}
-              color={getStabilityColor(city.powerStability)}
+              gradientFrom="#dc2626"
+              gradientMid="#facc15"
+              gradientTo="#22c55e"
             />
             <MetricBar
-              label="Преступность"
+              label="Контроль Преступности"
               value={city.crimeLevel}
-              color={getCrimeColor(city.crimeLevel)}
+              gradientFrom="#dc2626"
+              gradientMid="#facc15"
+              gradientTo="#22c55e"
             />
           </div>
         </div>

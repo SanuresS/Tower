@@ -25,7 +25,8 @@ export type Religion =
   | "free"
   | "echo_worship"
   | "silence_cult"
-  | "forest_collective";
+  | "forest_collective"
+  | "lamashtu_cult";
 
 export interface City {
   id: string;
@@ -92,6 +93,7 @@ export const religionLabels: Record<Religion, string> = {
   echo_worship: "Поклонение Эху",
   silence_cult: "Культ тишины",
   forest_collective: "Коллектив леса",
+  lamashtu_cult: "Секта Ламашту",
 };
 
 export const religionColors: Record<Religion, string> = {
@@ -102,6 +104,7 @@ export const religionColors: Record<Religion, string> = {
   echo_worship: "#a855f7",
   silence_cult: "#94a3b8",
   forest_collective: "#22c55e",
+  lamashtu_cult: "#a855f7",
 };
 
 /* ─── Data ─── */
@@ -125,7 +128,7 @@ export const cities: City[] = [
     religion: "rishtu" as const,
     religiosity: 95,
     powerStability: 92,
-    crimeLevel: 15,
+    crimeLevel: 85,
     color: "#b8860b",
   },
   {
@@ -141,7 +144,7 @@ export const cities: City[] = [
     religion: "rishtu" as const,
     religiosity: 80,
     powerStability: 88,
-    crimeLevel: 40,
+    crimeLevel: 60,
     color: "#b8860b",
   },
   {
@@ -157,7 +160,7 @@ export const cities: City[] = [
     religion: "rishtu" as const,
     religiosity: 75,
     powerStability: 85,
-    crimeLevel: 20,
+    crimeLevel: 80,
     color: "#b8860b",
   },
   {
@@ -173,7 +176,7 @@ export const cities: City[] = [
     religion: "rishtu" as const,
     religiosity: 70,
     powerStability: 82,
-    crimeLevel: 35,
+    crimeLevel: 65,
     color: "#b8860b",
   },
   {
@@ -189,7 +192,7 @@ export const cities: City[] = [
     religion: "rishtu" as const,
     religiosity: 98,
     powerStability: 90,
-    crimeLevel: 10,
+    crimeLevel: 90,
     color: "#b8860b",
   },
 
@@ -211,7 +214,7 @@ export const cities: City[] = [
     religion: "ezibtu" as const,
     religiosity: 65,
     powerStability: 90,
-    crimeLevel: 30,
+    crimeLevel: 70,
     color: "#b8860b",
   },
   {
@@ -227,7 +230,7 @@ export const cities: City[] = [
     religion: "ezibtu" as const,
     religiosity: 50,
     powerStability: 80,
-    crimeLevel: 45,
+    crimeLevel: 55,
     color: "#b8860b",
   },
   {
@@ -243,7 +246,7 @@ export const cities: City[] = [
     religion: "ezibtu" as const,
     religiosity: 45,
     powerStability: 75,
-    crimeLevel: 35,
+    crimeLevel: 65,
     color: "#b8860b",
   },
 
@@ -265,7 +268,7 @@ export const cities: City[] = [
     religion: "ezibtu" as const,
     religiosity: 60,
     powerStability: 88,
-    crimeLevel: 25,
+    crimeLevel: 75,
     color: "#b8860b",
   },
   {
@@ -281,7 +284,7 @@ export const cities: City[] = [
     religion: "ezibtu" as const,
     religiosity: 55,
     powerStability: 80,
-    crimeLevel: 30,
+    crimeLevel: 70,
     color: "#b8860b",
   },
   {
@@ -297,7 +300,7 @@ export const cities: City[] = [
     religion: "ezibtu" as const,
     religiosity: 70,
     powerStability: 85,
-    crimeLevel: 15,
+    crimeLevel: 85,
     color: "#b8860b",
   },
   {
@@ -313,7 +316,7 @@ export const cities: City[] = [
     religion: "ezibtu" as const,
     religiosity: 50,
     powerStability: 70,
-    crimeLevel: 35,
+    crimeLevel: 65,
     color: "#b8860b",
   },
 
@@ -330,11 +333,11 @@ export const cities: City[] = [
     factionGroup: "clans",
     factionName: 'Клан «Ламашту»',
     description:
-      "«Горькое Гнездо». Столица клана Ламашту, город-улей. Мрачный, чудовищно перенаселённый лабиринт. Здесь производят «Слёзы Ламашту» — уникальный органический клей. Управляется Советом Двенадцати Семей.",
-    religion: "ezibtu" as const,
+      "«Горькое Гнездо». Столица клана Ламашту, город-улей. Мрачный, чудовщно перенаселённый лабиринт. Здесь производят «Слёзы Ламашту» — уникальный органический клей. Управляется Советом Двенадцати Семей.",
+    religion: "lamashtu_cult" as const,
     religiosity: 85,
     powerStability: 30,
-    crimeLevel: 80,
+    crimeLevel: 20,
     color: "#b8860b",
   },
   {
@@ -347,10 +350,10 @@ export const cities: City[] = [
     factionName: 'Клан «Ламашту»',
     description:
       "«Гнездо Забытых». Город клана Ламашту, специализирующийся на кузнечном и стекольном производстве. Здесь работают наиболее квалифицированные рабочие клана.",
-    religion: "ezibtu" as const,
+    religion: "lamashtu_cult" as const,
     religiosity: 75,
     powerStability: 35,
-    crimeLevel: 70,
+    crimeLevel: 30,
     color: "#b8860b",
   },
   {
@@ -363,10 +366,10 @@ export const cities: City[] = [
     factionName: 'Клан «Ламашту»',
     description:
       "Самый «цивилизованный» город клана Ламашту. Торговый центр, где происходит обмен продукцией между стаями и внешними партнёрами. Наиболее безопасное место среди владений клана.",
-    religion: "ezibtu" as const,
+    religion: "lamashtu_cult" as const,
     religiosity: 60,
     powerStability: 40,
-    crimeLevel: 55,
+    crimeLevel: 45,
     color: "#b8860b",
   },
 
@@ -388,7 +391,7 @@ export const cities: City[] = [
     religion: "ezibtu" as const,
     religiosity: 55,
     powerStability: 88,
-    crimeLevel: 20,
+    crimeLevel: 80,
     color: "#b8860b",
   },
   {
@@ -404,7 +407,7 @@ export const cities: City[] = [
     religion: "ezibtu" as const,
     religiosity: 50,
     powerStability: 82,
-    crimeLevel: 25,
+    crimeLevel: 75,
     color: "#b8860b",
   },
   {
@@ -420,7 +423,7 @@ export const cities: City[] = [
     religion: "ezibtu" as const,
     religiosity: 45,
     powerStability: 78,
-    crimeLevel: 35,
+    crimeLevel: 65,
     color: "#b8860b",
   },
 
@@ -442,7 +445,7 @@ export const cities: City[] = [
     religion: "free" as const,
     religiosity: 25,
     powerStability: 85,
-    crimeLevel: 30,
+    crimeLevel: 70,
     color: "#b8860b",
   },
   {
@@ -459,7 +462,7 @@ export const cities: City[] = [
     religion: "free" as const,
     religiosity: 20,
     powerStability: 60,
-    crimeLevel: 55,
+    crimeLevel: 45,
     color: "#b8860b",
   },
   {
@@ -475,7 +478,7 @@ export const cities: City[] = [
     religion: "ezibtu" as const,
     religiosity: 95,
     powerStability: 80,
-    crimeLevel: 10,
+    crimeLevel: 90,
     color: "#b8860b",
   },
   {
@@ -491,7 +494,7 @@ export const cities: City[] = [
     religion: "atheism" as const,
     religiosity: 10,
     powerStability: 90,
-    crimeLevel: 15,
+    crimeLevel: 85,
     color: "#b8860b",
   },
   {
@@ -507,7 +510,7 @@ export const cities: City[] = [
     religion: "free" as const,
     religiosity: 15,
     powerStability: 65,
-    crimeLevel: 45,
+    crimeLevel: 55,
     color: "#b8860b",
   },
   {
@@ -523,7 +526,7 @@ export const cities: City[] = [
     religion: "free" as const,
     religiosity: 30,
     powerStability: 70,
-    crimeLevel: 55,
+    crimeLevel: 45,
     color: "#b8860b",
   },
   {
@@ -539,7 +542,7 @@ export const cities: City[] = [
     religion: "ezibtu" as const,
     religiosity: 60,
     powerStability: 75,
-    crimeLevel: 20,
+    crimeLevel: 80,
     color: "#b8860b",
   },
   {
@@ -555,7 +558,7 @@ export const cities: City[] = [
     religion: "free" as const,
     religiosity: 15,
     powerStability: 65,
-    crimeLevel: 40,
+    crimeLevel: 60,
     color: "#b8860b",
   },
 
@@ -590,7 +593,7 @@ export const cities: City[] = [
     religion: "free" as const,
     religiosity: 5,
     powerStability: 20,
-    crimeLevel: 70,
+    crimeLevel: 30,
     color: "#b8860b",
   },
 
@@ -611,7 +614,7 @@ export const cities: City[] = [
     religion: "echo_worship" as const,
     religiosity: 90,
     powerStability: 50,
-    crimeLevel: 25,
+    crimeLevel: 75,
     color: "#94a3b8",
   },
   {
@@ -627,7 +630,7 @@ export const cities: City[] = [
     religion: "echo_worship" as const,
     religiosity: 85,
     powerStability: 55,
-    crimeLevel: 30,
+    crimeLevel: 70,
     color: "#94a3b8",
   },
   {
@@ -643,7 +646,7 @@ export const cities: City[] = [
     religion: "atheism" as const,
     religiosity: 5,
     powerStability: 95,
-    crimeLevel: 5,
+    crimeLevel: 95,
     color: "#94a3b8",
   },
   {
@@ -659,7 +662,7 @@ export const cities: City[] = [
     religion: "atheism" as const,
     religiosity: 5,
     powerStability: 95,
-    crimeLevel: 5,
+    crimeLevel: 95,
     color: "#94a3b8",
   },
   {
@@ -675,7 +678,7 @@ export const cities: City[] = [
     religion: "silence_cult" as const,
     religiosity: 80,
     powerStability: 85,
-    crimeLevel: 5,
+    crimeLevel: 95,
     color: "#94a3b8",
   },
   {
@@ -691,7 +694,7 @@ export const cities: City[] = [
     religion: "silence_cult" as const,
     religiosity: 98,
     powerStability: 90,
-    crimeLevel: 2,
+    crimeLevel: 98,
     color: "#94a3b8",
   },
   {
@@ -707,7 +710,7 @@ export const cities: City[] = [
     religion: "free" as const,
     religiosity: 35,
     powerStability: 80,
-    crimeLevel: 15,
+    crimeLevel: 85,
     color: "#94a3b8",
   },
 
@@ -728,7 +731,7 @@ export const cities: City[] = [
     religion: "forest_collective" as const,
     religiosity: 90,
     powerStability: 70,
-    crimeLevel: 10,
+    crimeLevel: 90,
     color: "#22c55e",
   },
   {
@@ -744,7 +747,7 @@ export const cities: City[] = [
     religion: "forest_collective" as const,
     religiosity: 90,
     powerStability: 70,
-    crimeLevel: 10,
+    crimeLevel: 90,
     color: "#22c55e",
   },
 ];

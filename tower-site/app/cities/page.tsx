@@ -46,6 +46,7 @@ const cityReligions: Religion[] = [
   "echo_worship",
   "silence_cult",
   "forest_collective",
+  "lamashtu_cult",
 ];
 
 function FilterGroup({
