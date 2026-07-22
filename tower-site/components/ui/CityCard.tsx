@@ -1,8 +1,11 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import {
   City,
+  Religion,
+  CitySpecialization,
   citySizeLabels,
   citySpecializationLabels,
   cityZoneLabels,
@@ -10,13 +13,31 @@ import {
   religionLabels,
   religionColors,
 } from "@/data/cities";
+import { factions } from "@/data/factions";
 
 interface CityCardProps {
   city: City;
   highlighted?: boolean;
 }
 
-function SpecIcon({ spec, color }: { spec: City["specialization"]; color: string }) {
+function findFactionIdByName(name: string): string | null {
+  const normalized = name.toLowerCase().replace(/[«»]/g, "").trim();
+  const found = factions.find((f) => {
+    const fn = f.name.toLowerCase().replace(/[«»]/g, "").trim();
+    return fn === normalized || fn.includes(normalized) || normalized.includes(fn);
+  });
+  return found?.id ?? null;
+}
+
+const sizeDots: Record<string, number> = {
+  outpost: 1,
+  small: 2,
+  city: 3,
+  large: 4,
+  hive: 5,
+};
+
+function SpecIcon({ spec, color }: { spec: CitySpecialization; color: string }) {
   const size = 14;
   switch (spec) {
     case "capital":
@@ -125,9 +146,62 @@ function MetricBar({
   );
 }
 
+function ReligionPie({ religions }: { religions: { religion: Religion; percent: number }[] }) {
+  const size = 52;
+  const stroke = 8;
+  const radius = (size - stroke) / 2;
+  const circumference = 2 * Math.PI * radius;
+  let accumulated = 0;
+
+  return (
+    <div className="flex items-center gap-3">
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="shrink-0">
+        {religions.map((r, i) => {
+          const dash = (r.percent / 100) * circumference;
+          const offset = -(accumulated / 100) * circumference;
+          accumulated += r.percent;
+          return (
+            <circle
+              key={i}
+              cx={size / 2}
+              cy={size / 2}
+              r={radius}
+              fill="none"
+              stroke={religionColors[r.religion] ?? "#555"}
+              strokeWidth={stroke}
+              strokeDasharray={`${dash} ${circumference - dash}`}
+              strokeDashoffset={offset}
+              strokeLinecap="butt"
+            />
+          );
+        })}
+      </svg>
+      <div className="flex flex-col gap-0.5">
+        {religions.map((r, i) => (
+          <span
+            key={i}
+            className="flex items-center gap-1.5 text-[10px] font-mono text-tower-muted/70"
+          >
+            <span
+              className="inline-block w-1.5 h-1.5 rounded-full shrink-0"
+              style={{ backgroundColor: religionColors[r.religion] ?? "#555" }}
+            />
+            <span className="text-tower-muted/40">{r.percent}%</span>
+            <span>{religionLabels[r.religion]}</span>
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function CityCard({ city, highlighted }: CityCardProps) {
   const zColor = cityZoneColors[city.zone];
   const rColor = religionColors[city.religion];
+  const primarySpec = city.specialization[0] ?? "none";
+  const activeSpecs = city.specialization.filter((s) => s !== "none");
+  const factionId = city.factionName ? findFactionIdByName(city.factionName) : null;
+  const dots = sizeDots[city.size] ?? 3;
 
   return (
     <div
@@ -157,33 +231,20 @@ export default function CityCard({ city, highlighted }: CityCardProps) {
 
       <div className="p-5 pt-4">
         {/* Header: icon + name */}
-        <div className="flex items-start gap-2.5 mb-2">
+        <div className="flex items-start gap-2.5 mb-3">
           <div className="shrink-0 mt-0.5">
-            <SpecIcon spec={city.specialization} color={zColor} />
+            <SpecIcon spec={primarySpec} color={zColor} />
           </div>
           <div className="flex-1 min-w-0">
-            <div className="flex items-start justify-between gap-2">
-              <h3 className="text-tower-text font-mono text-[15px] font-semibold m-0 leading-snug">
-                {city.name}
-              </h3>
-              {city.specialization !== "none" && (
-                <span
-                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded font-mono text-[10px] shrink-0 mt-0.5"
-                  style={{
-                    backgroundColor: `${zColor}18`,
-                    color: zColor,
-                    border: `1px solid ${zColor}30`,
-                  }}
-                >
-                  {citySpecializationLabels[city.specialization]}
-                </span>
-              )}
-            </div>
+            <h3 className="text-tower-text font-mono text-[15px] font-semibold m-0 leading-snug">
+              {city.name}
+            </h3>
           </div>
         </div>
 
-        {/* Badges row: zone + size + faction */}
-        <div className="flex flex-wrap gap-1.5 mb-3 mt-2">
+        {/* Info row: zone + size dots + specializations */}
+        <div className="flex flex-wrap items-center gap-2 mb-3">
+          {/* Zone badge */}
           <span
             className="inline-flex items-center gap-1 px-2 py-0.5 rounded font-mono text-[10px]"
             style={{
@@ -192,62 +253,83 @@ export default function CityCard({ city, highlighted }: CityCardProps) {
               border: `1px solid ${zColor}30`,
             }}
           >
-            <span className="text-[9px] opacity-50">Зона:</span>
             {cityZoneLabels[city.zone]}
           </span>
 
-          <span
-            className="inline-flex items-center gap-1 px-2 py-0.5 rounded font-mono text-[10px]"
-            style={{
-              backgroundColor: "rgba(255,255,255,0.04)",
-              color: "#a3a3a3",
-              border: "1px solid rgba(255,255,255,0.08)",
-            }}
-          >
-            <span className="text-[9px] opacity-50">Размер:</span>
-            {citySizeLabels[city.size]}
+          {/* Size dots */}
+          <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <span
+                key={i}
+                className="w-1.5 h-1.5 rounded-full"
+                style={{
+                  backgroundColor: i < dots ? zColor : "rgba(255,255,255,0.1)",
+                }}
+              />
+            ))}
           </span>
 
-          {city.factionName && (
+          {/* Specialization badges */}
+          {activeSpecs.map((spec) => (
             <span
+              key={spec}
               className="inline-flex items-center gap-1 px-2 py-0.5 rounded font-mono text-[10px]"
               style={{
-                backgroundColor: "rgba(255,255,255,0.04)",
-                color: "#a3a3a3",
-                border: "1px solid rgba(255,255,255,0.08)",
+                backgroundColor: `${zColor}12`,
+                color: `${zColor}cc`,
+                border: `1px solid ${zColor}25`,
               }}
             >
-              <span className="text-[9px] opacity-50">Фракция:</span>
-              {city.factionName}
+              <SpecIcon spec={spec} color={zColor} />
+              {citySpecializationLabels[spec]}
             </span>
-          )}
+          ))}
         </div>
 
-        {/* Religion badge */}
-        <div className="mb-4">
-          <span
-            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded font-mono text-[10px]"
-            style={{
-              backgroundColor: `${rColor}15`,
-              color: rColor,
-              border: `1px solid ${rColor}30`,
-            }}
-          >
-            <span className="text-[9px] opacity-60">✦</span>
-            {religionLabels[city.religion]}
-          </span>
-        </div>
+        {/* Faction link */}
+        {city.factionName && (
+          <div className="mb-3">
+            {factionId ? (
+              <Link
+                href={`/factions?highlight=${factionId}`}
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded font-mono text-[10px] transition-all duration-200 hover:opacity-80"
+                style={{
+                  backgroundColor: "rgba(255,255,255,0.04)",
+                  color: "#d4a853",
+                  border: "1px solid rgba(184,134,11,0.25)",
+                }}
+              >
+                <span className="text-[9px] opacity-50">Фракция:</span>
+                {city.factionName}
+              </Link>
+            ) : (
+              <span
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded font-mono text-[10px]"
+                style={{
+                  backgroundColor: "rgba(255,255,255,0.04)",
+                  color: "#a3a3a3",
+                  border: "1px solid rgba(255,255,255,0.08)",
+                }}
+              >
+                <span className="text-[9px] opacity-50">Фракция:</span>
+                {city.factionName}
+              </span>
+            )}
+          </div>
+        )}
 
-        {/* Metrics block */}
+        {/* Combined: Metrics + Religions */}
         <div className="mb-4 p-3 rounded-md border border-tower-border/50 bg-white/[0.02]">
           <div className="flex items-center gap-2 mb-2.5">
             <div className="h-px flex-1 bg-white/[0.06]" />
             <p className="text-[9px] font-mono uppercase tracking-widest m-0 text-tower-muted/50">
-              Показатели
+              Показатели и религии
             </p>
             <div className="h-px flex-1 bg-white/[0.06]" />
           </div>
-          <div className="space-y-2">
+
+          {/* Metrics */}
+          <div className="space-y-2 mb-3">
             <MetricBar
               label="Религиозность"
               value={city.religiosity}
@@ -269,6 +351,14 @@ export default function CityCard({ city, highlighted }: CityCardProps) {
               gradientTo="#22c55e"
             />
           </div>
+
+          {/* Divider */}
+          <div className="h-px bg-white/[0.06] my-2.5" />
+
+          {/* Religion pie + legend */}
+          {city.religions && city.religions.length > 0 && (
+            <ReligionPie religions={city.religions} />
+          )}
         </div>
 
         {/* Description */}

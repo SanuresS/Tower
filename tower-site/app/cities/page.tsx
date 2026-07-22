@@ -119,7 +119,7 @@ function CitiesContent() {
     return cities.filter((c) => {
       if (selectedZone !== "all" && c.zone !== selectedZone) return false;
       if (selectedSize !== "all" && c.size !== selectedSize) return false;
-      if (selectedSpec !== "all" && c.specialization !== selectedSpec) return false;
+      if (selectedSpec !== "all" && !c.specialization.includes(selectedSpec)) return false;
       if (selectedFaction !== "all" && c.factionGroup !== selectedFaction) return false;
       if (selectedReligion !== "all" && c.religion !== selectedReligion) return false;
       return true;

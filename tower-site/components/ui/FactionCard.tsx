@@ -20,6 +20,7 @@ import { cities } from "@/data/cities";
 
 interface FactionCardProps {
   faction: Faction;
+  highlighted?: boolean;
 }
 
 function ZoneIcon({ zone, color }: { zone: LocationZone; color: string }) {
@@ -74,14 +75,15 @@ function findCityIdByName(name: string): string | null {
   return found?.id ?? null;
 }
 
-export default function FactionCard({ faction }: FactionCardProps) {
+export default function FactionCard({ faction, highlighted }: FactionCardProps) {
   const zColor = locationColors[faction.zone];
   const rColor = religionColors[faction.religion];
   const tagline = getTagline(faction.description);
 
   return (
     <div
-      className="relative group rounded-lg border border-tower-border bg-tower-surface overflow-hidden transition-all duration-300 hover:shadow-xl"
+      id={`faction-${faction.id}`}
+      className={`relative group rounded-lg border border-tower-border bg-tower-surface overflow-hidden transition-all duration-300 hover:shadow-xl ${highlighted ? "faction-highlight" : ""}`}
       style={{
         borderLeftWidth: "2px",
         borderLeftColor: "transparent",

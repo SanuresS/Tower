@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect, useCallback, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import PageContainer from "@/components/layout/PageContainer";
 import FactionCard from "@/components/ui/FactionCard";
 import {
@@ -13,8 +14,12 @@ import {
 const locationZones: LocationZone[] = ["lower", "middle", "special"];
 const sectsColor = locationColors.sects;
 
-export default function FactionsPage() {
+function FactionsContent() {
+  const searchParams = useSearchParams();
+  const highlightId = searchParams.get("highlight");
+
   const [selectedZone, setSelectedZone] = useState<LocationZone | "all">("all");
+  const [highlightedId, setHighlightedId] = useState<string | null>(null);
 
   const filtered = useMemo(() => {
     if (selectedZone === "all") return factions;
@@ -22,6 +27,22 @@ export default function FactionsPage() {
   }, [selectedZone]);
 
   const hasFilters = selectedZone !== "all";
+
+  const scrollToFaction = useCallback((factionId: string) => {
+    const el = document.getElementById(`faction-${factionId}`);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "center" });
+      setHighlightedId(factionId);
+      setTimeout(() => setHighlightedId(null), 5000);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (highlightId) {
+      const timer = setTimeout(() => scrollToFaction(highlightId), 300);
+      return () => clearTimeout(timer);
+    }
+  }, [highlightId, scrollToFaction]);
 
   function resetFilters() {
     setSelectedZone("all");
@@ -127,7 +148,11 @@ export default function FactionsPage() {
       {/* Factions grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
         {filtered.map((faction) => (
-          <FactionCard key={faction.id} faction={faction} />
+          <FactionCard
+            key={faction.id}
+            faction={faction}
+            highlighted={highlightedId === faction.id}
+          />
         ))}
       </div>
 
@@ -145,5 +170,13 @@ export default function FactionsPage() {
         </div>
       )}
     </PageContainer>
+  );
+}
+
+export default function FactionsPage() {
+  return (
+    <Suspense>
+      <FactionsContent />
+    </Suspense>
   );
 }

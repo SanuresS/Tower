@@ -127,3 +127,19 @@ body {
 .city-highlight {
   animation: cityGlow 5s ease-out forwards;
 }
+
+/* Faction highlight glow animation */
+@keyframes factionGlow {
+  0% {
+    box-shadow: 0 0 30px rgba(220, 38, 38, 0.6), 0 0 60px rgba(220, 38, 38, 0.3), 0 0 90px rgba(220, 38, 38, 0.15);
+    border-left-color: rgba(220, 38, 38, 0.9) !important;
+  }
+  100% {
+    box-shadow: none;
+    border-left-color: transparent !important;
+  }
+}
+
+.faction-highlight {
+  animation: factionGlow 5s ease-out forwards;
+}
