@@ -69,7 +69,7 @@ export const locationLabels: Record<LocationZone, string> = {
 export const locationColors: Record<LocationZone, string> = {
   lower: "#b8860b",
   middle: "#94a3b8",
-  special: "#991b1b",
+  special: "#22c55e",
   sects: "#c084fc",
 };
 

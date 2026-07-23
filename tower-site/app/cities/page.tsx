@@ -147,7 +147,7 @@ function CitiesContent() {
     if (el) {
       el.scrollIntoView({ behavior: "smooth", block: "center" });
       setHighlightedId(cityId);
-      setTimeout(() => setHighlightedId(null), 5000);
+      setTimeout(() => setHighlightedId(null), 6000);
     }
   }, []);
 

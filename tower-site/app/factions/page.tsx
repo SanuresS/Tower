@@ -33,7 +33,7 @@ function FactionsContent() {
     if (el) {
       el.scrollIntoView({ behavior: "smooth", block: "center" });
       setHighlightedId(factionId);
-      setTimeout(() => setHighlightedId(null), 5000);
+      setTimeout(() => setHighlightedId(null), 6000);
     }
   }, []);
 

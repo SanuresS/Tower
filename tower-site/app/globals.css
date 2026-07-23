@@ -58,11 +58,11 @@ body {
 .zone-life { --zone-color: #22c55e; }
 .zone-deep { --zone-color: #1a1a1a; }
 
-/* City highlight glow animation — amber */
+/* City highlight glow animation — red */
 @keyframes cityGlow {
   0% {
-    box-shadow: 0 0 24px rgba(184, 134, 11, 0.5), 0 0 48px rgba(184, 134, 11, 0.2);
-    border-left-color: rgba(184, 134, 11, 0.9) !important;
+    box-shadow: 0 0 24px rgba(220, 38, 38, 0.5), 0 0 48px rgba(220, 38, 38, 0.2);
+    border-left-color: rgba(220, 38, 38, 0.9) !important;
   }
   100% {
     box-shadow: none;
@@ -71,14 +71,14 @@ body {
 }
 
 .city-highlight {
-  animation: cityGlow 5s ease-out forwards;
+  animation: cityGlow 6s ease-out forwards;
 }
 
-/* Faction highlight glow animation — amber */
+/* Faction highlight glow animation — red */
 @keyframes factionGlow {
   0% {
-    box-shadow: 0 0 24px rgba(184, 134, 11, 0.5), 0 0 48px rgba(184, 134, 11, 0.2);
-    border-left-color: rgba(184, 134, 11, 0.9) !important;
+    box-shadow: 0 0 24px rgba(220, 38, 38, 0.5), 0 0 48px rgba(220, 38, 38, 0.2);
+    border-left-color: rgba(220, 38, 38, 0.9) !important;
   }
   100% {
     box-shadow: none;
@@ -87,5 +87,5 @@ body {
 }
 
 .faction-highlight {
-  animation: factionGlow 5s ease-out forwards;
+  animation: factionGlow 6s ease-out forwards;
 }

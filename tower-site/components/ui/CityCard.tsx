@@ -20,10 +20,14 @@ interface CityCardProps {
   highlighted?: boolean;
 }
 
+function stripAccents(str: string): string {
+  return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+
 function findFactionIdByName(name: string): string | null {
-  const normalized = name.toLowerCase().replace(/[«»]/g, "").trim();
+  const normalized = stripAccents(name.toLowerCase().replace(/[«»]/g, "").trim());
   const found = factions.find((f) => {
-    const fn = f.name.toLowerCase().replace(/[«»]/g, "").trim();
+    const fn = stripAccents(f.name.toLowerCase().replace(/[«»]/g, "").trim());
     return fn === normalized || fn.includes(normalized) || normalized.includes(fn);
   });
   return found?.id ?? null;
