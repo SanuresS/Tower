@@ -42,7 +42,10 @@ function EncounterBar({ label, icon, value }: { label: string; icon: React.React
   const color = lerpColor("#22c55e", "#dc2626", t);
   return (
     <div className="flex items-center gap-1.5 min-w-0">
-      <span className="text-[9px] text-tower-muted/50 shrink-0">{icon}</span>
+      <span className="text-[9px] text-tower-muted/50 flex items-center gap-1 w-[90px] shrink-0">
+        {icon}
+        <span className="text-[9px] text-tower-muted/40 whitespace-nowrap">{label}</span>
+      </span>
       <div className="flex-1 h-1 rounded-full bg-white/[0.06] overflow-hidden">
         <div
           className="h-full rounded-full transition-all duration-500"
@@ -158,7 +161,7 @@ export default function CreatureCard({ creature }: CreatureCardProps) {
             Вероятность встречи
           </p>
           <EncounterBar
-            label="Верх"
+            label="Верхние этажи"
             value={creature.encounter.upper}
             icon={
               <svg className="w-2.5 h-2.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2">
@@ -167,7 +170,7 @@ export default function CreatureCard({ creature }: CreatureCardProps) {
             }
           />
           <EncounterBar
-            label="Середина"
+            label="Средние этажи"
             value={creature.encounter.middle}
             icon={
               <svg className="w-2.5 h-2.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2">
@@ -176,7 +179,7 @@ export default function CreatureCard({ creature }: CreatureCardProps) {
             }
           />
           <EncounterBar
-            label="Низ"
+            label="Нижние этажи"
             value={creature.encounter.lower}
             icon={
               <svg className="w-2.5 h-2.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2">
