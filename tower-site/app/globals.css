@@ -72,6 +72,7 @@ body {
   height: var(--size, 2px);
   background: radial-gradient(circle, var(--color, rgba(139, 69, 19, 0.5)) 0%, transparent 70%);
   border-radius: 50%;
+  box-shadow: 0 0 6px 1px var(--color, rgba(139, 69, 19, 0.3));
   animation: dustFloat var(--duration, 25s) var(--delay, 0s) linear infinite;
   left: var(--left, 50%);
   will-change: transform, opacity;
@@ -212,7 +213,7 @@ body {
   );
   animation: scanLine 12s linear infinite;
   pointer-events: none;
-  z-index: 2;
+  z-index: 1;
 }
 
 /* ═══ Hero buttons ═══ */
