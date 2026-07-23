@@ -52,7 +52,7 @@ export default function TowerSlice({
           className="block"
         >
           {/* Zone backgrounds */}
-          {towerZones.map((zone) => {
+          {towerZones.map((zone, index) => {
             const yTop = floorToY(zone.floorEnd, svgHeight);
             const yBottom = floorToY(zone.floorStart, svgHeight);
             const zoneHeight = yBottom - yTop;
@@ -66,6 +66,10 @@ export default function TowerSlice({
                 height={zoneHeight}
                 fill={zone.color}
                 opacity={0.35}
+                style={{
+                  animation: `zonePulse ${12 + index * 2}s ease-in-out infinite`,
+                  animationDelay: `${index * 1.5}s`,
+                }}
               >
                 <title>{`${zone.name} (${zone.floorStart}–${zone.floorEnd})`}</title>
               </rect>

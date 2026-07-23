@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { loreSections } from "@/data/lore";
 
@@ -12,12 +12,28 @@ const previewTitles: Record<string, string> = {
 };
 
 export default function LorePreview() {
+  const [visible, setVisible] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) setVisible(true);
+      },
+      { threshold: 0.15 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   const items = previewIds
     .map((id) => loreSections.find((s) => s.id === id))
     .filter(Boolean);
 
   return (
-    <section className="py-16">
+    <section className="py-16" ref={ref}>
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex items-end justify-between mb-6">
           <div>
@@ -37,14 +53,17 @@ export default function LorePreview() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {items.map((section) =>
+          {items.map((section, i) =>
             section ? (
               <div
                 key={section.id}
-                className="relative rounded-lg border border-tower-border bg-tower-surface overflow-hidden transition-shadow duration-300 hover:shadow-lg p-4"
+                className="lore-card relative rounded-lg border border-tower-border bg-tower-surface overflow-hidden p-4"
                 style={{
                   borderLeftWidth: "2px",
                   borderLeftColor: "rgba(139, 69, 19, 0.4)",
+                  opacity: visible ? 1 : 0,
+                  transform: visible ? "translateY(0)" : "translateY(30px)",
+                  transition: `opacity 0.6s ease ${i * 0.15}s, transform 0.6s ease ${i * 0.15}s`,
                 }}
               >
                 <p className="font-mono text-tower-rust text-[10px] tracking-widest uppercase mb-2 m-0">
