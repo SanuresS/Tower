@@ -1,3 +1,5 @@
+import type { Religion } from "./types";
+
 export type CityZone = "lower" | "middle" | "special";
 
 export type CitySize = "hive" | "large" | "city" | "small" | "outpost";
@@ -18,17 +20,6 @@ export type CityFactionGroup =
   | "military"
   | "other";
 
-export type Religion =
-  | "ezibtu"
-  | "rishtu"
-  | "atheism"
-  | "free"
-  | "echo_worship"
-  | "silence_cult"
-  | "forest_collective"
-  | "lamashtu_cult"
-  | "yehudimism";
-
 export interface City {
   id: string;
   name: string;
@@ -36,6 +27,7 @@ export interface City {
   size: CitySize;
   specialization: CitySpecialization[];
   factionGroup: CityFactionGroup;
+  factionId?: string;
   factionName?: string;
   population?: string;
   religion: Religion;
@@ -87,30 +79,6 @@ export const cityFactionGroupLabels: Record<CityFactionGroup, string> = {
   other: "Другие",
 };
 
-export const religionLabels: Record<Religion, string> = {
-  ezibtu: "Эзибту Ша-ЦСУ",
-  rishtu: "Ришту Ша-ЦСУ",
-  atheism: "Атеизм",
-  free: "Свобода вероисповедания",
-  echo_worship: "Поклонение Эху",
-  silence_cult: "Культ тишины",
-  forest_collective: "Коллектив леса",
-  lamashtu_cult: "Секта Ламашту",
-  yehudimism: "Йехудимизм",
-};
-
-export const religionColors: Record<Religion, string> = {
-  ezibtu: "#0ea5e9",
-  rishtu: "#dc2626",
-  atheism: "#6b7280",
-  free: "#94a3b8",
-  echo_worship: "#ec4899",
-  silence_cult: "#94a3b8",
-  forest_collective: "#22c55e",
-  lamashtu_cult: "#a855f7",
-  yehudimism: "#f59e0b",
-};
-
 /* ─── Data ─── */
 
 export const cities: City[] = [
@@ -125,6 +93,7 @@ export const cities: City[] = [
     size: "large",
     specialization: ["capital"],
     factionGroup: "clans",
+    factionId: "zubakkar",
     factionName: 'Клан «Зубаккар»',
     population: "Крупный",
     description:
@@ -143,6 +112,7 @@ export const cities: City[] = [
     size: "city",
     specialization: ["industrial"],
     factionGroup: "clans",
+    factionId: "zubakkar",
     factionName: 'Клан «Зубаккар»',
     description:
       "«Дом Покорённых». Мрачное поселение-мастерская, бывшая жилая секция. Рабы трудятся на ткацких станках, в кузницах и на сортировке металлолома. Управляется надсмотрщиками из клана.",
@@ -160,6 +130,7 @@ export const cities: City[] = [
     size: "city",
     specialization: ["resource"],
     factionGroup: "clans",
+    factionId: "zubakkar",
     factionName: 'Клан «Зубаккар»',
     description:
       "«Крепость Ашшура». Сырьевой город рядом с гидропонной фермой. Земледельцы и охрана обеспечивают бесперебойную работу фермы. Фактически часть клана, но формально «союзная община». 75% урожая клану в обмен на защиту.",
@@ -177,6 +148,7 @@ export const cities: City[] = [
     size: "city",
     specialization: ["resource"],
     factionGroup: "clans",
+    factionId: "zubakkar",
     factionName: 'Клан «Зубаккар»',
     description:
       "Сырьевой город шахтёров и плавильщиков. Добыча чёрного металла из развалин старых конструкций. 80% добычи поступает в казну клана. Монопольное право клана на изготовление оружия из чёрного металла.",
@@ -194,6 +166,7 @@ export const cities: City[] = [
     size: "small",
     specialization: ["none"],
     factionGroup: "clans",
+    factionId: "zubakkar",
     factionName: 'Клан «Зубаккар»',
     description:
       "Небольшой город, религиозный центр Ришту Ша-ЦСУ. Община сформировалась беглыми Плотниками, отказавшимися почитать культ ЦСУ. Шаррум подчинил её, поддержав местные устои и распространив на весь клан.",
@@ -216,6 +189,7 @@ export const cities: City[] = [
     size: "hive",
     specialization: ["capital", "fortress"],
     factionGroup: "clans",
+    factionId: "gantal",
     factionName: 'Клан «Ганталь»',
     population: "Крупный",
     description:
@@ -234,6 +208,7 @@ export const cities: City[] = [
     size: "city",
     specialization: ["industrial"],
     factionGroup: "clans",
+    factionId: "gantal",
     factionName: 'Клан «Ганталь»',
     description:
       "Город клана Ганталь, один из крупных населённых пунктов под контролем железного кулака. Основная специализация — обеспечение клана продовольствием и рабочей силой.",
@@ -251,6 +226,7 @@ export const cities: City[] = [
     size: "city",
     specialization: ["none"],
     factionGroup: "clans",
+    factionId: "gantal",
     factionName: 'Клан «Ганталь»',
     description:
       "Город клана Ганталь. Расположен вблизи транспортных путей, контролируемых кланом. Играет роль в логистике и снабжении военных подразделений.",
@@ -273,6 +249,7 @@ export const cities: City[] = [
     size: "city",
     specialization: ["capital", "fortress"],
     factionGroup: "clans",
+    factionId: "barzakh",
     factionName: 'Клан «Барзах»',
     population: "Средний",
     description:
@@ -291,6 +268,7 @@ export const cities: City[] = [
     size: "city",
     specialization: ["none"],
     factionGroup: "clans",
+    factionId: "barzakh",
     factionName: 'Клан «Барзах»',
     description:
       "Город клана Барзах, один из опорных пунктов на торговых маршрутах. Здесь располагается один из фортпостов, контролирующих проход через локальные транспортные узлы.",
@@ -308,6 +286,7 @@ export const cities: City[] = [
     size: "city",
     specialization: ["industrial"],
     factionGroup: "clans",
+    factionId: "barzakh",
     factionName: 'Клан «Барзах»',
     description:
       "Город клана Барзах. Расположен вблизи промышленных секций, где производятся яды «Адады» и противоядия — основная продукция клана.",
@@ -325,6 +304,7 @@ export const cities: City[] = [
     size: "small",
     specialization: ["none"],
     factionGroup: "clans",
+    factionId: "barzakh",
     factionName: 'Клан «Барзах»',
     description:
       "Небольшой город клана Барзах. Обслуживает транспортные маршруты и обеспечивает клан проводниками для караванов, следующих по ЛТУ.",
@@ -347,6 +327,7 @@ export const cities: City[] = [
     size: "hive",
     specialization: ["capital"],
     factionGroup: "clans",
+    factionId: "lamashtu",
     factionName: 'Клан «Ламашту»',
     description:
       "«Горькое Гнездо». Столица клана Ламашту, город-улей. Мрачный, чудовщно перенаселённый лабиринт. Здесь производят «Слёзы Ламашту» — уникальный органический клей. Управляется Советом Двенадцати Семей.",
@@ -364,6 +345,7 @@ export const cities: City[] = [
     size: "city",
     specialization: ["none"],
     factionGroup: "clans",
+    factionId: "lamashtu",
     factionName: 'Клан «Ламашту»',
     description:
       "«Гнездо Забытых». Город клана Ламашту, специализирующийся на кузнечном и стекольном производстве. Здесь работают наиболее квалифицированные рабочие клана.",
@@ -381,6 +363,7 @@ export const cities: City[] = [
     size: "city",
     specialization: ["none"],
     factionGroup: "clans",
+    factionId: "lamashtu",
     factionName: 'Клан «Ламашту»',
     description:
       "Самый «цивилизованный» город клана Ламашту. Торговый центр, где происходит обмен продукцией между стаями и внешними партнёрами. Наиболее безопасное место среди владений клана.",
@@ -403,6 +386,7 @@ export const cities: City[] = [
     size: "city",
     specialization: ["capital", "industrial"],
     factionGroup: "clans",
+    factionId: "askari",
     factionName: 'Клан «Аскари»',
     population: "Средний",
     description:
@@ -421,6 +405,7 @@ export const cities: City[] = [
     size: "city",
     specialization: ["none"],
     factionGroup: "clans",
+    factionId: "askari",
     factionName: 'Клан «Аскари»',
     description:
       "Город клана Аскари, один из центров производства фармацевтической продукции. Здесь расположены основные лаборатории по синтезу препаратов.",
@@ -438,6 +423,7 @@ export const cities: City[] = [
     size: "small",
     specialization: ["none"],
     factionGroup: "clans",
+    factionId: "askari",
     factionName: 'Клан «Аскари»',
     description:
       "Небольшой город клана Аскари. Обеспечивает клан сырьём для производства медикаментов и наркотиков, а также служит перевалочным пунктом для подпольной сети «Шамашшу».",
@@ -460,6 +446,7 @@ export const cities: City[] = [
     size: "large",
     specialization: ["none"],
     factionGroup: "coalition",
+    factionId: "coalition",
     factionName: "Коалиция",
     population: "Крупный",
     description:
@@ -478,6 +465,7 @@ export const cities: City[] = [
     size: "large",
     specialization: ["trade"],
     factionGroup: "coalition",
+    factionId: "coalition",
     factionName: "Коалиция",
     population: "Крупный",
     description:
@@ -496,6 +484,7 @@ export const cities: City[] = [
     size: "large",
     specialization: ["trade", "industrial"],
     factionGroup: "coalition",
+    factionId: "coalition",
     factionName: "Коалиция",
     description:
       "Город-храм, священное сердце культа Эзибту Ша-ЦСУ. Место мученической смерти Иешуа Ибн Пантера Га-ноцри. Торгует религиозно-научными трудами, сложными имплантами и аналоговыми приборами. Половина населения — паломники и Плотники.",
@@ -513,6 +502,7 @@ export const cities: City[] = [
     size: "city",
     specialization: ["fortress", "industrial"],
     factionGroup: "coalition",
+    factionId: "coalition",
     factionName: "Коалиция",
     description:
       "Город-крепость, символ воинской доблести Коалиции. Расположен в бывшей секции производства фильтров и насосов. Главный производитель насосов, труб, огнемётов и сложной гидравлики. Лидер фракции «ястребов».",
@@ -530,6 +520,7 @@ export const cities: City[] = [
     size: "small",
     specialization: ["trade"],
     factionGroup: "coalition",
+    factionId: "coalition",
     factionName: "Коалиция",
     description:
       "Небольшой торговый город, вытянутый вдоль коридоров. Город сталкеров, зарабатывающих поиском до апокалиптических ценностей. Лучшие проводники и картографы нижних этажей. Почтовый хаб Коалиции.",
@@ -547,6 +538,7 @@ export const cities: City[] = [
     size: "small",
     specialization: ["none"],
     factionGroup: "coalition",
+    factionId: "coalition",
     factionName: "Коалиция",
     description:
       "Город-улей, компактное, густонаселённое бедное поселение в перестроенных резервуарах. Место выделки кожи и меха, производства примитивной взрывчатки и химикатов. «Страна Бомжей».",
@@ -564,6 +556,7 @@ export const cities: City[] = [
     size: "small",
     specialization: ["resource"],
     factionGroup: "coalition",
+    factionId: "coalition",
     factionName: "Коалиция",
     description:
       "Небольшой сырьевой город вокруг геотермальной аномалии «Дыхание Башни». Главный аграрный центр Коалиции. Поставщик овощей, грибов и целебных трав. Плотники — эксперты в примитивных биотехнологиях.",
@@ -581,6 +574,7 @@ export const cities: City[] = [
     size: "small",
     specialization: ["bastion", "trade"],
     factionGroup: "coalition",
+    factionId: "coalition",
     factionName: "Коалиция",
     description:
       "Бастион на колоссальном мосту через Глотку (ЦШТР-Ω). Стратегически важный пункт, бутылочное горлышко для прохода к западной части Вавилона-3. Торгует проходом через мост и услугами проводников.",
@@ -640,6 +634,7 @@ export const cities: City[] = [
     size: "small",
     specialization: ["none"],
     factionGroup: "witnesses",
+    factionId: "witnesses",
     factionName: "Свидетели Эха",
     description:
       "Небольшой город недалеко от буферной зоны. Сборище Паломников и последователей культа. Религиозная община, сохраняющая рассудок благодаря духовным практикам. Паломники добираются до Секции перегоревших Экранов.",
@@ -657,6 +652,7 @@ export const cities: City[] = [
     size: "city",
     specialization: ["none"],
     factionGroup: "witnesses",
+    factionId: "witnesses",
     factionName: "Свидетели Эха",
     description:
       "Город Свидетелей Эха на границе с высокими этажами. Перевалочный пункт для Паломников. Харизматичные священники убеждают остаться, принося пользу городу. Свидетели не строят город выше, опасаясь святых ангелов.",
@@ -674,6 +670,7 @@ export const cities: City[] = [
     size: "outpost",
     specialization: ["none"],
     factionGroup: "military",
+    factionId: "military",
     factionName: "Военные",
     description:
       "Одно из двух поселений Военных на средних этажах. Город Граждан, обеспечивающий самообеспечение: выращивание круп и скота, создание вооружения, синтез препаратов. Граждане не могут самовольно покидать город.",
@@ -691,6 +688,7 @@ export const cities: City[] = [
     size: "outpost",
     specialization: ["none"],
     factionGroup: "military",
+    factionId: "military",
     factionName: "Военные",
     description:
       "Второе поселение Военных на средних этажах. Аналогичная структура: Граждане, Воины, Скот. Связь с другими поселениями через кастрированную сеть ЦСУ. База для охоты на монстров и управления FPV-дронами.",
@@ -708,6 +706,7 @@ export const cities: City[] = [
     size: "outpost",
     specialization: ["fortress"],
     factionGroup: "military",
+    factionId: "military",
     factionName: "Военные",
     description:
       "Фортпост Военных на нижних этажах. Обеспечивает разведку и контроль территорий. Связан с основными поселениями через кастрированную сеть ЦСУ.",
@@ -725,6 +724,7 @@ export const cities: City[] = [
     size: "small",
     specialization: ["none"],
     factionGroup: "other",
+    factionId: "librarians",
     factionName: "Орден Библиотекарей",
     description:
       "Город в хорошо сохранившейся части 40-этажной Вавилонской Библиотеки. Затворнический орден учёных-монахов. Хранители знаний, культ тишины. Торгуют копиями книг и информацией.",
@@ -742,6 +742,7 @@ export const cities: City[] = [
     size: "small",
     specialization: ["none"],
     factionGroup: "other",
+    factionId: "silent-brotherhood",
     factionName: "Молчальники",
     description:
       "Небольшой город в пустой жилой секции. Обет полного молчания — общаются жестами и записками. Заложили большинство проходов кирпичом и бетоном. Раз в год каждый имеет право произнести одно слово.",
@@ -759,6 +760,7 @@ export const cities: City[] = [
     size: "city",
     specialization: ["none"],
     factionGroup: "other",
+    factionId: "dawn-colony",
     factionName: 'Колония «Рассвет»',
     description:
       "Крупный город техно-коммуны в секции жилых комплексов. Основан интеллектуалами и инженерами, нашедшими архивы социалистического периода. Управление — Совет Инженеров, решения по протоколам прошлого.",
@@ -781,6 +783,7 @@ export const cities: City[] = [
     size: "small",
     specialization: ["none"],
     factionGroup: "other",
+    factionId: "forest-people",
     factionName: "Лесные жители",
     description:
       "Жилые секции, вплетённые в структуру Разросшегося леса. Здания стоят, но стены и перекрытия пронизаны корнями и лианами. Обитатели — потомки людей, принявших симбиоз с лесом. Зеленоватый оттенок кожи, светящиеся глаза.",
@@ -798,6 +801,7 @@ export const cities: City[] = [
     size: "small",
     specialization: ["none"],
     factionGroup: "other",
+    factionId: "forest-people",
     factionName: "Лесные жители",
     description:
       "Второй город лесных жителей в Разросшемся лесе. Коллективное сознание через «роевой интеллект». Обязаны обслуживать лес: лечить деревья, направлять реки, разделывать хтонических тварей для удобрений.",

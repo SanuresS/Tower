@@ -4,33 +4,16 @@ import React from "react";
 import Link from "next/link";
 import {
   City,
-  Religion,
   CitySpecialization,
-  citySizeLabels,
   citySpecializationLabels,
   cityZoneLabels,
   cityZoneColors,
-  religionLabels,
-  religionColors,
 } from "@/data/cities";
-import { factions } from "@/data/factions";
+import { Religion, religionLabels, religionColors } from "@/data/types";
 
 interface CityCardProps {
   city: City;
   highlighted?: boolean;
-}
-
-function stripAccents(str: string): string {
-  return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-}
-
-function findFactionIdByName(name: string): string | null {
-  const normalized = stripAccents(name.toLowerCase().replace(/[«»]/g, "").trim());
-  const found = factions.find((f) => {
-    const fn = stripAccents(f.name.toLowerCase().replace(/[«»]/g, "").trim());
-    return fn === normalized || fn.includes(normalized) || normalized.includes(fn);
-  });
-  return found?.id ?? null;
 }
 
 const sizeDots: Record<string, number> = {
@@ -163,15 +146,19 @@ function ReligionPie({ religions }: { religions: { religion: Religion; percent: 
   const stroke = 8;
   const radius = (size - stroke) / 2;
   const circumference = 2 * Math.PI * radius;
-  let accumulated = 0;
+
+  const offsets = religions.reduce<number[]>((acc, r) => {
+    const prev = acc.length > 0 ? acc[acc.length - 1] : 0;
+    acc.push(prev + r.percent);
+    return acc;
+  }, []);
 
   return (
     <div className="flex items-center gap-3">
       <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="shrink-0">
         {religions.map((r, i) => {
           const dash = (r.percent / 100) * circumference;
-          const offset = -(accumulated / 100) * circumference;
-          accumulated += r.percent;
+          const offset = -(offsets[i] - r.percent) / 100 * circumference;
           return (
             <circle
               key={i}
@@ -211,7 +198,7 @@ export default function CityCard({ city, highlighted }: CityCardProps) {
   const zColor = cityZoneColors[city.zone];
   const primarySpec = city.specialization[0] ?? "none";
   const activeSpecs = city.specialization.filter((s) => s !== "none");
-  const factionId = city.factionName ? findFactionIdByName(city.factionName) : null;
+  const factionId = city.factionId ?? null;
   const dots = sizeDots[city.size] ?? 3;
   const sizeLabel = sizeLabels[city.size] ?? city.size;
 

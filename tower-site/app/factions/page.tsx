@@ -10,6 +10,7 @@ import {
   locationColors,
   LocationZone,
 } from "@/data/factions";
+import { getFilterStyle } from "@/lib/filters";
 
 const locationZones: LocationZone[] = ["lower", "middle", "special"];
 const sectsColor = locationColors.sects;
@@ -46,23 +47,6 @@ function FactionsContent() {
 
   function resetFilters() {
     setSelectedZone("all");
-  }
-
-  function getFilterStyle(isActive: boolean, color: string) {
-    if (isActive) {
-      return {
-        backgroundColor: `${color}15`,
-        color,
-        border: `1px solid ${color}50`,
-        borderLeftWidth: "3px",
-        borderLeftColor: color,
-      };
-    }
-    return {
-      backgroundColor: "transparent",
-      color: "rgba(255,255,255,0.4)",
-      border: "1px solid rgba(255,255,255,0.08)",
-    };
   }
 
   return (

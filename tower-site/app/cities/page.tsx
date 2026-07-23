@@ -4,6 +4,7 @@ import React, { useState, useMemo, useEffect, useCallback, Suspense } from "reac
 import { useSearchParams } from "next/navigation";
 import PageContainer from "@/components/layout/PageContainer";
 import CityCard from "@/components/ui/CityCard";
+import FilterBar from "@/components/ui/FilterBar";
 import {
   cities,
   cityZoneLabels,
@@ -11,14 +12,12 @@ import {
   citySizeLabels,
   citySpecializationLabels,
   cityFactionGroupLabels,
-  religionLabels,
-  religionColors,
   CityZone,
   CitySize,
   CitySpecialization,
   CityFactionGroup,
-  Religion,
 } from "@/data/cities";
+import { Religion, religionLabels, religionColors } from "@/data/types";
 
 const cityZones: CityZone[] = ["lower", "middle", "special"];
 const citySizes: CitySize[] = ["hive", "large", "city", "small", "outpost"];
@@ -48,70 +47,6 @@ const cityReligions: Religion[] = [
   "forest_collective",
   "lamashtu_cult",
 ];
-
-function FilterGroup({
-  label,
-  items,
-  labels,
-  selected,
-  onSelect,
-  colorFn,
-}: {
-  label: string;
-  items: readonly string[];
-  labels: Record<string, string>;
-  selected: string;
-  onSelect: (v: string) => void;
-  colorFn?: (v: string) => string;
-}) {
-  function getStyle(isActive: boolean, color: string) {
-    if (isActive) {
-      return {
-        backgroundColor: `${color}15`,
-        color,
-        border: `1px solid ${color}50`,
-        borderLeftWidth: "3px" as const,
-        borderLeftColor: color,
-      };
-    }
-    return {
-      backgroundColor: "transparent",
-      color: "rgba(255,255,255,0.4)",
-      border: "1px solid rgba(255,255,255,0.08)",
-    };
-  }
-
-  return (
-    <div>
-      <p className="text-[10px] font-mono text-tower-muted/60 uppercase tracking-widest mb-2 m-0">
-        {label}
-      </p>
-      <div className="flex flex-wrap gap-1.5">
-        <button
-          onClick={() => onSelect("all")}
-          className="px-2.5 py-1 rounded-full font-mono text-[11px] transition-all duration-200 border cursor-pointer"
-          style={getStyle(selected === "all", "#94a3b8")}
-        >
-          Все
-        </button>
-        {items.map((v) => {
-          const isActive = selected === v;
-          const color = colorFn ? colorFn(v) : "#94a3b8";
-          return (
-            <button
-              key={v}
-              onClick={() => onSelect(v)}
-              className="px-2.5 py-1 rounded-full font-mono text-[11px] transition-all duration-200 border cursor-pointer"
-              style={getStyle(isActive, color)}
-            >
-              {labels[v]}
-            </button>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
 
 function CitiesContent() {
   const searchParams = useSearchParams();
@@ -173,7 +108,7 @@ function CitiesContent() {
     >
       {/* Filters */}
       <div className="space-y-4 mb-8">
-        <FilterGroup
+        <FilterBar
           label="Зона"
           items={cityZones}
           labels={cityZoneLabels}
@@ -182,7 +117,7 @@ function CitiesContent() {
           colorFn={(v) => cityZoneColors[v as CityZone] ?? "#94a3b8"}
         />
 
-        <FilterGroup
+        <FilterBar
           label="Размер"
           items={citySizes}
           labels={citySizeLabels}
@@ -190,7 +125,7 @@ function CitiesContent() {
           onSelect={(v) => setSelectedSize(v as CitySize | "all")}
         />
 
-        <FilterGroup
+        <FilterBar
           label="Специализация"
           items={citySpecs}
           labels={citySpecializationLabels}
@@ -198,7 +133,7 @@ function CitiesContent() {
           onSelect={(v) => setSelectedSpec(v as CitySpecialization | "all")}
         />
 
-        <FilterGroup
+        <FilterBar
           label="Фракция"
           items={cityFactionGroups}
           labels={cityFactionGroupLabels}
@@ -206,7 +141,7 @@ function CitiesContent() {
           onSelect={(v) => setSelectedFaction(v as CityFactionGroup | "all")}
         />
 
-        <FilterGroup
+        <FilterBar
           label="Религия"
           items={cityReligions}
           labels={religionLabels}

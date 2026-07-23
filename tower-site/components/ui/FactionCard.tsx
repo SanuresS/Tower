@@ -7,16 +7,12 @@ import {
   factionTypeLabels,
   locationLabels,
   locationColors,
-  religionLabels,
-  religionColors,
-  mobilityLabels,
-  weaponLevelLabels,
   relationToneLabels,
   relationToneColors,
   relationToneOrder,
   LocationZone,
 } from "@/data/factions";
-import { cities } from "@/data/cities";
+import { religionLabels, religionColors } from "@/data/types";
 
 interface FactionCardProps {
   faction: Faction;
@@ -62,17 +58,6 @@ function getTagline(description: string): string {
       : sentences[0].slice(0, 70) + "...";
   }
   return "";
-}
-
-function findCityIdByName(name: string): string | null {
-  const normalizedName = name.toLowerCase().replace(/[«»]/g, "").trim();
-  const found = cities.find(
-    (c) =>
-      c.name.toLowerCase().replace(/[«»]/g, "").trim() === normalizedName ||
-      c.name.toLowerCase().includes(normalizedName) ||
-      normalizedName.includes(c.name.toLowerCase().replace(/[«»]/g, "").trim())
-  );
-  return found?.id ?? null;
 }
 
 export default function FactionCard({ faction, highlighted }: FactionCardProps) {
@@ -192,7 +177,7 @@ export default function FactionCard({ faction, highlighted }: FactionCardProps) 
                 style={{ backgroundColor: "#b8860b" }}
               />
               {(() => {
-                const cityId = findCityIdByName(faction.cities[0]);
+                const cityId = faction.cityIds[0] ?? null;
                 return cityId ? (
                   <Link
                     href={`/cities?highlight=${cityId}`}
@@ -215,7 +200,7 @@ export default function FactionCard({ faction, highlighted }: FactionCardProps) 
             {faction.cities.length > 1 && (
               <div className="flex flex-wrap gap-x-3 gap-y-1 pl-0.5">
                 {faction.cities.slice(1).map((city, i) => {
-                  const cityId = findCityIdByName(city);
+                  const cityId = faction.cityIds[i + 1] ?? null;
                   return (
                     <span key={i} className="flex items-center gap-1.5">
                       <span
