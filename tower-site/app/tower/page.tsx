@@ -4,7 +4,7 @@ import React from "react";
 import PageContainer from "@/components/layout/PageContainer";
 import FloorIndicator from "@/components/ui/FloorIndicator";
 import TowerSlice from "@/components/ui/TowerSlice";
-import { towerZones, babylonParts, towerSections, TOTAL_FLOORS } from "@/data/tower";
+import { towerZones, babylonParts, towerSections, sectionGroups, TOTAL_FLOORS } from "@/data/tower";
 
 export default function TowerPage() {
   return (
@@ -108,31 +108,79 @@ export default function TowerPage() {
 
       {/* Key sections */}
       <section>
-        <h2 className="font-mono text-tower-text text-lg font-semibold mb-4 m-0">
+        <h2 className="font-mono text-tower-text text-lg font-semibold mb-6 m-0">
           Ключевые секции
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {towerSections.map((section) => (
-            <div
-              key={section.id}
-              className="p-4 rounded-md border border-tower-border bg-tower-surface transition-shadow duration-300 hover:shadow-md"
-              style={{
-                borderLeftWidth: "2px",
-                borderLeftColor: "rgba(139, 69, 19, 0.4)",
-              }}
-            >
-              <div className="flex items-center gap-2 mb-2 flex-wrap">
-                <h3 className="font-mono text-tower-text text-sm font-semibold m-0">
-                  {section.name}
-                </h3>
-                <FloorIndicator floors={section.floors} />
+
+        {sectionGroups
+          .sort((a, b) => b.order - a.order)
+          .map((group) => {
+            const sectionsInGroup = towerSections.filter((s) => s.zone === group.id);
+
+            if (sectionsInGroup.length === 0 && group.id !== "upper") return null;
+
+            return (
+              <div key={group.id} className="mb-8 last:mb-0">
+                {/* Zone group header */}
+                <div className="flex items-center gap-3 mb-4">
+                  <div
+                    className="w-3 h-3 rounded-full shrink-0"
+                    style={{ backgroundColor: group.color }}
+                  />
+                  <h3
+                    className="font-mono text-sm font-semibold m-0"
+                    style={{ color: group.color }}
+                  >
+                    {group.name}
+                  </h3>
+                  <div className="h-px flex-1" style={{ backgroundColor: `${group.color}30` }} />
+                  <span
+                    className="font-mono text-[10px] tracking-wider"
+                    style={{ color: `${group.color}99` }}
+                  >
+                    {group.floorRange}
+                  </span>
+                </div>
+
+                {/* Sections in group */}
+                {sectionsInGroup.length > 0 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pl-6">
+                    {sectionsInGroup.map((section) => (
+                      <div
+                        key={section.id}
+                        className="p-4 rounded-md border border-tower-border bg-tower-surface transition-shadow duration-300 hover:shadow-md"
+                        style={{
+                          borderLeftWidth: "2px",
+                          borderLeftColor: `${group.color}60`,
+                        }}
+                      >
+                        <div className="flex items-center gap-2 mb-2 flex-wrap">
+                          <h4 className="font-mono text-tower-text text-sm font-semibold m-0">
+                            {section.name}
+                          </h4>
+                          <FloorIndicator floors={section.floors} color={group.color} />
+                        </div>
+                        <p className="text-tower-muted text-xs leading-relaxed m-0">
+                          {section.description}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="pl-6">
+                    <div
+                      className="p-4 rounded-md border border-dashed bg-white/[0.01]"
+                      style={{ borderColor: `${group.color}20` }}
+                    >
+                      <p className="text-tower-muted text-xs italic m-0" style={{ color: `${group.color}60` }}>
+                        Застывшие во времени пустые пространства. Здесь бродят Святые ангелы и сохраняются древние технологии.
+                      </p>
+                    </div>
+                  </div>
+                )}
               </div>
-              <p className="text-tower-muted text-xs leading-relaxed m-0">
-                {section.description}
-              </p>
-            </div>
-          ))}
-        </div>
+            );
+          })}
       </section>
     </PageContainer>
   );

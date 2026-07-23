@@ -135,14 +135,36 @@ export interface TowerSection {
   id: string;
   name: string;
   floors: string;
+  floorStart: number;
+  floorEnd: number;
+  zone: string;
   description: string;
 }
+
+export interface SectionGroup {
+  id: string;
+  name: string;
+  floorRange: string;
+  color: string;
+  order: number;
+}
+
+export const sectionGroups: SectionGroup[] = [
+  { id: "global", name: "Глобальные системы", floorRange: "Вся Башня", color: "#94a3b8", order: 5 },
+  { id: "upper", name: "Верхние этажи", floorRange: "8000–12000", color: "#94a3b8", order: 4 },
+  { id: "middle", name: "Средние этажи", floorRange: "5100–8000", color: "#b8860b", order: 3 },
+  { id: "lower", name: "Нижние этажи", floorRange: "2200–5000", color: "#737373", order: 2 },
+  { id: "life", name: "Этажи жизни", floorRange: "1700–2200", color: "#22c55e", order: 1 },
+];
 
 export const towerSections: TowerSection[] = [
   {
     id: "ctu",
     name: "Центральный Транспортный Узел (ЦТУ)",
     floors: "Весь Вавилон-1, центр Вавилона-2",
+    floorStart: 1,
+    floorEnd: 12000,
+    zone: "global",
     description:
       "Огромная шахта с лифтами и вертикальными поездами. Крайне опасное место — пристанище пауков-канатоходцев и автоматонов.",
   },
@@ -150,41 +172,69 @@ export const towerSections: TowerSection[] = [
     id: "ltu",
     name: "Локальный Транспортный Узел (ЛТУ)",
     floors: "Вся Башня",
+    floorStart: 1,
+    floorEnd: 12000,
+    zone: "global",
     description:
       "Сеть скоростных горизонтально-вертикальных лифтов-поездов. Несколько изолированных сетей по всей Башне.",
-  },
-  {
-    id: "cstr-omega",
-    name: "ЦШТР-Ω (Глотка)",
-    floors: "2000–3000, Вавилон-3",
-    description:
-      "Центральная Шахта Термальной Регуляции. Гигантский гравитационно-конвекционный радиатор.",
   },
   {
     id: "csu-servers",
     name: "Секция серверов ЦСУ",
     floors: "5200–7800, Вавилон-2",
+    floorStart: 5200,
+    floorEnd: 7800,
+    zone: "middle",
     description:
       "Кластер из серверных комнат и пульта взаимодействия с ЦСУ.",
-  },
-  {
-    id: "reactors",
-    name: "Секция реакторов",
-    floors: "2500–4000, 5200–7800 (4 шт)",
-    description:
-      "Ядерные реакторы, питающие Башню. На нижних — 2 расплавленных, на средних — 1 отключённый и 1 работающий.",
   },
   {
     id: "library",
     name: "40-этажная Библиотека",
     floors: "Средние этажи (до 8000)",
+    floorStart: 5100,
+    floorEnd: 8000,
+    zone: "middle",
     description:
       "Вавилонская Библиотека. 99% книг поражены грибком. Здесь живут Библиотекари.",
+  },
+  {
+    id: "reactors",
+    name: "Секция реакторов",
+    floors: "2500–4000, 5200–7800 (4 шт)",
+    floorStart: 2500,
+    floorEnd: 4000,
+    zone: "lower",
+    description:
+      "Ядерные реакторы, питающие Башню. На нижних — 2 расплавленных, на средних — 1 отключённый и 1 работающий.",
+  },
+  {
+    id: "ice-crypt",
+    name: "Ледяной склеп",
+    floors: "3000, Вавилон-3",
+    floorStart: 3000,
+    floorEnd: 3000,
+    zone: "lower",
+    description:
+      "После разрушения криогенных баков превратилась в царство вечного холода.",
+  },
+  {
+    id: "cstr-omega",
+    name: "ЦШТР-Ω (Глотка)",
+    floors: "2000–3000, Вавилон-3",
+    floorStart: 2000,
+    floorEnd: 3000,
+    zone: "life",
+    description:
+      "Центральная Шахта Термальной Регуляции. Гигантский гравитационно-конвекционный радиатор.",
   },
   {
     id: "ocean",
     name: "Океан",
     floors: "1700–2200",
+    floorStart: 1700,
+    floorEnd: 2200,
+    zone: "life",
     description:
       "Огромный резервуар с водой и собственной атмосферой. Естественная преграда между нижними и глубинными этажами.",
   },
@@ -192,6 +242,9 @@ export const towerSections: TowerSection[] = [
     id: "overgrown-forest",
     name: "Разросшийся лес",
     floors: "1700–2200",
+    floorStart: 1700,
+    floorEnd: 2200,
+    zone: "life",
     description:
       "Растения с гидропонной фермы вступили в симбиоз и разрослись на многие этажи. Живая биофауна.",
   },
@@ -199,14 +252,10 @@ export const towerSections: TowerSection[] = [
     id: "mushroom-forest",
     name: "Грибной лес",
     floors: "1700–2200",
+    floorStart: 1700,
+    floorEnd: 2200,
+    zone: "life",
     description:
       "Гриб разросся по всей лаборатории и вышел за её пределы. Споры чрезвычайно ядовиты.",
-  },
-  {
-    id: "ice-crypt",
-    name: "Ледяной склеп",
-    floors: "3000, Вавилон-3",
-    description:
-      "После разрушения криогенных баков превратилась в царство вечного холода.",
   },
 ];
