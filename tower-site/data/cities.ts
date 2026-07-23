@@ -702,6 +702,23 @@ export const cities: City[] = [
     color: "#94a3b8",
   },
   {
+    id: "military-fortpost",
+    name: "Фортпост Военных",
+    zone: "lower",
+    size: "outpost",
+    specialization: ["fortress"],
+    factionGroup: "military",
+    factionName: "Военные",
+    description:
+      "Фортпост Военных на нижних этажах. Обеспечивает разведку и контроль территорий. Связан с основными поселениями через кастрированную сеть ЦСУ.",
+    religion: "atheism" as const,
+    religions: [ { religion: "atheism", percent: 95 }, { religion: "ezibtu", percent: 5 } ],
+    religiosity: 5,
+    powerStability: 95,
+    crimeLevel: 95,
+    color: "#94a3b8",
+  },
+  {
     id: "librarians-city",
     name: "Город в Библиотеке",
     zone: "middle",
