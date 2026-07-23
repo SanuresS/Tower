@@ -42,11 +42,11 @@ export default function TowerSlice({
   const centerX = svgWidth / 2;
 
   return (
-    <div className="flex gap-4 items-start" style={{ height: svgHeight }}>
+    <div className="flex flex-col md:flex-row gap-4 items-start" style={{ minHeight: svgHeight }}>
       {/* SVG Tower */}
-      <div className="relative shrink-0">
+      <div className="relative w-full md:w-auto shrink-0 max-w-[240px]">
         <svg
-          width={svgWidth}
+          width="100%"
           height={svgHeight}
           viewBox={`0 0 ${svgWidth} ${svgHeight}`}
           className="block"
@@ -135,39 +135,57 @@ export default function TowerSlice({
 
       {/* Labels — absolute positioning at zone centers, reversed order */}
       {showLabels && (
-        <div className="relative shrink-0" style={{ width: 140, height: svgHeight }}>
-          {[...towerZones].reverse().map((zone) => {
-            const yTop = floorToY(zone.floorEnd, svgHeight);
-            const yBottom = floorToY(zone.floorStart, svgHeight);
-            const centerY = (yTop + yBottom) / 2;
+        <>
+          <div className="hidden md:block relative shrink-0" style={{ width: 140, height: svgHeight }}>
+            {[...towerZones].reverse().map((zone) => {
+              const yTop = floorToY(zone.floorEnd, svgHeight);
+              const yBottom = floorToY(zone.floorStart, svgHeight);
+              const centerY = (yTop + yBottom) / 2;
 
-            return (
-              <div
-                key={zone.id}
-                className="absolute flex items-center gap-2"
-                style={{
-                  top: centerY,
-                  transform: "translateY(-50%)",
-                  left: 0,
-                  right: 0,
-                }}
-              >
+              return (
                 <div
-                  className="w-2 h-2 rounded-full shrink-0"
+                  key={zone.id}
+                  className="absolute flex items-center gap-2"
+                  style={{
+                    top: centerY,
+                    transform: "translateY(-50%)",
+                    left: 0,
+                    right: 0,
+                  }}
+                >
+                  <div
+                    className="w-2 h-2 rounded-full shrink-0"
+                    style={{ backgroundColor: zone.color }}
+                  />
+                  <div className="min-w-0">
+                    <p className="text-[11px] font-mono text-tower-text leading-tight m-0">
+                      {zone.name}
+                    </p>
+                    <p className="text-[9px] font-mono text-tower-muted leading-tight m-0">
+                      {zone.floorStart}–{zone.floorEnd}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <div className="md:hidden flex flex-wrap gap-x-3 gap-y-1 w-full">
+            {towerZones.map((zone) => (
+              <div key={zone.id} className="flex items-center gap-1">
+                <div
+                  className="w-1.5 h-1.5 rounded-full shrink-0"
                   style={{ backgroundColor: zone.color }}
                 />
-                <div className="min-w-0">
-                  <p className="text-[11px] font-mono text-tower-text leading-tight m-0">
-                    {zone.name}
-                  </p>
-                  <p className="text-[9px] font-mono text-tower-muted leading-tight m-0">
-                    {zone.floorStart}–{zone.floorEnd}
-                  </p>
-                </div>
+                <span className="text-[10px] font-mono text-tower-text whitespace-nowrap leading-tight">
+                  {zone.name}
+                </span>
+                <span className="text-[8px] font-mono text-tower-muted whitespace-nowrap leading-tight">
+                  {zone.floorStart}–{zone.floorEnd}
+                </span>
               </div>
-            );
-          })}
-        </div>
+            ))}
+          </div>
+        </>
       )}
     </div>
   );
