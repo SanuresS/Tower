@@ -154,7 +154,7 @@ export default function FactionCard({ faction, highlighted }: FactionCardProps) 
               border: "1px solid rgba(255,255,255,0.08)",
             }}
           >
-            <span className="text-[9px] opacity-50">Нас.</span>
+            <span className="text-[9px] opacity-50">Население:</span>
             {faction.population}
           </span>
         </div>
