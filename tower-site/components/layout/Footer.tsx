@@ -23,7 +23,7 @@ export default function Footer() {
           </p>
         </div>
         <p className="text-tower-muted/50 text-[10px] font-mono m-0">
-          12 000 этажей · Процедурный мир · Живая история
+          Мир, в котором суициднулся Бог
         </p>
       </div>
     </footer>

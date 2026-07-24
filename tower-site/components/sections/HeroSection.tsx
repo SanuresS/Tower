@@ -63,10 +63,10 @@ export default function HeroSection() {
         </h1>
 
         <p className="text-tower-muted text-base md:text-lg leading-relaxed mb-8 max-w-xl mx-auto">
-          Она строилась 6500 лет. Бог умер в ней. Выжившие забыли, зачем.
+          Подобно самой бездушной серой мегаструктуре, людей окружает бездушный серый мир.
           <br />
           <span className="text-tower-rust">
-            12 000 этажей. Процедурный мир. Живая история.
+            Мир, в котором суициднулся Бог
           </span>
         </p>
 
