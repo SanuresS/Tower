@@ -294,11 +294,11 @@ export default function FactionCard({ faction, highlighted }: FactionCardProps) 
                         <div className="flex gap-3">
                           <div className="flex flex-col gap-0.5 flex-1 min-w-0">
                             <div className="flex items-center gap-1.5">
-                              <span className="text-[8px] font-mono text-tower-muted/40 w-16 text-right shrink-0">Мобильность</span>
+                              <span className="text-[8px] font-mono text-tower-muted/40 w-[52px] text-left shrink-0">Мобильность</span>
                               <div className="flex gap-0.5">
                                 {([1, 2, 3, 4, 5] as const).map((pos) => {
                                   const val = unit.mobility;
-                                  const level = val === "static" ? 1 : val === "limited" ? 2 : val === "mobile" ? 3 : 5;
+                                  const level = val === "static" ? 1 : val === "limited" ? 2 : val === "mobile" ? 3 : val === "fast" ? 4 : 5;
                                   return (
                                     <span
                                       key={pos}
@@ -312,7 +312,7 @@ export default function FactionCard({ faction, highlighted }: FactionCardProps) 
                               </div>
                             </div>
                             <div className="flex items-center gap-1.5">
-                              <span className="text-[8px] font-mono text-tower-muted/40 w-16 text-right shrink-0">Организация</span>
+                              <span className="text-[8px] font-mono text-tower-muted/40 w-[52px] text-left shrink-0">Организация</span>
                               <div className="flex gap-0.5">
                                 {([1, 2, 3, 4, 5] as const).map((pos) => {
                                   const val = unit.organization;
@@ -330,11 +330,11 @@ export default function FactionCard({ faction, highlighted }: FactionCardProps) 
                               </div>
                             </div>
                             <div className="flex items-center gap-1.5">
-                              <span className="text-[8px] font-mono text-tower-muted/40 w-16 text-right shrink-0">Вооружение</span>
+                              <span className="text-[8px] font-mono text-tower-muted/40 w-[52px] text-left shrink-0">Вооружение</span>
                               <div className="flex gap-0.5">
                                 {([1, 2, 3, 4, 5] as const).map((pos) => {
                                   const val = unit.weaponLevel;
-                                  const level = val === "primitive" ? 1 : val === "standard" ? 2 : val === "mixed" ? 3 : 4;
+                                  const level = val === "primitive" ? 1 : val === "standard" ? 2 : val === "mixed" ? 3 : val === "advanced" ? 4 : 5;
                                   return (
                                     <span
                                       key={pos}
