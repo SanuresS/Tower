@@ -235,82 +235,9 @@ export default function FactionCard({ faction, highlighted }: FactionCardProps) 
           if (faction.zone === "sects" && !hasMilitary && !hasProtected && !hasRelations) return null;
           return (
             <div className="mb-4 p-3 rounded-md border border-tower-border/50 bg-white/[0.02]">
-              {/* Military section — always shown */}
-              <div className={hasProtected || hasRelations ? "mb-3" : ""}>
-                <div className="flex items-center gap-2 mb-2">
-                  <svg width="12" height="12" viewBox="0 0 16 16" fill="none" className="opacity-40 shrink-0">
-                    <path d="M8 1L10 5H14L11 8L12 12L8 10L4 12L5 8L2 5H6L8 1Z" stroke="currentColor" strokeWidth="1" fill="none" className="text-tower-muted" />
-                  </svg>
-                  <div className="h-px flex-1 bg-white/[0.06]" />
-                  <p className="text-[9px] font-mono uppercase tracking-widest m-0 text-tower-muted/50">
-                    Военные формирования
-                  </p>
-                  <div className="h-px flex-1 bg-white/[0.06]" />
-                </div>
-                {hasMilitary ? (
-                  <div className="space-y-2">
-                    {faction.military!.map((unit, i) => (
-                      <div key={i} className="flex flex-col gap-1">
-                        <div className="flex items-center justify-between gap-2">
-                          <span className="text-[12px] font-mono font-medium text-tower-text/80">
-                            {unit.name}
-                          </span>
-                          <span className="text-[10px] font-mono text-tower-muted/60 shrink-0">
-                            {unit.count} человек
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <div className="flex items-center gap-1.5">
-                            <span className="text-[8px] font-mono text-tower-muted/40 w-16 text-right">Мобильность</span>
-                            <div className="flex gap-0.5">
-                              {([1, 2, 3, 4, 5] as const).map((pos) => {
-                                const val = unit.mobility;
-                                const level = val === "static" ? 1 : val === "limited" ? 2 : val === "mobile" ? 3 : 5;
-                                return (
-                                  <span
-                                    key={pos}
-                                    className="w-2 h-1.5 rounded-sm"
-                                    style={{
-                                      backgroundColor: level >= pos ? "#3b82f6" : "rgba(255,255,255,0.06)",
-                                    }}
-                                  />
-                                );
-                              })}
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-1.5">
-                            <span className="text-[8px] font-mono text-tower-muted/40 w-16 text-right">Вооружение</span>
-                            <div className="flex gap-0.5">
-                              {([1, 2, 3, 4, 5] as const).map((pos) => {
-                                const val = unit.weaponLevel;
-                                const level = val === "primitive" ? 1 : val === "standard" ? 2 : val === "mixed" ? 3 : 4;
-                                return (
-                                  <span
-                                    key={pos}
-                                    className="w-2 h-1.5 rounded-sm"
-                                    style={{
-                                      backgroundColor: level >= pos ? "#ef4444" : "rgba(255,255,255,0.06)",
-                                    }}
-                                  />
-                                );
-                              })}
-                            </div>
-                          </div>
-                          <span className="text-[10px] font-mono text-tower-muted/50 ml-auto hidden sm:inline">
-                            {unit.role}
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-[11px] font-mono text-tower-muted/30 m-0 text-center py-1">Нет данных</p>
-                )}
-              </div>
-
               {/* Protected communities section — only if data exists */}
               {hasProtected && (
-                <div className={hasRelations ? "mb-3" : ""}>
+                <div className={hasMilitary || hasRelations ? "mb-3" : ""}>
                   <div className="flex items-center gap-2 mb-2">
                     <div className="h-px flex-1 bg-white/[0.06]" />
                     <p className="text-[9px] font-mono uppercase tracking-widest m-0 text-tower-muted/50">
@@ -322,14 +249,116 @@ export default function FactionCard({ faction, highlighted }: FactionCardProps) 
                     {faction.protectedCommunities!.map((community, i) => (
                       <span key={i} className="flex items-center gap-1.5">
                         <span className="text-tower-muted/40 text-[10px] shrink-0">◇</span>
-                        <span className="text-[12px] font-mono text-tower-text/60">
-                          {community.name}
-                        </span>
+                        {community.id ? (
+                          <Link
+                            href={`/cities?highlight=${community.id}`}
+                            className="text-[12px] font-mono text-tower-amber/70 hover:text-tower-amber hover:underline transition-colors"
+                          >
+                            {community.name}
+                          </Link>
+                        ) : (
+                          <span className="text-[12px] font-mono text-tower-text/60">
+                            {community.name}
+                          </span>
+                        )}
                       </span>
                     ))}
                   </div>
                 </div>
               )}
+
+              {/* Military section — always shown */}
+              <div className={hasRelations ? "mb-3" : ""}>
+                <div className="flex items-center gap-2 mb-2">
+                  <svg width="12" height="12" viewBox="0 0 16 16" fill="none" className="opacity-40 shrink-0">
+                    <path d="M8 1L10 5H14L11 8L12 12L8 10L4 12L5 8L2 5H6L8 1Z" stroke="currentColor" strokeWidth="1" fill="none" className="text-tower-muted" />
+                  </svg>
+                  <div className="h-px flex-1 bg-white/[0.06]" />
+                  <p className="text-[9px] font-mono uppercase tracking-widest m-0 text-tower-muted/50">
+                    Военные формирования
+                  </p>
+                  <div className="h-px flex-1 bg-white/[0.06]" />
+                </div>
+                {hasMilitary ? (
+                  <div className="space-y-1.5">
+                    {faction.military!.map((unit, i) => (
+                      <div key={i} className="flex flex-col gap-1">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="text-[12px] font-mono font-medium text-tower-text/80">
+                            {unit.name}
+                          </span>
+                          <span className="text-[10px] font-mono text-tower-muted/60 shrink-0">
+                            {unit.count} человек
+                          </span>
+                        </div>
+                        <div className="flex gap-3">
+                          <div className="flex flex-col gap-0.5 flex-1 min-w-0">
+                            <div className="flex items-center gap-1.5">
+                              <span className="text-[8px] font-mono text-tower-muted/40 w-16 text-right shrink-0">Мобильность</span>
+                              <div className="flex gap-0.5">
+                                {([1, 2, 3, 4, 5] as const).map((pos) => {
+                                  const val = unit.mobility;
+                                  const level = val === "static" ? 1 : val === "limited" ? 2 : val === "mobile" ? 3 : 5;
+                                  return (
+                                    <span
+                                      key={pos}
+                                      className="w-2 h-1.5 rounded-sm"
+                                      style={{
+                                        backgroundColor: level >= pos ? "#3b82f6" : "rgba(255,255,255,0.06)",
+                                      }}
+                                    />
+                                  );
+                                })}
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-1.5">
+                              <span className="text-[8px] font-mono text-tower-muted/40 w-16 text-right shrink-0">Организация</span>
+                              <div className="flex gap-0.5">
+                                {([1, 2, 3, 4, 5] as const).map((pos) => {
+                                  const val = unit.organization;
+                                  const level = val === "chaotic" ? 1 : val === "loose" ? 2 : val === "organized" ? 3 : val === "disciplined" ? 4 : 5;
+                                  return (
+                                    <span
+                                      key={pos}
+                                      className="w-2 h-1.5 rounded-sm"
+                                      style={{
+                                        backgroundColor: level >= pos ? "#a855f7" : "rgba(255,255,255,0.06)",
+                                      }}
+                                    />
+                                  );
+                                })}
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-1.5">
+                              <span className="text-[8px] font-mono text-tower-muted/40 w-16 text-right shrink-0">Вооружение</span>
+                              <div className="flex gap-0.5">
+                                {([1, 2, 3, 4, 5] as const).map((pos) => {
+                                  const val = unit.weaponLevel;
+                                  const level = val === "primitive" ? 1 : val === "standard" ? 2 : val === "mixed" ? 3 : 4;
+                                  return (
+                                    <span
+                                      key={pos}
+                                      className="w-2 h-1.5 rounded-sm"
+                                      style={{
+                                        backgroundColor: level >= pos ? "#ef4444" : "rgba(255,255,255,0.06)",
+                                      }}
+                                    />
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          </div>
+                          <span className="text-[10px] font-mono text-tower-muted/50 self-center hidden sm:inline max-w-[140px] text-right leading-snug">
+                            {unit.role}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-[11px] font-mono text-tower-muted/30 m-0 text-center py-1">Нет данных</p>
+                )}
+              </div>
 
               {/* Relations section — always shown */}
               <div>
