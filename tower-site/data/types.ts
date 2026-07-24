@@ -31,7 +31,7 @@ export const religionColors: Record<Religion, string> = {
   ezibtu: "#0ea5e9",
   rishtu: "#dc2626",
   lamashtu_cult: "#a855f7",
-  silence_cult: "#94a3b8",
+  silence_cult: "#7f8c9b",
   forest_collective: "#22c55e",
   echo_worship: "#ec4899",
   yehudimism: "#f59e0b",

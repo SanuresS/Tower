@@ -25,10 +25,10 @@ const sizeDots: Record<string, number> = {
 };
 
 const sizeLabels: Record<string, string> = {
-  outpost: "Пост",
-  small: "Малый",
+  outpost: "Форпост",
+  small: "Небольшой",
   city: "Город",
-  large: "Большой",
+  large: "Крупный",
   hive: "Улей",
 };
 

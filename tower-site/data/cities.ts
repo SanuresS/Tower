@@ -410,7 +410,7 @@ export const cities: City[] = [
     name: "Ши-Масл",
     zone: "lower",
     size: "small",
-    specialization: ["none"],
+    specialization: ["bastion"],
     factionGroup: "clans",
     factionId: "barzakh",
     factionName: 'Клан «Барзах»',
@@ -861,7 +861,7 @@ export const cities: City[] = [
   {
     id: "kromka",
     name: "Кромка",
-    zone: "lower",
+    zone: "special",
     size: "small",
     specialization: ["none"],
     factionGroup: "other",
@@ -872,7 +872,7 @@ export const cities: City[] = [
     religiosity: 5,
     powerStability: 20,
     crimeLevel: 30,
-    color: "#b8860b",
+    color: "#22c55e",
   },
 
   // ═══════════════════════════════════════
