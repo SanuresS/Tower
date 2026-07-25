@@ -30,12 +30,16 @@ const termCategories: TermCategory[] = [
 export default function LorePage() {
   const [activeTab, setActiveTab] = useState("story");
   const [termFilter, setTermFilter] = useState<TermCategory | "all">("all");
+  const [termSearch, setTermSearch] = useState("");
   const sectionRefs = useRef<(HTMLElement | null)[]>([]);
 
-  const filteredTerms =
-    termFilter === "all"
-      ? terminology
-      : terminology.filter((t) => t.category === termFilter);
+  const termQuery = termSearch.trim().toLowerCase();
+
+  const filteredTerms = terminology.filter((t) => {
+    if (termQuery && !t.term.toLowerCase().includes(termQuery) && !t.definition.toLowerCase().includes(termQuery)) return false;
+    if (termFilter !== "all" && t.category !== termFilter) return false;
+    return true;
+  });
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -181,6 +185,37 @@ export default function LorePage() {
             label: "Терминология",
             children: (
               <div>
+                {/* Search */}
+                <div className="relative mb-4">
+                  <svg
+                    className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                  >
+                    <circle cx="7" cy="7" r="5" stroke="#737373" strokeWidth="1.5" />
+                    <path d="M11 11L14 14" stroke="#737373" strokeWidth="1.5" strokeLinecap="round" />
+                  </svg>
+                  <input
+                    type="text"
+                    placeholder="Поиск по терминам и определениям..."
+                    value={termSearch}
+                    onChange={(e) => setTermSearch(e.target.value)}
+                    className="w-full pl-9 pr-8 py-2.5 rounded-lg font-mono text-[12px] text-tower-text bg-tower-surface border border-tower-border placeholder:text-tower-muted/40 focus:outline-none focus:border-tower-rust/40 focus:shadow-[0_0_12px_rgba(139,69,19,0.1)] transition-all duration-200"
+                  />
+                  {termSearch && (
+                    <button
+                      onClick={() => setTermSearch("")}
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-tower-muted/40 hover:text-tower-muted transition-colors cursor-pointer bg-transparent border-none p-0"
+                    >
+                      <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                        <path d="M4 4L12 12M12 4L4 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                      </svg>
+                    </button>
+                  )}
+                </div>
+
                 {/* Filter bar */}
                 <div className="flex flex-wrap items-center gap-2 mb-6">
                   <span className="text-[10px] font-mono text-tower-muted/60 uppercase tracking-widest mr-1">

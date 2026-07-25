@@ -1,12 +1,20 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import PageContainer from "@/components/layout/PageContainer";
 import FloorIndicator from "@/components/ui/FloorIndicator";
 import TowerSlice from "@/components/ui/TowerSlice";
 import { towerZones, babylonParts, towerSections, sectionGroups, TOTAL_FLOORS } from "@/data/tower";
 
 export default function TowerPage() {
+  const [sectionSearch, setSectionSearch] = useState("");
+
+  const sectionQuery = sectionSearch.trim().toLowerCase();
+
+  const filteredSections = sectionQuery
+    ? towerSections.filter((s) => s.name.toLowerCase().includes(sectionQuery))
+    : towerSections;
+
   return (
     <PageContainer
       title="Архитектура Башни"
@@ -112,10 +120,41 @@ export default function TowerPage() {
           Ключевые секции
         </h2>
 
+        {/* Search */}
+        <div className="relative mb-6">
+          <svg
+            className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
+            width="14"
+            height="14"
+            viewBox="0 0 16 16"
+            fill="none"
+          >
+            <circle cx="7" cy="7" r="5" stroke="#737373" strokeWidth="1.5" />
+            <path d="M11 11L14 14" stroke="#737373" strokeWidth="1.5" strokeLinecap="round" />
+          </svg>
+          <input
+            type="text"
+            placeholder="Поиск по названию секции..."
+            value={sectionSearch}
+            onChange={(e) => setSectionSearch(e.target.value)}
+            className="w-full pl-9 pr-8 py-2.5 rounded-lg font-mono text-[12px] text-tower-text bg-tower-surface border border-tower-border placeholder:text-tower-muted/40 focus:outline-none focus:border-tower-rust/40 focus:shadow-[0_0_12px_rgba(139,69,19,0.1)] transition-all duration-200"
+          />
+          {sectionSearch && (
+            <button
+              onClick={() => setSectionSearch("")}
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-tower-muted/40 hover:text-tower-muted transition-colors cursor-pointer bg-transparent border-none p-0"
+            >
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                <path d="M4 4L12 12M12 4L4 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+              </svg>
+            </button>
+          )}
+        </div>
+
         {sectionGroups
           .sort((a, b) => b.order - a.order)
           .map((group) => {
-            const sectionsInGroup = towerSections.filter((s) => s.zone === group.id);
+            const sectionsInGroup = filteredSections.filter((s) => s.zone === group.id);
 
             if (sectionsInGroup.length === 0 && group.id !== "upper") return null;
 
