@@ -156,7 +156,7 @@ export default function TowerPage() {
           .map((group) => {
             const sectionsInGroup = filteredSections.filter((s) => s.zone === group.id);
 
-            if (sectionsInGroup.length === 0 && group.id !== "upper") return null;
+            if (sectionsInGroup.length === 0 && (sectionQuery || group.id !== "upper")) return null;
 
             return (
               <div key={group.id} className="mb-8 last:mb-0">
