@@ -51,8 +51,31 @@ export default function TowerSlice({
           viewBox={`0 0 ${svgWidth} ${svgHeight}`}
           className="block"
         >
+          <defs>
+            {towerZones.map((zone) => (
+              <linearGradient
+                key={`grad-${zone.id}`}
+                id={`zone-grad-${zone.id}`}
+                x1="0"
+                y1="0"
+                x2="0"
+                y2="1"
+              >
+                <stop offset="0%" stopColor={zone.color} stopOpacity={0.25} />
+                <stop offset="100%" stopColor={zone.color} stopOpacity={0.1} />
+              </linearGradient>
+            ))}
+            <filter id="tower-glow" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="2" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+
           {/* Zone backgrounds */}
-          {towerZones.map((zone, index) => {
+          {towerZones.map((zone) => {
             const yTop = floorToY(zone.floorEnd, svgHeight);
             const yBottom = floorToY(zone.floorStart, svgHeight);
             const zoneHeight = yBottom - yTop;
@@ -64,12 +87,7 @@ export default function TowerSlice({
                 y={yTop}
                 width={svgWidth}
                 height={zoneHeight}
-                fill={zone.color}
-                opacity={0.35}
-                style={{
-                  animation: `zonePulse ${12 + index * 2}s ease-in-out infinite`,
-                  animationDelay: `${index * 1.5}s`,
-                }}
+                fill={`url(#zone-grad-${zone.id})`}
               >
                 <title>{`${zone.name} (${zone.floorStart}–${zone.floorEnd})`}</title>
               </rect>
@@ -86,7 +104,7 @@ export default function TowerSlice({
                 y1={y}
                 x2={svgWidth}
                 y2={y}
-                stroke="rgba(255,255,255,0.08)"
+                stroke="rgba(255,255,255,0.1)"
                 strokeWidth={0.5}
               />
             );
@@ -94,7 +112,7 @@ export default function TowerSlice({
 
           {/* Babylon outlines */}
           {showBabylons &&
-            babylonParts.map((part) => {
+            babylonParts.map((part, index) => {
               const path = getBabylonPath(
                 part.widthBottom,
                 part.widthTop,
@@ -111,8 +129,20 @@ export default function TowerSlice({
                   fill="none"
                   stroke={part.color}
                   strokeWidth={1.5}
-                  strokeOpacity={0.6}
+                  strokeOpacity={0.7}
                   strokeDasharray={part.dashed ? "6 4" : "none"}
+                  filter="url(#tower-glow)"
+                  style={
+                    !part.dashed
+                      ? {
+                          strokeDasharray: "1 1",
+                          strokeDashoffset: "1 1",
+                          "--dash-length": "1",
+                          animation: `svgDraw 2s ease forwards`,
+                          animationDelay: `${index * 300}ms`,
+                        } as React.CSSProperties
+                      : undefined
+                  }
                 >
                   <title>{`${part.name} (${part.floorStart}–${part.floorEnd} этажей)`}</title>
                 </path>

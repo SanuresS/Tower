@@ -28,6 +28,7 @@ const placeholderText: Record<string, string> = {
 
 export default function TowerPage() {
   const [sectionSearch, setSectionSearch] = useState("");
+  const towerRef = useRef<HTMLElement | null>(null);
   const groupRefs = useRef<(HTMLElement | null)[]>([]);
 
   const sectionQuery = sectionSearch.trim().toLowerCase();
@@ -51,6 +52,7 @@ export default function TowerPage() {
     groupRefs.current.forEach((el) => {
       if (el) observer.observe(el);
     });
+    if (towerRef.current) observer.observe(towerRef.current);
 
     return () => observer.disconnect();
   }, []);
@@ -63,41 +65,53 @@ export default function TowerPage() {
       subtitle={`${(TOTAL_FLOORS / 100).toFixed(0)} км мегаструктура — от основания до недостроенных этажей`}
     >
       {/* Tower visualization */}
-      <section className="mb-12">
-        <div className="flex flex-col lg:flex-row items-start gap-6 lg:gap-8 p-4 sm:p-6 rounded-lg bg-tower-surface border border-tower-border">
+      <section ref={towerRef} className="mb-12 tower-section">
+        <div className="tower-container flex flex-col lg:flex-row items-start gap-6 lg:gap-8 p-4 sm:p-6 rounded-lg">
           <div className="shrink-0 mx-auto lg:mx-0">
-            <TowerSlice height={500} svgWidth={240} showBabylons showLabels />
+            <div className="relative">
+              <div className="scan-beam" />
+              <TowerSlice height={500} svgWidth={240} showBabylons showLabels />
+            </div>
           </div>
           <div className="flex-1 min-w-0">
-            <h2 className="font-mono text-tower-text text-lg font-semibold mb-4 m-0">
-              Структура Башни
-            </h2>
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-1 h-5 rounded-full bg-tower-rust/60 shrink-0" />
+              <h2 className="font-mono text-tower-text text-lg font-semibold m-0">
+                Структура Башни
+              </h2>
+            </div>
 
             {/* Babylon legend */}
             <div className="space-y-2 sm:space-y-3 mb-6">
-              {babylonParts.map((part) => (
+              {babylonParts.map((part, i) => (
                 <div
                   key={part.id}
-                  className="tower-card flex items-center gap-3 p-3 rounded-md border border-tower-border/50 bg-white/[0.02]"
+                  className="tower-fade-in tower-card flex items-center gap-3 p-3 rounded-md border border-tower-border/50 bg-white/[0.02]"
                   style={{
                     borderLeftWidth: "2px",
                     borderLeftColor: `${part.color}60`,
+                    animationDelay: `${i * 100}ms`,
                   }}
                 >
-                  <svg width={24} height={24} viewBox="0 0 24 24" className="shrink-0">
-                    <path
-                      d={
-                        part.shape === "cylinder"
-                          ? `M 6 20 L 6 4 L 18 4 L 18 20 Z`
-                          : `M 3 20 L 7 4 L 17 4 L 21 20 Z`
-                      }
-                      fill="none"
-                      stroke={part.color}
-                      strokeWidth={1.5}
-                      strokeDasharray={part.dashed ? "3 2" : "none"}
-                      strokeOpacity={0.8}
-                    />
-                  </svg>
+                  <div
+                    className="w-8 h-8 rounded-md flex items-center justify-center shrink-0"
+                    style={{ backgroundColor: `${part.color}15` }}
+                  >
+                    <svg width={18} height={18} viewBox="0 0 24 24">
+                      <path
+                        d={
+                          part.shape === "cylinder"
+                            ? `M 6 20 L 6 4 L 18 4 L 18 20 Z`
+                            : `M 3 20 L 7 4 L 17 4 L 21 20 Z`
+                        }
+                        fill="none"
+                        stroke={part.color}
+                        strokeWidth={1.5}
+                        strokeDasharray={part.dashed ? "3 2" : "none"}
+                        strokeOpacity={0.8}
+                      />
+                    </svg>
+                  </div>
                   <div className="min-w-0">
                     <p className="font-mono text-tower-text text-xs font-semibold m-0">
                       {part.name}
@@ -111,27 +125,32 @@ export default function TowerPage() {
               ))}
             </div>
 
-            <div className="h-px bg-tower-border mb-6" />
+            <div className="flex items-center gap-2 mb-6">
+              <div className="h-px flex-1 bg-gradient-to-r from-tower-rust/40 to-transparent" />
+              <span className="text-tower-rust/30 text-[8px]">◆</span>
+              <div className="h-px w-8 bg-tower-border" />
+            </div>
 
             {/* Floor zones */}
             <h3 className="font-mono text-tower-text text-sm font-semibold mb-3 m-0">
               Зоны этажей
             </h3>
             <div className="space-y-2">
-              {towerZones.map((zone) => {
+              {towerZones.map((zone, i) => {
                 const floors = zone.floorEnd - zone.floorStart;
                 const km = floors / 100;
                 return (
                   <div
                     key={zone.id}
-                    className="tower-card flex items-center gap-3 p-2.5 rounded-md border border-tower-border/50 bg-white/[0.02]"
+                    className="tower-fade-in tower-card flex items-center gap-3 p-2.5 rounded-md border border-tower-border/50 bg-white/[0.02]"
                     style={{
                       borderLeftWidth: "2px",
                       borderLeftColor: `${zone.color}60`,
+                      animationDelay: `${400 + i * 80}ms`,
                     }}
                   >
                     <div
-                      className="w-2 h-8 rounded-full shrink-0"
+                      className="zone-bar w-2 h-8 rounded-full shrink-0"
                       style={{ backgroundColor: zone.color }}
                     />
                     <div className="min-w-0 flex-1">

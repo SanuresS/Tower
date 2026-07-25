@@ -123,12 +123,6 @@ body {
   }
 }
 
-/* --- Zone pulse (SVG) --- */
-@keyframes zonePulse {
-  0%, 100% { opacity: 0.35; }
-  50% { opacity: 0.55; }
-}
-
 /* ═══ Glitch text ═══ */
 .glitch-text {
   position: relative;
@@ -475,6 +469,16 @@ body {
   transform: translateY(0);
 }
 
+/* ═══ Tower page — staggered item fade-in ═══ */
+@keyframes towerFadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.tower-fade-in {
+  opacity: 0;
+  animation: towerFadeIn 0.5s ease forwards;
+}
+
 /* ═══ Tower page — section cards ═══ */
 .tower-card {
   transition: transform 0.3s ease, box-shadow 0.3s ease, border-left-color 0.3s ease;
@@ -503,6 +507,29 @@ body {
   transition: border-color 0.3s ease;
 }
 
+/* ═══ Tower page — container gradient border ═══ */
+.tower-container {
+  border: 1px solid transparent;
+  background:
+    linear-gradient(var(--color-tower-surface), var(--color-tower-surface)) padding-box,
+    linear-gradient(135deg, rgba(139, 69, 19, 0.3), rgba(42, 42, 42, 0.5), rgba(139, 69, 19, 0.1)) border-box;
+}
+
+/* ═══ Tower page — SVG draw animation ═══ */
+@keyframes svgDraw {
+  from { stroke-dashoffset: var(--dash-length); }
+  to   { stroke-dashoffset: 0; }
+}
+
+/* ═══ Tower page — zone bar pulse ═══ */
+@keyframes zoneBarPulse {
+  0%, 100% { opacity: 0.6; }
+  50%      { opacity: 1; }
+}
+.zone-bar {
+  animation: zoneBarPulse 4s ease-in-out infinite;
+}
+
 /* ═══ Reduced motion ═══ */
 @media (prefers-reduced-motion: reduce) {
   .dust-particle,
@@ -511,7 +538,9 @@ body {
   .glitch-text::after,
   .lore-section,
   .tower-section,
-  .group-header-glow {
+  .tower-fade-in,
+  .group-header-glow,
+  .zone-bar {
     animation: none !important;
     transition: none !important;
   }
