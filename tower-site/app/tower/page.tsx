@@ -156,7 +156,12 @@ export default function TowerPage() {
           .map((group) => {
             const sectionsInGroup = filteredSections.filter((s) => s.zone === group.id);
 
-            if (sectionsInGroup.length === 0 && (sectionQuery || group.id !== "upper")) return null;
+            if (sectionsInGroup.length === 0 && (sectionQuery || (group.id !== "upper" && group.id !== "deep"))) return null;
+
+            const placeholderText: Record<string, string> = {
+              upper: "Застывшие во времени пустые пространства. Здесь бродят Святые ангелы и сохраняются древние технологии.",
+              deep: "Смесь чёрных зон, которые не прерываются. Этажи, где обитают самые разные хтонические твари. Чем ниже этаж, тем больше их становится.",
+            };
 
             return (
               <div key={group.id} className="mb-8 last:mb-0">
@@ -212,7 +217,7 @@ export default function TowerPage() {
                       style={{ borderColor: `${group.color}20` }}
                     >
                       <p className="text-tower-muted text-xs italic m-0" style={{ color: `${group.color}60` }}>
-                        Застывшие во времени пустые пространства. Здесь бродят Святые ангелы и сохраняются древние технологии.
+                        {placeholderText[group.id] || ""}
                       </p>
                     </div>
                   </div>
