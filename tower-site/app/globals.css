@@ -464,20 +464,62 @@ body {
   color: rgba(255, 255, 255, 0.7);
 }
 
+/* ═══ Tower page — section fade-in ═══ */
+.tower-section {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.tower-section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ═══ Tower page — section cards ═══ */
+.tower-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-left-color 0.3s ease;
+}
+.tower-card:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(139, 69, 19, 0.15);
+}
+
+/* ═══ Tower page — group header pulse glow ═══ */
+@keyframes groupGlow {
+  0%, 100% { box-shadow: 0 0 8px var(--glow-color, rgba(139, 69, 19, 0.3)); }
+  50%      { box-shadow: 0 0 18px var(--glow-color, rgba(139, 69, 19, 0.5)); }
+}
+.group-header-glow {
+  animation: groupGlow 3s ease-in-out infinite;
+}
+
+/* ═══ Tower page — placeholder boxes ═══ */
+.tower-placeholder {
+  border-style: dashed;
+  border-radius: 0.375rem;
+  background: rgba(255, 255, 255, 0.01);
+  transition: border-color 0.3s ease;
+}
+
 /* ═══ Reduced motion ═══ */
 @media (prefers-reduced-motion: reduce) {
   .dust-particle,
   .scan-beam,
   .glitch-text::before,
   .glitch-text::after,
-  .lore-section {
+  .lore-section,
+  .tower-section,
+  .group-header-glow {
     animation: none !important;
     transition: none !important;
   }
   .glitch-text {
     animation: none !important;
   }
-  .lore-section {
+  .lore-section,
+  .tower-section {
     opacity: 1 !important;
     transform: none !important;
   }
