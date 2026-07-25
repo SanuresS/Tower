@@ -11,11 +11,12 @@ import {
   cityZoneColors,
   citySizeLabels,
   citySpecializationLabels,
-  cityFactionGroupLabels,
+  cityFactionIds,
+  cityFactionLabels,
+  cityFactionColors,
   CityZone,
   CitySize,
   CitySpecialization,
-  CityFactionGroup,
 } from "@/data/cities";
 import { Religion, religionLabels, religionColors } from "@/data/types";
 
@@ -30,18 +31,10 @@ const citySpecs: CitySpecialization[] = [
   "industrial",
   "none",
 ];
-const cityFactionGroups: CityFactionGroup[] = [
-  "clans",
-  "coalition",
-  "witnesses",
-  "military",
-  "other",
-];
 const cityReligions: Religion[] = [
   "ezibtu",
   "rishtu",
   "atheism",
-  "free",
   "echo_worship",
   "silence_cult",
   "forest_collective",
@@ -55,7 +48,7 @@ function CitiesContent() {
   const [selectedZone, setSelectedZone] = useState<CityZone | "all">("all");
   const [selectedSize, setSelectedSize] = useState<CitySize | "all">("all");
   const [selectedSpec, setSelectedSpec] = useState<CitySpecialization | "all">("all");
-  const [selectedFaction, setSelectedFaction] = useState<CityFactionGroup | "all">("all");
+  const [selectedFaction, setSelectedFaction] = useState<string>("all");
   const [selectedReligion, setSelectedReligion] = useState<Religion | "all">("all");
   const [highlightedId, setHighlightedId] = useState<string | null>(null);
 
@@ -64,7 +57,7 @@ function CitiesContent() {
       if (selectedZone !== "all" && c.zone !== selectedZone) return false;
       if (selectedSize !== "all" && c.size !== selectedSize) return false;
       if (selectedSpec !== "all" && !c.specialization.includes(selectedSpec)) return false;
-      if (selectedFaction !== "all" && c.factionGroup !== selectedFaction) return false;
+      if (selectedFaction !== "all" && c.factionId !== selectedFaction) return false;
       if (selectedReligion !== "all" && c.religion !== selectedReligion) return false;
       return true;
     });
@@ -135,10 +128,11 @@ function CitiesContent() {
 
         <FilterBar
           label="Фракция"
-          items={cityFactionGroups}
-          labels={cityFactionGroupLabels}
+          items={cityFactionIds}
+          labels={cityFactionLabels}
           selected={selectedFaction}
-          onSelect={(v) => setSelectedFaction(v as CityFactionGroup | "all")}
+          onSelect={(v) => setSelectedFaction(v)}
+          colorFn={(v) => cityFactionColors[v] ?? "#94a3b8"}
         />
 
         <FilterBar

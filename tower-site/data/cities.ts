@@ -13,22 +13,14 @@ export type CitySpecialization =
   | "resource"
   | "industrial";
 
-export type CityFactionGroup =
-  | "clans"
-  | "coalition"
-  | "witnesses"
-  | "military"
-  | "other";
-
 export interface City {
   id: string;
   name: string;
   zone: CityZone;
   size: CitySize;
   specialization: CitySpecialization[];
-  factionGroup: CityFactionGroup;
-  factionId?: string;
-  factionName?: string;
+  factionId: string;
+  factionName: string;
   population?: string;
   religion: Religion;
   religions: { religion: Religion; percent: number }[];
@@ -71,13 +63,53 @@ export const citySpecializationLabels: Record<CitySpecialization, string> = {
   industrial: "Производственный город",
 };
 
-export const cityFactionGroupLabels: Record<CityFactionGroup, string> = {
-  clans: "Кланы",
+export const cityFactionLabels: Record<string, string> = {
+  zubakkar: "Клан «Зубаккар»",
+  gantal: "Клан «Ганталь»",
+  barzakh: "Клан «Барзах»",
+  lamashtu: "Клан «Ламашту»",
+  askari: "Клан «Аскари»",
   coalition: "Коалиция",
   witnesses: "Свидетели Эха",
   military: "Военные",
-  other: "Другие",
+  librarians: "Орден Библиотекарей",
+  "silent-brotherhood": "Молчальники",
+  "dawn-colony": "Колония «Рассвет»",
+  "forest-people": "Лесные жители",
+  independent: "Независимые",
 };
+
+export const cityFactionColors: Record<string, string> = {
+  zubakkar: "#dc2626",
+  gantal: "#b8860b",
+  barzakh: "#0ea5e9",
+  lamashtu: "#a855f7",
+  askari: "#22c55e",
+  coalition: "#b8860b",
+  witnesses: "#a855f7",
+  military: "#737373",
+  librarians: "#94a3b8",
+  "silent-brotherhood": "#94a3b8",
+  "dawn-colony": "#94a3b8",
+  "forest-people": "#22c55e",
+  independent: "#6b7280",
+};
+
+export const cityFactionIds: string[] = [
+  "zubakkar",
+  "gantal",
+  "barzakh",
+  "lamashtu",
+  "askari",
+  "coalition",
+  "witnesses",
+  "military",
+  "librarians",
+  "silent-brotherhood",
+  "dawn-colony",
+  "forest-people",
+  "independent",
+];
 
 /* ─── Data ─── */
 
@@ -92,7 +124,6 @@ export const cities: City[] = [
     zone: "lower",
     size: "large",
     specialization: ["capital"],
-    factionGroup: "clans",
     factionId: "zubakkar",
     factionName: 'Клан «Зубаккар»',
     population: "Крупный",
@@ -111,7 +142,6 @@ export const cities: City[] = [
     zone: "lower",
     size: "city",
     specialization: ["industrial"],
-    factionGroup: "clans",
     factionId: "zubakkar",
     factionName: 'Клан «Зубаккар»',
     description:
@@ -129,7 +159,6 @@ export const cities: City[] = [
     zone: "lower",
     size: "city",
     specialization: ["resource"],
-    factionGroup: "clans",
     factionId: "zubakkar",
     factionName: 'Клан «Зубаккар»',
     description:
@@ -147,7 +176,6 @@ export const cities: City[] = [
     zone: "lower",
     size: "city",
     specialization: ["resource"],
-    factionGroup: "clans",
     factionId: "zubakkar",
     factionName: 'Клан «Зубаккар»',
     description:
@@ -165,7 +193,6 @@ export const cities: City[] = [
     zone: "lower",
     size: "small",
     specialization: ["none"],
-    factionGroup: "clans",
     factionId: "zubakkar",
     factionName: 'Клан «Зубаккар»',
     description:
@@ -183,7 +210,6 @@ export const cities: City[] = [
     zone: "lower",
     size: "small",
     specialization: ["industrial"],
-    factionGroup: "clans",
     factionId: "zubakkar",
     factionName: 'Клан «Зубаккар»',
     description:
@@ -201,7 +227,6 @@ export const cities: City[] = [
     zone: "lower",
     size: "small",
     specialization: ["none"],
-    factionGroup: "clans",
     factionId: "zubakkar",
     factionName: 'Клан «Зубаккар»',
     description:
@@ -224,7 +249,6 @@ export const cities: City[] = [
     zone: "lower",
     size: "hive",
     specialization: ["capital", "fortress"],
-    factionGroup: "clans",
     factionId: "gantal",
     factionName: 'Клан «Ганталь»',
     population: "Крупный",
@@ -243,7 +267,6 @@ export const cities: City[] = [
     zone: "lower",
     size: "city",
     specialization: ["industrial"],
-    factionGroup: "clans",
     factionId: "gantal",
     factionName: 'Клан «Ганталь»',
     description:
@@ -261,7 +284,6 @@ export const cities: City[] = [
     zone: "lower",
     size: "small",
     specialization: ["none"],
-    factionGroup: "clans",
     factionId: "gantal",
     factionName: 'Клан «Ганталь»',
     description:
@@ -279,7 +301,6 @@ export const cities: City[] = [
     zone: "lower",
     size: "small",
     specialization: ["resource"],
-    factionGroup: "clans",
     factionId: "gantal",
     factionName: 'Клан «Ганталь»',
     description:
@@ -297,7 +318,6 @@ export const cities: City[] = [
     zone: "lower",
     size: "small",
     specialization: ["resource"],
-    factionGroup: "clans",
     factionId: "gantal",
     factionName: 'Клан «Ганталь»',
     description:
@@ -315,7 +335,6 @@ export const cities: City[] = [
     zone: "lower",
     size: "small",
     specialization: ["industrial"],
-    factionGroup: "clans",
     factionId: "gantal",
     factionName: 'Клан «Ганталь»',
     description:
@@ -333,13 +352,12 @@ export const cities: City[] = [
     zone: "lower",
     size: "small",
     specialization: ["trade"],
-    factionGroup: "clans",
     factionId: "gantal",
     factionName: 'Клан «Ганталь»',
     description:
       "Торговая фактория на стыке двух транспортных веток. Перевалочный пункт для караванов. Перешла под крышу Ганталя после Безумной Войны. Управляется ставленниками Ганталя, взимает плату за проход и стоянку.",
-    religion: "free" as const,
-    religions: [ { religion: "yehudimism", percent: 30 }, { religion: "ezibtu", percent: 25 }, { religion: "atheism", percent: 20 }, { religion: "rishtu", percent: 15 } ],
+    religion: "yehudimism" as const,
+    religions: [ { religion: "yehudimism", percent: 33 }, { religion: "ezibtu", percent: 28 }, { religion: "atheism", percent: 22 }, { religion: "rishtu", percent: 17 } ],
     religiosity: 15,
     powerStability: 65,
     crimeLevel: 60,
@@ -356,7 +374,6 @@ export const cities: City[] = [
     zone: "lower",
     size: "large",
     specialization: ["capital", "fortress"],
-    factionGroup: "clans",
     factionId: "barzakh",
     factionName: 'Клан «Барзах»',
     population: "Средний",
@@ -375,7 +392,6 @@ export const cities: City[] = [
     zone: "lower",
     size: "city",
     specialization: ["none"],
-    factionGroup: "clans",
     factionId: "barzakh",
     factionName: 'Клан «Барзах»',
     description:
@@ -393,7 +409,6 @@ export const cities: City[] = [
     zone: "lower",
     size: "small",
     specialization: ["industrial"],
-    factionGroup: "clans",
     factionId: "barzakh",
     factionName: 'Клан «Барзах»',
     description:
@@ -411,7 +426,6 @@ export const cities: City[] = [
     zone: "lower",
     size: "small",
     specialization: ["bastion"],
-    factionGroup: "clans",
     factionId: "barzakh",
     factionName: 'Клан «Барзах»',
     description:
@@ -429,7 +443,6 @@ export const cities: City[] = [
     zone: "lower",
     size: "small",
     specialization: ["resource"],
-    factionGroup: "clans",
     factionId: "barzakh",
     factionName: 'Клан «Барзах»',
     description:
@@ -447,7 +460,6 @@ export const cities: City[] = [
     zone: "lower",
     size: "small",
     specialization: ["industrial"],
-    factionGroup: "clans",
     factionId: "barzakh",
     factionName: 'Клан «Барзах»',
     description:
@@ -465,7 +477,6 @@ export const cities: City[] = [
     zone: "lower",
     size: "small",
     specialization: ["resource"],
-    factionGroup: "clans",
     factionId: "barzakh",
     factionName: 'Клан «Барзах»',
     description:
@@ -488,7 +499,6 @@ export const cities: City[] = [
     zone: "lower",
     size: "hive",
     specialization: ["capital"],
-    factionGroup: "clans",
     factionId: "lamashtu",
     factionName: 'Клан «Ламашту»',
     description:
@@ -506,7 +516,6 @@ export const cities: City[] = [
     zone: "lower",
     size: "hive",
     specialization: ["none"],
-    factionGroup: "clans",
     factionId: "lamashtu",
     factionName: 'Клан «Ламашту»',
     description:
@@ -524,7 +533,6 @@ export const cities: City[] = [
     zone: "lower",
     size: "city",
     specialization: ["none"],
-    factionGroup: "clans",
     factionId: "lamashtu",
     factionName: 'Клан «Ламашту»',
     description:
@@ -542,7 +550,6 @@ export const cities: City[] = [
     zone: "lower",
     size: "small",
     specialization: ["resource"],
-    factionGroup: "clans",
     factionId: "lamashtu",
     factionName: 'Клан «Ламашту»',
     description:
@@ -560,7 +567,6 @@ export const cities: City[] = [
     zone: "lower",
     size: "small",
     specialization: ["resource"],
-    factionGroup: "clans",
     factionId: "lamashtu",
     factionName: 'Клан «Ламашту»',
     description:
@@ -578,7 +584,6 @@ export const cities: City[] = [
     zone: "lower",
     size: "small",
     specialization: ["none"],
-    factionGroup: "clans",
     factionId: "lamashtu",
     factionName: 'Клан «Ламашту»',
     description:
@@ -601,7 +606,6 @@ export const cities: City[] = [
     zone: "lower",
     size: "city",
     specialization: ["capital", "industrial"],
-    factionGroup: "clans",
     factionId: "askari",
     factionName: 'Клан «Аскари»',
     population: "Средний",
@@ -620,7 +624,6 @@ export const cities: City[] = [
     zone: "lower",
     size: "city",
     specialization: ["none"],
-    factionGroup: "clans",
     factionId: "askari",
     factionName: 'Клан «Аскари»',
     description:
@@ -638,7 +641,6 @@ export const cities: City[] = [
     zone: "lower",
     size: "small",
     specialization: ["none"],
-    factionGroup: "clans",
     factionId: "askari",
     factionName: 'Клан «Аскари»',
     description:
@@ -656,7 +658,6 @@ export const cities: City[] = [
     zone: "lower",
     size: "small",
     specialization: ["resource"],
-    factionGroup: "clans",
     factionId: "askari",
     factionName: 'Клан «Аскари»',
     description:
@@ -674,7 +675,6 @@ export const cities: City[] = [
     zone: "lower",
     size: "small",
     specialization: ["resource"],
-    factionGroup: "clans",
     factionId: "askari",
     factionName: 'Клан «Аскари»',
     description:
@@ -697,13 +697,12 @@ export const cities: City[] = [
     zone: "lower",
     size: "large",
     specialization: ["none"],
-    factionGroup: "coalition",
     factionId: "coalition",
     factionName: "Коалиция",
     population: "Крупный",
     description:
       "Старейший и крупнейший город Коалиции. Расположен в гигантской секции бывшего Административного Центра Планирования. Центр торговли и финансов, здесь располагаются Совет Консулов, Верховный Арбитраж и Штаб-Квартира Легиона.",
-    religion: "free" as const,
+    religion: "ezibtu" as const,
     religions: [ { religion: "ezibtu", percent: 30 }, { religion: "yehudimism", percent: 25 }, { religion: "atheism", percent: 20 }, { religion: "rishtu", percent: 15 }, { religion: "silence_cult", percent: 5 }, { religion: "echo_worship", percent: 5 } ],
     religiosity: 25,
     powerStability: 85,
@@ -716,14 +715,13 @@ export const cities: City[] = [
     zone: "lower",
     size: "large",
     specialization: ["trade"],
-    factionGroup: "coalition",
     factionId: "coalition",
     factionName: "Коалиция",
     population: "Крупный",
     description:
       "Крупный торговый город, построенный кланом Барзах. Город развлечений и услуг, Колизей Фаливива — самая престижная арена на нижних этажах. Школы гладиаторов, бордели, рестораны. Крупный центр работорговли.",
-    religion: "free" as const,
-    religions: [ { religion: "yehudimism", percent: 30 }, { religion: "ezibtu", percent: 20 }, { religion: "atheism", percent: 20 }, { religion: "rishtu", percent: 15 } ],
+    religion: "yehudimism" as const,
+    religions: [ { religion: "yehudimism", percent: 35 }, { religion: "ezibtu", percent: 24 }, { religion: "atheism", percent: 24 }, { religion: "rishtu", percent: 17 } ],
     religiosity: 20,
     powerStability: 60,
     crimeLevel: 45,
@@ -735,7 +733,6 @@ export const cities: City[] = [
     zone: "lower",
     size: "large",
     specialization: ["trade", "industrial"],
-    factionGroup: "coalition",
     factionId: "coalition",
     factionName: "Коалиция",
     description:
@@ -753,7 +750,6 @@ export const cities: City[] = [
     zone: "lower",
     size: "city",
     specialization: ["fortress", "industrial"],
-    factionGroup: "coalition",
     factionId: "coalition",
     factionName: "Коалиция",
     description:
@@ -771,13 +767,12 @@ export const cities: City[] = [
     zone: "lower",
     size: "small",
     specialization: ["trade"],
-    factionGroup: "coalition",
     factionId: "coalition",
     factionName: "Коалиция",
     description:
       "Небольшой торговый город, вытянутый вдоль коридоров. Город сталкеров, зарабатывающих поиском до апокалиптических ценностей. Лучшие проводники и картографы нижних этажей. Почтовый хаб Коалиции.",
-    religion: "free" as const,
-    religions: [ { religion: "yehudimism", percent: 25 }, { religion: "ezibtu", percent: 20 }, { religion: "atheism", percent: 20 }, { religion: "rishtu", percent: 15 } ],
+    religion: "yehudimism" as const,
+    religions: [ { religion: "yehudimism", percent: 31 }, { religion: "ezibtu", percent: 25 }, { religion: "atheism", percent: 25 }, { religion: "rishtu", percent: 19 } ],
     religiosity: 15,
     powerStability: 65,
     crimeLevel: 55,
@@ -789,12 +784,11 @@ export const cities: City[] = [
     zone: "lower",
     size: "hive",
     specialization: ["none"],
-    factionGroup: "coalition",
     factionId: "coalition",
     factionName: "Коалиция",
     description:
       "Город-улей, компактное, густонаселённое бедное поселение в перестроенных резервуарах. Место выделки кожи и меха, производства примитивной взрывчатки и химикатов. «Страна Бомжей».",
-    religion: "free" as const,
+    religion: "ezibtu" as const,
     religions: [ { religion: "ezibtu", percent: 35 }, { religion: "atheism", percent: 25 }, { religion: "yehudimism", percent: 20 }, { religion: "rishtu", percent: 20 } ],
     religiosity: 30,
     powerStability: 70,
@@ -807,7 +801,6 @@ export const cities: City[] = [
     zone: "lower",
     size: "small",
     specialization: ["resource"],
-    factionGroup: "coalition",
     factionId: "coalition",
     factionName: "Коалиция",
     description:
@@ -825,13 +818,12 @@ export const cities: City[] = [
     zone: "lower",
     size: "small",
     specialization: ["bastion", "trade"],
-    factionGroup: "coalition",
     factionId: "coalition",
     factionName: "Коалиция",
     description:
       "Бастион на колоссальном мосту через Глотку (ЦШТР-Ω). Стратегически важный пункт, бутылочное горлышко для прохода к западной части Вавилона-3. Торгует проходом через мост и услугами проводников.",
-    religion: "free" as const,
-    religions: [ { religion: "yehudimism", percent: 25 }, { religion: "ezibtu", percent: 25 }, { religion: "atheism", percent: 25 } ],
+    religion: "ezibtu" as const,
+    religions: [ { religion: "yehudimism", percent: 33 }, { religion: "ezibtu", percent: 34 }, { religion: "atheism", percent: 33 } ],
     religiosity: 15,
     powerStability: 65,
     crimeLevel: 60,
@@ -848,11 +840,12 @@ export const cities: City[] = [
     zone: "lower",
     size: "large",
     specialization: ["trade"],
-    factionGroup: "other",
+    factionId: "independent",
+    factionName: "Независимые",
     description:
       "Крупнейший торговый узел нижних этажей. Нейтральный город-государство в огромной секции торгового центра. Неписаный закон: «Кровь не льётся там, где звенит монета». Управляет Совет Старейшин.",
-    religion: "free" as const,
-    religions: [ { religion: "yehudimism", percent: 35 }, { religion: "ezibtu", percent: 20 }, { religion: "atheism", percent: 20 }, { religion: "rishtu", percent: 15 } ],
+    religion: "yehudimism" as const,
+    religions: [ { religion: "yehudimism", percent: 39 }, { religion: "ezibtu", percent: 22 }, { religion: "atheism", percent: 22 }, { religion: "rishtu", percent: 17 } ],
     religiosity: 10,
     powerStability: 55,
     crimeLevel: 50,
@@ -864,11 +857,12 @@ export const cities: City[] = [
     zone: "special",
     size: "small",
     specialization: ["trade"],
-    factionGroup: "other",
+    factionId: "independent",
+    factionName: "Независимые",
     description:
       "Поселение изгоев, охотников и добытчиков на границе Разросшегося и Грибного лесов. Анархия с элементом взаимовыручки. Главный товар — «продукты леса»: шкуры, яды, информация.",
-    religion: "free" as const,
-    religions: [ { religion: "forest_collective", percent: 30 }, { religion: "ezibtu", percent: 20 }, { religion: "atheism", percent: 25 }, { religion: "yehudimism", percent: 15 } ],
+    religion: "forest_collective" as const,
+    religions: [ { religion: "forest_collective", percent: 33 }, { religion: "ezibtu", percent: 22 }, { religion: "atheism", percent: 28 }, { religion: "yehudimism", percent: 17 } ],
     religiosity: 5,
     powerStability: 20,
     crimeLevel: 30,
@@ -885,7 +879,6 @@ export const cities: City[] = [
     zone: "middle",
     size: "small",
     specialization: ["none"],
-    factionGroup: "witnesses",
     factionId: "witnesses",
     factionName: "Свидетели Эха",
     description:
@@ -903,7 +896,6 @@ export const cities: City[] = [
     zone: "middle",
     size: "city",
     specialization: ["none"],
-    factionGroup: "witnesses",
     factionId: "witnesses",
     factionName: "Свидетели Эха",
     description:
@@ -921,7 +913,6 @@ export const cities: City[] = [
     zone: "middle",
     size: "outpost",
     specialization: ["none"],
-    factionGroup: "military",
     factionId: "military",
     factionName: "Военные",
     description:
@@ -939,7 +930,6 @@ export const cities: City[] = [
     zone: "middle",
     size: "outpost",
     specialization: ["none"],
-    factionGroup: "military",
     factionId: "military",
     factionName: "Военные",
     description:
@@ -957,7 +947,6 @@ export const cities: City[] = [
     zone: "lower",
     size: "outpost",
     specialization: ["fortress"],
-    factionGroup: "military",
     factionId: "military",
     factionName: "Военные",
     description:
@@ -975,7 +964,6 @@ export const cities: City[] = [
     zone: "middle",
     size: "small",
     specialization: ["none"],
-    factionGroup: "other",
     factionId: "librarians",
     factionName: "Орден Библиотекарей",
     description:
@@ -993,7 +981,6 @@ export const cities: City[] = [
     zone: "middle",
     size: "small",
     specialization: ["none"],
-    factionGroup: "other",
     factionId: "silent-brotherhood",
     factionName: "Молчальники",
     description:
@@ -1011,13 +998,12 @@ export const cities: City[] = [
     zone: "middle",
     size: "city",
     specialization: ["none"],
-    factionGroup: "other",
     factionId: "dawn-colony",
     factionName: 'Колония «Рассвет»',
     description:
       "Крупный город техно-коммуны в секции жилых комплексов. Основан интеллектуалами и инженерами, нашедшими архивы социалистического периода. Управление — Совет Инженеров, решения по протоколам прошлого.",
-    religion: "free" as const,
-    religions: [ { religion: "atheism", percent: 75 }, { religion: "ezibtu", percent: 10 }, { religion: "yehudimism", percent: 10 } ],
+    religion: "atheism" as const,
+    religions: [ { religion: "atheism", percent: 79 }, { religion: "ezibtu", percent: 11 }, { religion: "yehudimism", percent: 10 } ],
     religiosity: 35,
     powerStability: 80,
     crimeLevel: 85,
@@ -1029,7 +1015,6 @@ export const cities: City[] = [
     zone: "middle",
     size: "outpost",
     specialization: ["fortress"],
-    factionGroup: "other",
     factionId: "dawn-colony",
     factionName: 'Колония «Рассвет»',
     description:
@@ -1052,7 +1037,6 @@ export const cities: City[] = [
     zone: "special",
     size: "small",
     specialization: ["none"],
-    factionGroup: "other",
     factionId: "forest-people",
     factionName: "Лесные жители",
     description:
@@ -1070,7 +1054,6 @@ export const cities: City[] = [
     zone: "special",
     size: "small",
     specialization: ["none"],
-    factionGroup: "other",
     factionId: "forest-people",
     factionName: "Лесные жители",
     description:

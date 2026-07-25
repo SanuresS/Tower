@@ -176,7 +176,7 @@ export const factions: Faction[] = [
     name: 'Клан «Ганта́ль»',
     type: "clan",
     zone: "lower",
-    religion: "ezibtu",
+    religion: "free",
     population: "Крупный",
     cities: [
       "Дур-Нун",
