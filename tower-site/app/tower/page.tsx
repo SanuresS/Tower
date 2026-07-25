@@ -68,8 +68,7 @@ export default function TowerPage() {
       <section ref={towerRef} className="mb-12 tower-section">
         <div className="tower-container flex flex-col lg:flex-row items-start gap-6 lg:gap-8 p-4 sm:p-6 rounded-lg">
           <div className="shrink-0 mx-auto lg:mx-0">
-            <div className="relative">
-              <div className="scan-beam" />
+            <div className="relative" style={{ animation: "ambientGlow 6s ease-in-out infinite" }}>
               <TowerSlice height={500} svgWidth={240} showBabylons showLabels />
             </div>
           </div>

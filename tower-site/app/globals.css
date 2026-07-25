@@ -521,6 +521,12 @@ body {
   to   { stroke-dashoffset: 0; }
 }
 
+/* ═══ Tower page — ambient glow pulse ═══ */
+@keyframes ambientGlow {
+  0%, 100% { filter: drop-shadow(0 0 4px rgba(139, 69, 19, 0.15)); }
+  50%      { filter: drop-shadow(0 0 12px rgba(139, 69, 19, 0.3)); }
+}
+
 /* ═══ Tower page — zone bar pulse ═══ */
 @keyframes zoneBarPulse {
   0%, 100% { opacity: 0.6; }
@@ -543,6 +549,10 @@ body {
   .zone-bar {
     animation: none !important;
     transition: none !important;
+  }
+  [style*="ambientGlow"] {
+    animation: none !important;
+    filter: none !important;
   }
   .glitch-text {
     animation: none !important;
