@@ -20,14 +20,20 @@ function FactionsContent() {
   const highlightId = searchParams.get("highlight");
 
   const [selectedZone, setSelectedZone] = useState<LocationZone | "all">("all");
+  const [searchQuery, setSearchQuery] = useState("");
   const [highlightedId, setHighlightedId] = useState<string | null>(null);
 
-  const filtered = useMemo(() => {
-    if (selectedZone === "all") return factions;
-    return factions.filter((f) => f.zone === selectedZone);
-  }, [selectedZone]);
+  const query = searchQuery.trim().toLowerCase();
 
-  const hasFilters = selectedZone !== "all";
+  const filtered = useMemo(() => {
+    return factions.filter((f) => {
+      if (query && !f.name.toLowerCase().includes(query)) return false;
+      if (selectedZone !== "all" && f.zone !== selectedZone) return false;
+      return true;
+    });
+  }, [query, selectedZone]);
+
+  const hasFilters = query !== "" || selectedZone !== "all";
 
   const scrollToFaction = useCallback((factionId: string) => {
     const el = document.getElementById(`faction-${factionId}`);
@@ -46,6 +52,7 @@ function FactionsContent() {
   }, [highlightId, scrollToFaction]);
 
   function resetFilters() {
+    setSearchQuery("");
     setSelectedZone("all");
   }
 
@@ -56,6 +63,37 @@ function FactionsContent() {
     >
       {/* Filters */}
       <div className="space-y-3 mb-8">
+        {/* Search */}
+        <div className="relative">
+          <svg
+            className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
+            width="14"
+            height="14"
+            viewBox="0 0 16 16"
+            fill="none"
+          >
+            <circle cx="7" cy="7" r="5" stroke="#737373" strokeWidth="1.5" />
+            <path d="M11 11L14 14" stroke="#737373" strokeWidth="1.5" strokeLinecap="round" />
+          </svg>
+          <input
+            type="text"
+            placeholder="Поиск по названию..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-9 pr-8 py-2.5 rounded-lg font-mono text-[12px] text-tower-text bg-tower-surface border border-tower-border placeholder:text-tower-muted/40 focus:outline-none focus:border-tower-rust/40 focus:shadow-[0_0_12px_rgba(139,69,19,0.1)] transition-all duration-200"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery("")}
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-tower-muted/40 hover:text-tower-muted transition-colors cursor-pointer bg-transparent border-none p-0"
+            >
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                <path d="M4 4L12 12M12 4L4 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+              </svg>
+            </button>
+          )}
+        </div>
+
         {/* All button — prominent, centered */}
         <div className="flex justify-center">
           <button
