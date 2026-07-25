@@ -6,16 +6,18 @@ import FloorIndicator from "@/components/ui/FloorIndicator";
 import TowerSlice from "@/components/ui/TowerSlice";
 import { towerZones, babylonParts, towerSections, sectionGroups, TOTAL_FLOORS } from "@/data/tower";
 
-const placeholderStyles: Record<string, { text: string; border: string; bg: string }> = {
+const placeholderStyles: Record<string, { text: string; border: string; bg: string; glow: string }> = {
   upper: {
     text: "rgba(148, 163, 184, 0.6)",
     border: "rgba(148, 163, 184, 0.15)",
     bg: "rgba(20, 20, 20, 0.6)",
+    glow: "rgba(148, 163, 184, 0.25)",
   },
   deep: {
-    text: "rgba(148, 163, 184, 0.7)",
-    border: "rgba(100, 114, 124, 0.3)",
-    bg: "rgba(30, 30, 30, 0.6)",
+    text: "rgba(160, 160, 160, 0.5)",
+    border: "rgba(80, 80, 80, 0.25)",
+    bg: "rgba(40, 40, 40, 0.5)",
+    glow: "rgba(100, 116, 139, 0.15)",
   },
 };
 
@@ -208,7 +210,7 @@ export default function TowerPage() {
               {/* Zone group header */}
               <div
                 className="group-header-glow flex items-center gap-3 mb-4 p-2 rounded-lg"
-                style={{ "--glow-color": `${group.color}40` } as React.CSSProperties}
+                style={{ "--glow-color": ph?.glow || `${group.color}40` } as React.CSSProperties}
               >
                 <div
                   className="w-3 h-3 rounded-full shrink-0"
@@ -216,7 +218,7 @@ export default function TowerPage() {
                 />
                 <h3
                   className="font-mono text-sm font-semibold m-0"
-                  style={{ color: group.color }}
+                  style={{ color: group.id === "deep" ? "#64748b" : group.color }}
                 >
                   {group.name}
                 </h3>

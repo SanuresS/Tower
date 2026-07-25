@@ -488,8 +488,8 @@ body {
 
 /* ═══ Tower page — group header pulse glow ═══ */
 @keyframes groupGlow {
-  0%, 100% { box-shadow: 0 0 8px var(--glow-color, rgba(139, 69, 19, 0.3)); }
-  50%      { box-shadow: 0 0 18px var(--glow-color, rgba(139, 69, 19, 0.5)); }
+  0%, 100% { box-shadow: 0 0 10px var(--glow-color, rgba(139, 69, 19, 0.3)); }
+  50%      { box-shadow: 0 0 22px var(--glow-color, rgba(139, 69, 19, 0.5)), 0 0 4px var(--glow-color, rgba(139, 69, 19, 0.2)); }
 }
 .group-header-glow {
   animation: groupGlow 3s ease-in-out infinite;
