@@ -78,7 +78,7 @@ export default function CreatureCard({ creature }: CreatureCardProps) {
       }}
     >
       {/* Image */}
-      <div className="relative w-full aspect-[16/9] overflow-hidden">
+      <div className="relative w-full aspect-[16/9] overflow-hidden card-image-vhs">
         <img
           src={imgSrc}
           alt={creature.name}

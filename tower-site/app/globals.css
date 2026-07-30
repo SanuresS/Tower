@@ -536,6 +536,45 @@ body {
   animation: zoneBarPulse 4s ease-in-out infinite;
 }
 
+/* ═══ VHS effect on creature card images ═══ */
+.card-image-vhs img {
+  filter: contrast(1.05) saturate(1.15) brightness(0.95) sepia(0.08);
+  transition: filter 0.3s ease;
+}
+
+.card-image-vhs::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.06) 2px,
+    rgba(0, 0, 0, 0.06) 4px
+  );
+  mix-blend-mode: overlay;
+}
+
+@keyframes vhsTracking {
+  0%, 100% { transform: translateX(0); }
+  10% { transform: translateX(0.5px); }
+  30% { transform: translateX(-0.3px); }
+  50% { transform: translateX(0.3px); }
+  70% { transform: translateX(-0.5px); }
+  90% { transform: translateX(0.2px); }
+}
+
+.card-image-vhs {
+  animation: vhsTracking 8s ease-in-out infinite;
+}
+
+.card-image-vhs:hover img {
+  filter: contrast(1.1) saturate(1.25) brightness(0.9) sepia(0.12) hue-rotate(2deg);
+}
+
 /* ═══ Reduced motion ═══ */
 @media (prefers-reduced-motion: reduce) {
   .dust-particle,
@@ -556,6 +595,12 @@ body {
   }
   .glitch-text {
     animation: none !important;
+  }
+  .card-image-vhs {
+    animation: none !important;
+  }
+  .card-image-vhs img {
+    filter: none !important;
   }
   .lore-section,
   .tower-section {
