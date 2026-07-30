@@ -536,43 +536,139 @@ body {
   animation: zoneBarPulse 4s ease-in-out infinite;
 }
 
-/* ═══ VHS effect on creature card images ═══ */
+/* ═══ VHS effect — creature card images (6 layers) ═══ */
+
+/* 1. Image color degradation — old tape look */
 .card-image-vhs img {
-  filter: contrast(1.05) saturate(1.15) brightness(0.95) sepia(0.08);
+  filter: contrast(1.12) saturate(0.82) brightness(0.92) sepia(0.15);
   transition: filter 0.3s ease;
 }
 
+.card-image-vhs:hover img {
+  filter: contrast(1.18) saturate(0.75) brightness(0.88) sepia(0.22) hue-rotate(4deg);
+}
+
+/* 2. Chromatic aberration — red/cyan RGB channel split */
+.card-image-vhs::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(255, 0, 0, 0.12) 0%,
+      transparent 10%,
+      transparent 90%,
+      rgba(0, 255, 255, 0.12) 100%
+    ),
+    linear-gradient(
+      180deg,
+      transparent 0%,
+      transparent 82%,
+      rgba(255, 0, 0, 0.08) 94%,
+      rgba(0, 255, 255, 0.1) 100%
+    );
+  mix-blend-mode: screen;
+}
+
+/* 3. Scanlines — thin horizontal lines with flicker */
 .card-image-vhs::after {
   content: "";
   position: absolute;
   inset: 0;
-  z-index: 3;
+  z-index: 5;
   pointer-events: none;
   background: repeating-linear-gradient(
     0deg,
     transparent,
-    transparent 2px,
-    rgba(0, 0, 0, 0.06) 2px,
-    rgba(0, 0, 0, 0.06) 4px
+    transparent 1px,
+    rgba(0, 0, 0, 0.14) 1px,
+    rgba(0, 0, 0, 0.14) 2px
   );
   mix-blend-mode: overlay;
+  animation: vhsScanlineFlicker 0.15s steps(2) infinite;
 }
 
-@keyframes vhsTracking {
-  0%, 100% { transform: translateX(0); }
-  10% { transform: translateX(0.5px); }
-  30% { transform: translateX(-0.3px); }
-  50% { transform: translateX(0.3px); }
-  70% { transform: translateX(-0.5px); }
-  90% { transform: translateX(0.2px); }
+@keyframes vhsScanlineFlicker {
+  0% { opacity: 0.88; }
+  50% { opacity: 1; }
 }
 
-.card-image-vhs {
-  animation: vhsTracking 8s ease-in-out infinite;
+/* 4. Tracking noise — scrolling interference bar */
+@keyframes vhsTrackingBar {
+  0%   { top: -12%; opacity: 0; }
+  4%   { opacity: 1; }
+  16%  { opacity: 1; }
+  22%  { top: 112%; opacity: 0; }
+  100% { top: 112%; opacity: 0; }
 }
 
-.card-image-vhs:hover img {
-  filter: contrast(1.1) saturate(1.25) brightness(0.9) sepia(0.12) hue-rotate(2deg);
+.vhs-tracking-bar {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 14px;
+  z-index: 4;
+  pointer-events: none;
+  background: linear-gradient(
+    0deg,
+    transparent,
+    rgba(255, 255, 255, 0.04) 15%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.04) 85%,
+    transparent
+  );
+  animation: vhsTrackingBar 10s linear infinite;
+}
+
+/* 5. Static noise — grain overlay */
+@keyframes vhsNoise {
+  0%   { transform: translate(0, 0); }
+  20%  { transform: translate(-1px, 1px); }
+  40%  { transform: translate(1px, -1px); }
+  60%  { transform: translate(-1px, -1px); }
+  80%  { transform: translate(1px, 0); }
+  100% { transform: translate(0, 1px); }
+}
+
+.vhs-noise {
+  position: absolute;
+  inset: -2px;
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0.06;
+  background-image:
+    radial-gradient(circle, rgba(255,255,255,0.8) 0.5px, transparent 0.5px),
+    radial-gradient(circle, rgba(255,255,255,0.5) 0.5px, transparent 0.5px);
+  background-size: 3px 3px, 5px 5px;
+  background-position: 0 0, 1px 1px;
+  animation: vhsNoise 0.2s steps(4) infinite;
+}
+
+/* 6. Head switching noise — bottom-edge distortion */
+@keyframes vhsHeadSwitch {
+  0%, 100% { transform: scaleX(1) translateX(0); opacity: 0.4; }
+  30%      { transform: scaleX(1.03) translateX(3px); opacity: 0.7; }
+  60%      { transform: scaleX(0.98) translateX(-2px); opacity: 0.5; }
+}
+
+.vhs-head-switch {
+  position: absolute;
+  bottom: 0;
+  left: -2px;
+  right: -2px;
+  height: 10px;
+  z-index: 4;
+  pointer-events: none;
+  background: linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    transparent 100%
+  );
+  filter: blur(1px);
+  animation: vhsHeadSwitch 3.5s ease-in-out infinite;
 }
 
 /* ═══ Reduced motion ═══ */
@@ -596,11 +692,16 @@ body {
   .glitch-text {
     animation: none !important;
   }
-  .card-image-vhs {
-    animation: none !important;
-  }
   .card-image-vhs img {
     filter: none !important;
+  }
+  .vhs-tracking-bar,
+  .vhs-noise,
+  .vhs-head-switch {
+    animation: none !important;
+  }
+  .card-image-vhs::after {
+    animation: none !important;
   }
   .lore-section,
   .tower-section {

@@ -90,6 +90,9 @@ export default function CreatureCard({ creature }: CreatureCardProps) {
             background: `linear-gradient(to top, #141414 0%, transparent 50%)`,
           }}
         />
+        <div className="vhs-noise" />
+        <div className="vhs-tracking-bar" />
+        <div className="vhs-head-switch" />
       </div>
 
       {/* Top accent stripe */}
