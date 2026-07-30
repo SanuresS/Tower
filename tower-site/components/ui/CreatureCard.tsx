@@ -67,6 +67,8 @@ export default function CreatureCard({ creature }: CreatureCardProps) {
   const dColor = dangerColors[creature.dangerLevel];
   const hColor = habitatColors[creature.habitat];
 
+  const imgSrc = creature.image || "/pictures/none.png";
+
   return (
     <div
       className="relative rounded-lg border border-tower-border bg-tower-surface overflow-hidden transition-shadow duration-300 hover:shadow-lg"
@@ -75,6 +77,21 @@ export default function CreatureCard({ creature }: CreatureCardProps) {
         borderLeftColor: `${catColor}60`,
       }}
     >
+      {/* Image */}
+      <div className="relative w-full aspect-[16/9] overflow-hidden">
+        <img
+          src={imgSrc}
+          alt={creature.name}
+          className="w-full h-full object-cover"
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            background: `linear-gradient(to top, #141414 0%, transparent 50%)`,
+          }}
+        />
+      </div>
+
       {/* Top accent stripe */}
       <div
         className="h-[3px] w-full"

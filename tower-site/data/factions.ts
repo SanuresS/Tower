@@ -44,6 +44,7 @@ export interface Faction {
   relations?: Relation[];
   description: string;
   color: string;
+  image?: string;
 }
 
 /* ─── Labels ─── */

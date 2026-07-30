@@ -29,6 +29,7 @@ export interface City {
   crimeLevel: number;
   description: string;
   color: string;
+  image?: string;
 }
 
 /* ─── Labels ─── */

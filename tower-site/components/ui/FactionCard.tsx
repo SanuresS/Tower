@@ -64,6 +64,7 @@ export default function FactionCard({ faction, highlighted }: FactionCardProps) 
   const zColor = locationColors[faction.zone];
   const rColor = religionColors[faction.religion];
   const tagline = getTagline(faction.description);
+  const imgSrc = faction.image || "/pictures/none.png";
 
   return (
     <div
@@ -75,6 +76,21 @@ export default function FactionCard({ faction, highlighted }: FactionCardProps) 
         ["--zone-glow" as string]: zColor,
       }}
     >
+      {/* Image */}
+      <div className="relative w-full aspect-[16/9] overflow-hidden">
+        <img
+          src={imgSrc}
+          alt={faction.name}
+          className="w-full h-full object-cover"
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            background: `linear-gradient(to top, #141414 0%, transparent 50%)`,
+          }}
+        />
+      </div>
+
       {/* Top accent stripe */}
       <div
         className="h-[3px] w-full"
