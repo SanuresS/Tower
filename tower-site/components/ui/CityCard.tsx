@@ -214,7 +214,7 @@ export default function CityCard({ city, highlighted }: CityCardProps) {
       }}
     >
       {/* Image */}
-      <div className="relative w-full aspect-[16/9] overflow-hidden">
+      <div className="relative w-full aspect-[16/9] overflow-hidden card-image-vhs">
         <img
           src={imgSrc}
           alt={city.name}
@@ -226,6 +226,9 @@ export default function CityCard({ city, highlighted }: CityCardProps) {
             background: `linear-gradient(to top, #141414 0%, transparent 50%)`,
           }}
         />
+        <div className="vhs-noise" />
+        <div className="vhs-tracking-bar" />
+        <div className="vhs-head-switch" />
       </div>
 
       {/* Top accent stripe */}
