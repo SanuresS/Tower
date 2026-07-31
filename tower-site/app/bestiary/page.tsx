@@ -36,13 +36,15 @@ export default function BestiaryPage() {
   const query = searchQuery.trim().toLowerCase();
 
   const filtered = useMemo(() => {
-    return creatures.filter((c) => {
-      if (query && !c.name.toLowerCase().includes(query)) return false;
-      if (selectedCategory !== "all" && c.category !== selectedCategory) return false;
-      if (selectedHabitat !== "all" && c.habitat !== selectedHabitat) return false;
-      if (selectedDanger !== "all" && c.dangerLevel !== selectedDanger) return false;
-      return true;
-    });
+    return creatures
+      .filter((c) => {
+        if (query && !c.name.toLowerCase().includes(query)) return false;
+        if (selectedCategory !== "all" && c.category !== selectedCategory) return false;
+        if (selectedHabitat !== "all" && c.habitat !== selectedHabitat) return false;
+        if (selectedDanger !== "all" && c.dangerLevel !== selectedDanger) return false;
+        return true;
+      })
+      .sort((a, b) => a.name.localeCompare(b.name, "ru"));
   }, [query, selectedCategory, selectedHabitat, selectedDanger]);
 
   const hasFilters = query !== "" || selectedCategory !== "all" || selectedHabitat !== "all" || selectedDanger !== "all";
